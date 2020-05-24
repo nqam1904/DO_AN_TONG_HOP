@@ -1,0 +1,237 @@
+﻿
+@{
+    ViewBag.Title = "DanhSachKH";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<link href="~/Content/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/dataTables.bootstrap4.min.js"></script>
+
+<style>
+    .btn-add {
+        margin-right: 20px;
+    }
+</style>
+
+<br />
+<div class="container-fluid">
+    <h2>Danh sách khách hàng</h2>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Dashboard / Khách hàng</li>
+    </ol>
+</div>
+
+<div class="text-right btn-add">
+    <button type="button" class="btn btn-primary btn-lg" onclick="CreateKH()"><i class="fa fa-plus"></i> Thêm khách hàng</button>
+</div>
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-striped" id="myTable">
+            <thead>
+                <tr>
+                    <th scope="col">Tên khách hàng</th>
+                    <th scope="col">Số điện thoại </th>
+                    <th scope="col">Địa chỉ</th>
+                    <th scope="col">Email</th>
+                    <th scope="col"></th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @using (BDSEntities db = new BDSEntities())
+                {
+
+
+                    foreach (var kh in db.CUSTOMERs.ToList())
+                    {
+
+                        <tr>
+                            <td>@kh.nameCustom</td>
+
+                            <td>
+                                @kh.phoneCustom
+                            </td>
+                            <td>@kh.addressCustom</td>
+                            <td>@kh.emailCustom</td>
+                            <th>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-primary" onclick="EditKH(@kh.idCustom)"><i class="far fa-eye"></i></button>
+                                    <button type="button" class="btn btn-danger" onclick="DeleteKH(@kh.idCustom)"><i class="fa fa-trash"></i></button>
+                                </div>
+                            </th>
+                        </tr>
+
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Thông tin khách hàng</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Họ tên</label>
+                                <input type="text" class="form-control" name="NAME">
+                                <div class="invalid-feedback">
+                                    Vui lòng nhập họ tên
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Số điện thoại</label>
+                                <input type="number" class="form-control" name="PHONE">
+                                <div class="invalid-feedback">
+                                    Vui lòng nhập số điện thoại
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="col-form-label">Địa chỉ</label>
+                            <input type="text" class="form-control" name="ADDRESS">
+                            <div class="invalid-feedback">
+                                Vui lòng nhập địa chỉ
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="col-form-label">Email</label>
+                            <input type="text" class="form-control" name="EMAIL">
+                            <div class="invalid-feedback">
+                                Vui lòng nhập email
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="onSave()"><i class="far fa-save"></i> Lưu lại</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+    let idKH = 0;
+    function CreateKH() {
+        $("[name='NAME']").val("");
+        $("[name='PHONE']").val("");
+        $("[name='ADDRESS']").val("");
+        $("[name='EMAIL']").val("");
+        $("#modal").modal("show");
+    }
+
+    function EditKH(id) {
+        idKH = id;
+        $.ajax({
+            url: '/Ajax/GetKH/',
+            type: 'GET',
+            dataType: 'text',
+            data: {
+                id: idKH,
+            }
+        }).done(function (ketqua) {
+            var json = JSON.parse(ketqua);
+            $("[name='NAME']").val(json.NAME);
+            $("[name='PHONE']").val(json.PHONE);
+            $("[name='ADDRESS']").val(json.ADDRESS);
+            $("[name='EMAIL']").val(json.EMAIL);
+            $("#modal").modal("show");
+
+        }).fail(() => {
+            $.notify("Có lỗi xảy ra !!", "error");
+        });
+    }
+    function DeleteKH(id) {
+        var dialog = bootbox.dialog({
+            title: 'Thông báo xóa',
+            message: "Bạn có muốn xóa không?",
+            size: 'large',
+            closeButton: false,
+            buttons: {
+                ok: {
+                    label: "Có",
+                    className: 'btn-info',
+                    callback: function () {
+                        $.ajax({
+                            url: '/Ajax/DeleteKH/' + id,
+                            type: 'POST',
+                            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                            dataType: "json",
+                           
+                        }).done(function (ketqua) {
+                            if (ketqua.Success) {
+                                $.notify("Xóa thành công !", "success");
+                                location.reload();
+                                return;
+                            }
+                        });
+                    }
+                   
+                },
+                cancel: {
+                    label: "Không",
+                    className: 'btn-danger',
+                }
+            }
+        });
+
+    }
+
+   
+    function onSave() {
+        let name = $("[name='NAME']").val();
+        let phone = $("[name='PHONE']").val();
+        let diachi = $("[name='ADDRESS']").val();
+        let email = $("[name='EMAIL']").val();
+        if (name == '' || phone == '' || diachi == '' || email == '') {
+            $.notify("Vui lòng nhập thông tin !", "error");
+            $('.invalid-feedback').show();
+            return;
+        }
+        $.ajax({
+            url: '/Ajax/PostKH',
+            type: 'POST',
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            dataType: "json",
+            data: {
+                idCustom: idKH,
+                nameCustom: name,
+                phoneCustom: phone,
+                emailCustom: email,
+                addressCustom: diachi,
+            },
+
+        }).done(function (result) {
+            if (result.Success) {
+                location.reload();
+                return;
+            }
+            $.notify('Lưu thành công', 'successs');
+        });
+    }
+</script>

@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "ChiTietTinTuc";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int idNews = ViewBag.IdNews;
+}
+<style>
+    .date {
+        font-style: italic;
+    }
+    .noidung{
+        margin-top: 20px;
+    }
+    .breadcrumb{
+        margin-top: 20px
+    }
+</style>
+<div class="container-fluid">
+    
+    <div class="container">
+        @using (BDSEntities db = new BDSEntities())
+                {
+                    var chitiet = db.NEWS.Where(x => x.idNews == idNews).FirstOrDefault();
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/Home/TinTuc">Tin Tức</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@chitiet.titleNews</li>
+                </ol>
+            </nav>
+        }
+        <br />
+        <div class="row">
+            <div class="col-6">
+                @using (BDSEntities db = new BDSEntities())
+                {
+                    var chitiet = db.NEWS.Where(x => x.idNews == idNews).ToList();
+                    foreach (var item in chitiet)
+                    {
+                        <h3><b>@item.titleNews</b></h3>
+
+                        <img src="~/Images/@item.Img" width="550" />
+                        <br />
+
+                        <div class="noidung">
+                            @Html.Raw(item.Description)
+                        </div>
+
+                        <br />
+                        <div class="date text-right">
+                            <p>@item.createDate</p>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="col-6">
+                @using(BDSEntities db = new BDSEntities())
+                {
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

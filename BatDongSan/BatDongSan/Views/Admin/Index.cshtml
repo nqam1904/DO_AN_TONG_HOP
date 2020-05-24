@@ -1,0 +1,129 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<style>
+
+    .jumbotron {
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-top: -10px;
+        height: 300px;
+    }
+</style>
+<br />
+<div class="container-fluid">
+
+
+
+    @if (((USER)Session["AdminLogin"]).idRole == 1)
+    {
+        <h1 class="mt-4">Quản lý</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+        <div class="row">
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-primary text-white mb-4">
+                    <div class="card-body">Nhân sự</div>
+                    @using (BDSEntities db = new BDSEntities())
+                    {
+                        int soluong = 0;
+                        var listnhanvien = db.USERs.ToList();
+                        foreach (var item in listnhanvien)
+                        {
+                            soluong = listnhanvien.Count();
+                        }
+                        <div class="card-footer d-flex align-items-center justify-content-between">
+                            <a class="small text-white stretched-link" href="/Admin/User">@soluong</a>
+                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-warning text-white mb-4">
+                    <div class="card-body">Tòa nhà</div>
+                    @using (BDSEntities db = new BDSEntities())
+                    {
+                        int soluong = 0;
+                        var listtoanha = db.BUILDINGs.ToList();
+                        foreach (var item in listtoanha)
+                        {
+                            soluong = listtoanha.Count();
+                        }
+                        <div class="card-footer d-flex align-items-center justify-content-between">
+                            <a class="small text-white stretched-link" href="/Admin/Building">@soluong</a>
+                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-success text-white mb-4">
+                    <div class="card-body">Phiếu hẹn</div>
+                    @using (BDSEntities db = new BDSEntities())
+                    {
+                        int soluong = 0;
+                        var listphieu = db.PHIEUHENs.ToList();
+                        foreach (var item in listphieu)
+                        {
+                            soluong = listphieu.Count();
+                        }
+                        <div class="card-footer d-flex align-items-center justify-content-between">
+                            <a class="small text-white stretched-link" href="/Admin/Phieuhen">@soluong</a>
+                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-danger text-white mb-4">
+                    <div class="card-body">Hợp đồng</div>
+                    @using (BDSEntities db = new BDSEntities())
+                    {
+                        int soluong = 0;
+                        var listBill = db.BILLs.ToList();
+                        foreach (var item in listBill)
+                        {
+                            soluong = listBill.Count();
+                        }
+                        <div class="card-footer d-flex align-items-center justify-content-between">
+                            <a class="small text-white stretched-link" href="#">@soluong</a>
+                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <h1 class="mt-4">Nhân viên</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+        <br/>
+        <div class="jumbotron">
+            <div class="row">
+                <div class="col-sm-1">
+                    <img src="~/HinhAnh/hlep.png" width="100" />
+                </div>
+                <div class="col-sm-11">
+                    <h1 class="display-4">Hướng dẫn sử dụng</h1>
+                    <p class="lead">Nếu bạn gặp rắc rối khi sử dụng các tính năng của website, hãy tải hướng dẫn sử dụng bên dưới hoặc liên hệ với kỹ thuật viên để được hỗ trợ nhanh nhất.</p>
+                    <hr class="my-4">
+                    <a class="btn btn-primary btn-lg" href="~/doc/Hướng dẫn sử dụng website.docx" download="Hướng dẫn sử dụng website.docx" role="button"><i class="fas fa-long-arrow-alt-down"></i> Tải hướng dẫn sử dụng</a>
+                </div>
+            </div>
+
+        </div>
+    }
+
+
+</div>

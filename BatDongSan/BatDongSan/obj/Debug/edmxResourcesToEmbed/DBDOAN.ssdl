@@ -1,0 +1,414 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DATHModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="BILL">
+    <Key>
+      <PropertyRef Name="idBill" />
+    </Key>
+    <Property Name="idBill" Type="int" Nullable="false" />
+    <Property Name="idUserKH" Type="int" Nullable="false" />
+    <Property Name="idUserNV" Type="int" Nullable="false" />
+    <Property Name="idBuild" Type="int" Nullable="false" />
+    <Property Name="totalPrice" Type="int" />
+    <Property Name="createDate" Type="datetime" />
+    <Property Name="content" Type="ntext" />
+    <Property Name="cmndTruoc" Type="nvarchar" MaxLength="55" />
+    <Property Name="cmndSau" Type="nvarchar" MaxLength="55" />
+    <Property Name="ngayKyTen" Type="datetime" />
+  </EntityType>
+  <EntityType Name="BUILDING">
+    <Key>
+      <PropertyRef Name="idBuild" />
+    </Key>
+    <Property Name="idBuild" Type="int" Nullable="false" />
+    <Property Name="idWard" Type="int" Nullable="false" />
+    <Property Name="idUser" Type="int" Nullable="false" />
+    <Property Name="idType" Type="int" Nullable="false" />
+    <Property Name="nameBuild" Type="nvarchar" MaxLength="55" />
+    <Property Name="street" Type="nvarchar" MaxLength="55" />
+    <Property Name="floorarea" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="floor" Type="int" />
+    <Property Name="conent" Type="nvarchar" MaxLength="255" />
+    <Property Name="price" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="buildDate" Type="datetime" />
+    <Property Name="nameManger" Type="nvarchar" MaxLength="55" />
+    <Property Name="phoneManger" Type="nvarchar" MaxLength="12" />
+    <Property Name="direction" Type="nvarchar" MaxLength="55" />
+  </EntityType>
+  <EntityType Name="CITY">
+    <Key>
+      <PropertyRef Name="idCity" />
+    </Key>
+    <Property Name="idCity" Type="int" Nullable="false" />
+    <Property Name="nameCity" Type="nvarchar" MaxLength="55" />
+  </EntityType>
+  <EntityType Name="DISTRICT">
+    <Key>
+      <PropertyRef Name="idDistrict" />
+    </Key>
+    <Property Name="idDistrict" Type="int" Nullable="false" />
+    <Property Name="nameDistrict" Type="nvarchar" MaxLength="55" />
+    <Property Name="idCity" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Entity18">
+    <Key>
+      <PropertyRef Name="idService" />
+      <PropertyRef Name="idBuild" />
+    </Key>
+    <Property Name="idService" Type="int" Nullable="false" />
+    <Property Name="idBuild" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="IMAGE">
+    <Key>
+      <PropertyRef Name="idImage" />
+    </Key>
+    <Property Name="idImage" Type="int" Nullable="false" />
+    <Property Name="nameImage" Type="nvarchar" MaxLength="50" />
+    <Property Name="idBuild" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="NEWS">
+    <Key>
+      <PropertyRef Name="idNews" />
+    </Key>
+    <Property Name="idNews" Type="int" Nullable="false" />
+    <Property Name="idUser" Type="int" Nullable="false" />
+    <Property Name="titleNews" Type="nvarchar" MaxLength="20" />
+    <Property Name="Description" Type="ntext" />
+  </EntityType>
+  <EntityType Name="PHIEUHEN">
+    <Key>
+      <PropertyRef Name="idPhieu" />
+    </Key>
+    <Property Name="idPhieu" Type="int" Nullable="false" />
+    <Property Name="idUserKH" Type="int" Nullable="false" />
+    <Property Name="idUserNV" Type="int" Nullable="false" />
+    <Property Name="idBuild" Type="int" Nullable="false" />
+    <Property Name="namePhieu" Type="nvarchar" MaxLength="1" />
+    <Property Name="contentPhieu" Type="nvarchar" MaxLength="55" />
+    <Property Name="createPhieu" Type="datetime" />
+  </EntityType>
+  <EntityType Name="ROLE">
+    <Key>
+      <PropertyRef Name="idRole" />
+    </Key>
+    <Property Name="idRole" Type="int" Nullable="false" />
+    <Property Name="nameRold" Type="nvarchar" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="SERVICES">
+    <Key>
+      <PropertyRef Name="idService" />
+    </Key>
+    <Property Name="idService" Type="int" Nullable="false" />
+    <Property Name="typeService" Type="nvarchar" MaxLength="22" />
+    <Property Name="nameService" Type="nvarchar" MaxLength="55" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="TYPE">
+    <Key>
+      <PropertyRef Name="idType" />
+    </Key>
+    <Property Name="idType" Type="int" Nullable="false" />
+    <Property Name="nameType" Type="nvarchar" MaxLength="55" />
+  </EntityType>
+  <EntityType Name="USER">
+    <Key>
+      <PropertyRef Name="idUser" />
+    </Key>
+    <Property Name="idUser" Type="int" Nullable="false" />
+    <Property Name="idRole" Type="int" Nullable="false" />
+    <Property Name="userName" Type="nvarchar" MaxLength="50" />
+    <Property Name="userPassword" Type="nvarchar" MaxLength="50" />
+    <Property Name="FullName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Email" Type="nvarchar" MaxLength="55" />
+    <Property Name="Phone" Type="nvarchar" MaxLength="12" />
+    <Property Name="Address" Type="nvarchar" MaxLength="55" />
+  </EntityType>
+  <EntityType Name="WARD">
+    <Key>
+      <PropertyRef Name="idWard" />
+    </Key>
+    <Property Name="idWard" Type="int" Nullable="false" />
+    <Property Name="nameWard" Type="nvarchar" MaxLength="1" />
+    <Property Name="idDistrict" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK__BILL__idBuild__30F848ED">
+    <End Role="BUILDING" Type="Self.BUILDING" Multiplicity="1" />
+    <End Role="BILL" Type="Self.BILL" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BUILDING">
+        <PropertyRef Name="idBuild" />
+      </Principal>
+      <Dependent Role="BILL">
+        <PropertyRef Name="idBuild" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__BILL__idUserKH__2C3393D0">
+    <End Role="USER" Type="Self.USER" Multiplicity="1" />
+    <End Role="BILL" Type="Self.BILL" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="USER">
+        <PropertyRef Name="idUser" />
+      </Principal>
+      <Dependent Role="BILL">
+        <PropertyRef Name="idUserKH" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__BILL__idUserNV__2D27B809">
+    <End Role="USER" Type="Self.USER" Multiplicity="1" />
+    <End Role="BILL" Type="Self.BILL" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="USER">
+        <PropertyRef Name="idUser" />
+      </Principal>
+      <Dependent Role="BILL">
+        <PropertyRef Name="idUserNV" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__BUILDING__idType__31EC6D26">
+    <End Role="TYPE" Type="Self.TYPE" Multiplicity="1" />
+    <End Role="BUILDING" Type="Self.BUILDING" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TYPE">
+        <PropertyRef Name="idType" />
+      </Principal>
+      <Dependent Role="BUILDING">
+        <PropertyRef Name="idType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__BUILDING__idUser__29572725">
+    <End Role="USER" Type="Self.USER" Multiplicity="1" />
+    <End Role="BUILDING" Type="Self.BUILDING" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="USER">
+        <PropertyRef Name="idUser" />
+      </Principal>
+      <Dependent Role="BUILDING">
+        <PropertyRef Name="idUser" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__BUILDING__idWard__35BCFE0A">
+    <End Role="WARD" Type="Self.WARD" Multiplicity="1" />
+    <End Role="BUILDING" Type="Self.BUILDING" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="WARD">
+        <PropertyRef Name="idWard" />
+      </Principal>
+      <Dependent Role="BUILDING">
+        <PropertyRef Name="idWard" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DISTRICT__idCity__33D4B598">
+    <End Role="CITY" Type="Self.CITY" Multiplicity="1" />
+    <End Role="DISTRICT" Type="Self.DISTRICT" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CITY">
+        <PropertyRef Name="idCity" />
+      </Principal>
+      <Dependent Role="DISTRICT">
+        <PropertyRef Name="idCity" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Entity18__idBuil__2F10007B">
+    <End Role="BUILDING" Type="Self.BUILDING" Multiplicity="1" />
+    <End Role="Entity18" Type="Self.Entity18" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BUILDING">
+        <PropertyRef Name="idBuild" />
+      </Principal>
+      <Dependent Role="Entity18">
+        <PropertyRef Name="idBuild" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Entity18__idServ__32E0915F">
+    <End Role="SERVICES" Type="Self.SERVICES" Multiplicity="1" />
+    <End Role="Entity18" Type="Self.Entity18" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SERVICES">
+        <PropertyRef Name="idService" />
+      </Principal>
+      <Dependent Role="Entity18">
+        <PropertyRef Name="idService" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__IMAGE__idBuild__300424B4">
+    <End Role="BUILDING" Type="Self.BUILDING" Multiplicity="1" />
+    <End Role="IMAGE" Type="Self.IMAGE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BUILDING">
+        <PropertyRef Name="idBuild" />
+      </Principal>
+      <Dependent Role="IMAGE">
+        <PropertyRef Name="idBuild" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__NEWS__idUser__286302EC">
+    <End Role="USER" Type="Self.USER" Multiplicity="1" />
+    <End Role="NEWS" Type="Self.NEWS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="USER">
+        <PropertyRef Name="idUser" />
+      </Principal>
+      <Dependent Role="NEWS">
+        <PropertyRef Name="idUser" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PHIEUHEN__idBuil__2E1BDC42">
+    <End Role="BUILDING" Type="Self.BUILDING" Multiplicity="1" />
+    <End Role="PHIEUHEN" Type="Self.PHIEUHEN" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BUILDING">
+        <PropertyRef Name="idBuild" />
+      </Principal>
+      <Dependent Role="PHIEUHEN">
+        <PropertyRef Name="idBuild" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PHIEUHEN__idUser__2A4B4B5E">
+    <End Role="USER" Type="Self.USER" Multiplicity="1" />
+    <End Role="PHIEUHEN" Type="Self.PHIEUHEN" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="USER">
+        <PropertyRef Name="idUser" />
+      </Principal>
+      <Dependent Role="PHIEUHEN">
+        <PropertyRef Name="idUserKH" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PHIEUHEN__idUser__2B3F6F97">
+    <End Role="USER" Type="Self.USER" Multiplicity="1" />
+    <End Role="PHIEUHEN" Type="Self.PHIEUHEN" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="USER">
+        <PropertyRef Name="idUser" />
+      </Principal>
+      <Dependent Role="PHIEUHEN">
+        <PropertyRef Name="idUserNV" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__USER__idRole__276EDEB3">
+    <End Role="ROLE" Type="Self.ROLE" Multiplicity="1" />
+    <End Role="USER" Type="Self.USER" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ROLE">
+        <PropertyRef Name="idRole" />
+      </Principal>
+      <Dependent Role="USER">
+        <PropertyRef Name="idRole" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__WARD__idDistrict__34C8D9D1">
+    <End Role="DISTRICT" Type="Self.DISTRICT" Multiplicity="1" />
+    <End Role="WARD" Type="Self.WARD" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DISTRICT">
+        <PropertyRef Name="idDistrict" />
+      </Principal>
+      <Dependent Role="WARD">
+        <PropertyRef Name="idDistrict" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DATHModelStoreContainer">
+    <EntitySet Name="BILL" EntityType="Self.BILL" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BUILDING" EntityType="Self.BUILDING" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CITY" EntityType="Self.CITY" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DISTRICT" EntityType="Self.DISTRICT" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Entity18" EntityType="Self.Entity18" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="IMAGE" EntityType="Self.IMAGE" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="NEWS" EntityType="Self.NEWS" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PHIEUHEN" EntityType="Self.PHIEUHEN" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ROLE" EntityType="Self.ROLE" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SERVICES" EntityType="Self.SERVICES" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TYPE" EntityType="Self.TYPE" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="USER" EntityType="Self.USER" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="WARD" EntityType="Self.WARD" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__BILL__idBuild__30F848ED" Association="Self.FK__BILL__idBuild__30F848ED">
+      <End Role="BUILDING" EntitySet="BUILDING" />
+      <End Role="BILL" EntitySet="BILL" />
+    </AssociationSet>
+    <AssociationSet Name="FK__BILL__idUserKH__2C3393D0" Association="Self.FK__BILL__idUserKH__2C3393D0">
+      <End Role="USER" EntitySet="USER" />
+      <End Role="BILL" EntitySet="BILL" />
+    </AssociationSet>
+    <AssociationSet Name="FK__BILL__idUserNV__2D27B809" Association="Self.FK__BILL__idUserNV__2D27B809">
+      <End Role="USER" EntitySet="USER" />
+      <End Role="BILL" EntitySet="BILL" />
+    </AssociationSet>
+    <AssociationSet Name="FK__BUILDING__idType__31EC6D26" Association="Self.FK__BUILDING__idType__31EC6D26">
+      <End Role="TYPE" EntitySet="TYPE" />
+      <End Role="BUILDING" EntitySet="BUILDING" />
+    </AssociationSet>
+    <AssociationSet Name="FK__BUILDING__idUser__29572725" Association="Self.FK__BUILDING__idUser__29572725">
+      <End Role="USER" EntitySet="USER" />
+      <End Role="BUILDING" EntitySet="BUILDING" />
+    </AssociationSet>
+    <AssociationSet Name="FK__BUILDING__idWard__35BCFE0A" Association="Self.FK__BUILDING__idWard__35BCFE0A">
+      <End Role="WARD" EntitySet="WARD" />
+      <End Role="BUILDING" EntitySet="BUILDING" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DISTRICT__idCity__33D4B598" Association="Self.FK__DISTRICT__idCity__33D4B598">
+      <End Role="CITY" EntitySet="CITY" />
+      <End Role="DISTRICT" EntitySet="DISTRICT" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Entity18__idBuil__2F10007B" Association="Self.FK__Entity18__idBuil__2F10007B">
+      <End Role="BUILDING" EntitySet="BUILDING" />
+      <End Role="Entity18" EntitySet="Entity18" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Entity18__idServ__32E0915F" Association="Self.FK__Entity18__idServ__32E0915F">
+      <End Role="SERVICES" EntitySet="SERVICES" />
+      <End Role="Entity18" EntitySet="Entity18" />
+    </AssociationSet>
+    <AssociationSet Name="FK__IMAGE__idBuild__300424B4" Association="Self.FK__IMAGE__idBuild__300424B4">
+      <End Role="BUILDING" EntitySet="BUILDING" />
+      <End Role="IMAGE" EntitySet="IMAGE" />
+    </AssociationSet>
+    <AssociationSet Name="FK__NEWS__idUser__286302EC" Association="Self.FK__NEWS__idUser__286302EC">
+      <End Role="USER" EntitySet="USER" />
+      <End Role="NEWS" EntitySet="NEWS" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PHIEUHEN__idBuil__2E1BDC42" Association="Self.FK__PHIEUHEN__idBuil__2E1BDC42">
+      <End Role="BUILDING" EntitySet="BUILDING" />
+      <End Role="PHIEUHEN" EntitySet="PHIEUHEN" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PHIEUHEN__idUser__2A4B4B5E" Association="Self.FK__PHIEUHEN__idUser__2A4B4B5E">
+      <End Role="USER" EntitySet="USER" />
+      <End Role="PHIEUHEN" EntitySet="PHIEUHEN" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PHIEUHEN__idUser__2B3F6F97" Association="Self.FK__PHIEUHEN__idUser__2B3F6F97">
+      <End Role="USER" EntitySet="USER" />
+      <End Role="PHIEUHEN" EntitySet="PHIEUHEN" />
+    </AssociationSet>
+    <AssociationSet Name="FK__USER__idRole__276EDEB3" Association="Self.FK__USER__idRole__276EDEB3">
+      <End Role="ROLE" EntitySet="ROLE" />
+      <End Role="USER" EntitySet="USER" />
+    </AssociationSet>
+    <AssociationSet Name="FK__WARD__idDistrict__34C8D9D1" Association="Self.FK__WARD__idDistrict__34C8D9D1">
+      <End Role="DISTRICT" EntitySet="DISTRICT" />
+      <End Role="WARD" EntitySet="WARD" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
