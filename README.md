@@ -16,5 +16,5 @@
 10- paste tên máy ra xong xuống dưới mục connect to a database chọn dropdown select or enter a database name -> chọn database BDS xong nhấn test connection.
 11- thấy hiện chữ BDSEntities rồi nhấn next ( nếu không giống chữ BDSEntities liên hệ lại tôi để hỗ trợ)
 12- có 3 checkbox chọn table với stored procedures and function xong nhấn finish khi hiện lên bảng diagram các bảng database nhấn vô vùng trống ko đụng vô bảng nào.
-13- Nhấn ctrl + S để nó save lại mất khoản 30 - 40s sau khi quay xong nhấn ctrl + B hoặc ctrl + shift + B để nó build lại nếu báo success 1 error 0 
+13- Nhấn ctrl + S để nó save lại mất khoản 35 - 40s sau khi quay xong nhấn ctrl + B hoặc ctrl + shift + B để nó build lại nếu báo success 1 error 0 
 14- Chạy project ... DONE!
