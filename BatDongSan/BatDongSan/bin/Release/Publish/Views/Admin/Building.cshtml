@@ -1,0 +1,629 @@
+﻿@{
+    ViewBag.Title = "Building";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autonumeric/4.1.0/autoNumeric.min.js"></script>
+<link href="~/Content/image-uploader.css" rel="stylesheet" />
+<link href="~/Content/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
+<script src="~/Scripts/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/dataTables.bootstrap4.min.js"></script>
+<script src="~/Scripts/image-uploader.js"></script>
+@*<script src="~/Scripts/FomartPrice.js"></script>*@
+<style>
+  
+    .btn-add {
+        margin-right: 20px;
+    }
+
+    .tab_style {
+        margin-left: 10px;
+        margin-right: 30px;
+    }
+
+    .tab-content {
+        margin-left: 20px;
+    }
+
+    .mr-10 {
+        margin-right: 20px;
+    }
+</style>
+
+<br />
+<div class="container-fluid">
+    <h2>Danh sách các tòa nhà</h2>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Dashboard / Tòa nhà</li>
+    </ol>
+</div>
+@if (((USER)Session["AdminLogin"]).idRole == 1)
+{
+
+    <div class="text-right btn-add">
+        <button type="button" class="btn btn-primary btn-lg" onclick="CreateBuild()"><i class="fa fa-plus"></i> Thêm</button>
+    </div>
+
+}
+else
+{
+    <div class="text-right btn-add">
+
+        <button type="button" class="btn btn-outline-danger btn-lg" onclick=""><i class="fas fa-bug"></i> Báo cáo</button>
+
+    </div>
+}
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-striped" id="myTable">
+            <thead>
+                <tr>
+                    <th scope="col">Tòa nhà</th>
+                    <th scope="col">Hình ảnh</th>
+                    <th scope="col">Thành phố</th>
+                    <th scope="col">Giá thuê</th>
+                    <th scope="col">Đặt cọc</th>
+                    <th scope="col">Tình trạng</th>
+                    <th scope="col">Nhân viên tư vấn</th>
+                    @if (((USER)Session["AdminLogin"]).idRole == 1)
+                    {
+                        <th></th>
+                    }
+                    else
+                    {
+
+                        <th scope="col">Hợp đồng thuê</th>
+                        <th scope="col"></th>
+                    }
+
+                </tr>
+            </thead>
+            <tbody>
+                @using (BDSEntities db = new BDSEntities())
+                {
+                    var idTK = ((USER)Session["AdminLogin"]);
+                    var tk = db.USERs.Where(x => x.idUser == idTK.idUser).FirstOrDefault();
+
+                    foreach (var item in db.BUILDINGs.Where(x => x.idUser == tk.idUser || tk.idRole == 1 || tk.idRole == 2).ToList())
+                    {
+
+                        var phuong = db.WARDs.Where(x => x.idWard == item.idWard).FirstOrDefault();
+                        var quan = db.DISTRICTs.Where(x => x.idDistrict == phuong.idDistrict).FirstOrDefault();
+                        var city = db.CITies.Where(x => x.idCity == quan.idCity).FirstOrDefault();
+                        string GiaTien = String.Format("{0:N0}", item.price);
+                        var hinh = db.IMAGEs.Where(x => x.idBuild == item.idBuild).FirstOrDefault();
+                        var huong = db.HUONGs.Where(x => x.idHuong == item.idHuong).FirstOrDefault();
+                        <tr>
+                            <td>@item.nameBuild</td>
+
+                            <td>
+                                @if (hinh == null)
+                                {
+                                    <img src="~/HinhAnh/no-img.jpg" style="width: 90px" alt="..." />
+                                }
+                                else
+                                {
+                                    <img src="~/Images/@hinh.nameImage" style="width: 80px" alt="..." />
+                                }
+                            </td>
+                            @*<td>@item.floorarea m<sup>2</sup></td>*@
+                            <td>@city.nameCity</td>
+                            <td>@GiaTien VNĐ</td>
+                            <td>@item.deposits Tháng</td>
+                            @if (item.idStatus == 3 || item.idStatus == 2)
+                            {
+                                <td style="color: red">@item.STATUS.nameStatuts</td>
+                            }
+                            else
+                            {
+                                <td style="color: limegreen">@item.STATUS.nameStatuts</td>
+                            }
+                            <td><h5><span class="badge badge-primary">@item.USER.FullName</span></h5></td>
+                            @if (tk.idRole == 1)
+                            {
+                                <th>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-primary" onclick="EditBuild(@item.idBuild)"><i class="far fa-eye"></i></button>
+                                        <button type="button" class="btn btn-danger" onclick="DeleteBuild(@item.idBuild)"><i class="fa fa-trash"></i></button>
+                                    </div>
+                                </th>
+                            }
+                            else
+                            {
+                                <th class="text-center">0</th>
+                                <th>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-primary" onclick="EditBuild(@item.idBuild)"><i class="far fa-eye"></i></button>
+                                    </div>
+                                </th>
+
+                            }
+
+                        </tr>
+
+
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div id="model" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Thông tin tòa nhà</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form style="margin:auto; overflow: hidden" id="form">
+                    <div name="form-example-1" id="form-example-1">
+                        <div class="input-field">
+                            <div class="input-images-1" style="padding-top: .5rem;" id="HINHANH" name="HINHANH" onchange="readURL(this, 'blah1');"></div>
+                        </div>
+                        <br />
+                        <div class="imges">
+                            <img id="blah1" width="250">
+                        </div>
+                    </div>
+                   
+                    <div class="row">
+                        <div class="form-group col-lg">
+                            <label class="col-form-label">Tên tòa nhà</label>
+                            <input type="text" class="form-control" name="NAME">
+                            <div class="invalid-feedback">
+                                Vui lòng nhập tên
+                            </div>
+                        </div>
+                        <div class="form-group col-lg">
+                            <label class="col-form-label">Tỉnh/Thành Phố</label>
+                            <select class="form-control " id="IdCity" name="CITY" onchange="UpdateDistrict()">
+                                @using (BDSEntities db = new BDSEntities())
+                                {
+                                    foreach (var city in db.CITies.ToList())
+                                    {
+                                        <option value="@city.idCity">@city.nameCity</option>
+
+                                    }
+
+                                }
+                            </select>
+                            <div class="invalid-feedback">
+                                Vui lòng chọn thành phố
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg">
+                            <label class="col-form-label">Quận/Huyện</label>
+                            <select class="form-control" id="IdDistrict" name="QUAN" onchange="UpdateWard()">
+                                @using (BDSEntities db = new BDSEntities())
+                                {
+                                    foreach (var quan in db.DISTRICTs.ToList())
+                                    {
+                                        <option value="@quan.idDistrict" class="option-district" id-city="@quan.idCity">@quan.nameDistrict</option>
+                                    }
+
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group col-lg">
+                            <label class="col-form-label">Phường/Xã</label>
+                            <select class="form-control" id="IdWard" name="PHUONG">
+                                @using (BDSEntities db = new BDSEntities())
+                                {
+                                    foreach (var phuong in db.WARDs.ToList())
+                                    {
+                                        <option value="@phuong.idWard" class="option-ward" id-district="@phuong.idDistrict">@phuong.nameWard</option>
+                                    }
+
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label class="col-form-label">Địa chỉ</label>
+                                <input type="text" class="form-control " name="DIACHI">
+                                <div class="invalid-feedback">
+                                    Vui lòng nhập địa chỉ
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label class="col-form-label">Diện tích</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" name="DIENTICH" aria-describedby="basic-addon2">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" id="basic-addon2">m<sup>2</sup></span>
+                                    </div>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Vui lòng nhập diện tích
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label class="col-form-label">Số tầng</label>
+                                <input type="number" class="form-control " name="TANG">
+                                <div class="invalid-feedback">
+                                    Vui lòng nhập số tầng
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-4">
+                            <label class="col-form-label">Hướng</label>
+                            <select class="form-control " name="HUONG" data-live-search="true">
+                                @using (BDSEntities db = new BDSEntities())
+                                {
+                                    foreach (var huong in db.HUONGs.ToList())
+                                    {
+                                        <option value="@huong.idHuong">@huong.nameHuong</option>
+                                    }
+
+
+                                }
+                            </select>
+                            <div class="invalid-feedback">
+                                Vui lòng nhập hướng
+                            </div>
+                        </div>
+                        <div class="form-group col-4">
+                            <label class="col-form-label">Đặt cọc (tháng)</label>
+                            <div class="input-group mb-3">
+                                <input type="number" class="form-control " name="DATCOC" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2">Tháng</span>
+                                </div>
+                            </div>
+                            <div class="invalid-feedback">
+                                Vui lòng nhập
+                            </div>
+                        </div>
+                        <div class="form-group col-4">
+                            <label class="col-form-label">Thời hạn thuê tối thiểu (tháng)</label>
+                            <div class="input-group mb-3">
+                                <input class="form-control" name="DATE" type="number" aria-describedby="basic-addon2" />
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2">Tháng</span>
+                                </div>
+                            </div>
+                            <div class="invalid-feedback">
+                                Vui lòng chọn ngày
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-4">
+                            <label class="col-form-label">Quản lý</label>
+                            <input type="text" class="form-control " name="MANAGER">
+                            <div class="invalid-feedback">
+                                Vui lòng nhập tên của quản lý tòa nhà
+                            </div>
+                        </div>
+                        <div class="form-group col-4">
+                            <label class="col-form-label">Số điện thoại</label>
+                            <input type="number" class="form-control " name="PHONE">
+                            <div class="invalid-feedback">
+                                Vui lòng số điện thoại
+                            </div>
+                        </div>
+                        <div class="form-group col-4">
+                            <label class="col-form-label">Nhân viên phụ trách</label>
+                            <select class="form-control " name="NHANVIEN" data-live-search="true">
+                                @using (BDSEntities db = new BDSEntities())
+                                {
+                                    var id = 3;
+                                    var user = db.ROLEs.Where(x => x.idRole == id).FirstOrDefault();
+                                    foreach (var idrole in db.USERs.Where(x => x.idRole == user.idRole).ToList())
+                                    {
+                                        <option value="@idrole.idUser">@idrole.FullName</option>
+                                    }
+                                }
+                            </select>
+                            <div class="invalid-feedback">
+                                Vui lòng chọn người hướng dẫn
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg">
+                            <label class="col-form-label">Loại</label>
+                            <select class="form-control" name="LOAI">
+                                @using (BDSEntities db = new BDSEntities())
+                                {
+
+                                    foreach (var idLoai in db.TYPEs.ToList())
+                                    {
+                                        <option value="@idLoai.idType">@idLoai.nameType</option>
+                                    }
+                                }
+                            </select>
+                            <div class="invalid-feedback">
+                                Vui lòng chọn loại
+                            </div>
+                        </div>
+                        <div class="form-group col-lg">
+                            <label class="col-form-label">Trạng thái</label>
+                            <select class="form-control" name="STATUS">
+                                @using (BDSEntities db = new BDSEntities())
+                                {
+
+                                    foreach (var idTinhtrang in db.STATUS.ToList())
+                                    {
+                                        <option value="@idTinhtrang.idStatus">@idTinhtrang.nameStatuts</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-form-label">Giá thuê</label>
+                        <input type="text" class="form-control" placeholder="1,000,000 VNĐ" name="GIA" data-a-sign="" data-a-dec="," data-a-sep="." id="amount">
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label">Mô tả</label>
+                        <textarea class="form-control" rows="5" name="MOTA" id="MOTA"></textarea>
+                        <div class="invalid-feedback">
+                            Vui lòng nhập mô tả
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" onclick="SaveInfo()"><i class="far fa-save"></i> Lưu lại</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+        CKEDITOR.replace('MOTA');
+        $('#datepicker').datepicker({
+            uiLibrary: 'bootstrap4'
+        });
+        $("#show_hide_password a").on('click', function (event) {
+            event.preventDefault();
+            if ($('#show_hide_password input').attr("type") == "text") {
+                $('#show_hide_password input').attr('type', 'password');
+                $('#show_hide_password i').addClass("fa-eye-slash");
+                $('#show_hide_password i').removeClass("fa-eye");
+            } else if ($('#show_hide_password input').attr("type") == "password") {
+                $('#show_hide_password input').attr('type', 'text');
+                $('#show_hide_password i').removeClass("fa-eye-slash");
+                $('#show_hide_password i').addClass("fa-eye");
+            }
+        });
+    });
+    let idToaNha = 0;
+   
+
+    CreateExcel = () => {
+        setTimeout(() => {
+            $.notify('Chức năng đang phát triển!!', 'warning');
+        }, 1000);
+    }
+
+
+  
+    CreateBuild = () => {
+
+        idToaNha = 0;
+        $("[name='NAME']").val('');
+        $("[name='CITY']").val('');
+        $("[name='QUAN']").val('');
+        $("[name='PHUONG']").val('');
+        $("[name='DIACHI']").val('');
+        $("[name='TANG']").val('');
+        $("[name='HUONG']").val('');
+        $("[name='DATCOC']").val('');
+        CKEDITOR.instances['MOTA'].setData('');
+        $("[name='DIENTICH']").val('');
+        $("[name='DATE']").val('');
+        $("[name='MANAGER']").val('');
+        $("[name='PHONE']").val('');
+        $("[name='NHANVIEN']").val('');
+        $("[name='STATUS']").val('');
+        $("[name='LOAI']").val('');
+        $("[name='GIA']").val('');
+        $("#model").modal("show");
+        $(".invalid-feedback").hide();
+    }
+
+    EditBuild = (id) => {
+        idToaNha = id;
+        $.ajax({
+            url: '/Ajax/GetBuild/' + idToaNha,
+            type: 'GET',
+            dataType: 'text',
+            data: {
+                id: idToaNha,
+            }
+        }).done(function (ketqua) {
+            var json = JSON.parse(ketqua);
+            $("[name='NAME']").val(json.NAME);
+            $("[name='CITY']").val(json.CITY);
+            $("[name='QUAN']").val(json.QUAN);
+            $("[name='PHUONG']").val(json.PHUONG);
+            $("[name='DIACHI']").val(json.DIACHI);
+            $("[name='TANG']").val(json.TANG);
+            $("[name='HUONG']").val(json.HUONG);
+            $("[name='DATCOC']").val(json.DATCOC);
+            CKEDITOR.instances['MOTA'].setData(json.MOTA);
+            $("[name='DIENTICH']").val(json.DIENTICH);
+            $("[name='DATE']").val(json.DATE);
+            $("[name='MANAGER']").val(json.MANAGER);
+            $("[name='PHONE']").val(json.PHONE);
+            $("[name='NHANVIEN']").val(json.NHANVIEN);
+            $("[name='STATUS']").val(json.STATUS);
+            $("[name='LOAI']").val(json.LOAI);
+            $("[name='GIA']").val(json.GIA);
+            $("#blah1").attr('src', '/Images/' + json.HINHANH);
+            $("#model").modal("show");
+        }).fail(() => {
+
+            $.notify("Có lỗi!", "error");
+        });
+    }
+   
+    function DeleteBuild(id) {
+        if (!confirm("Bạn có muốn xóa tòa nhà này không?")) return;
+        $.ajax({
+            url: '/Ajax/DeleteBuild/' + id,
+            type: 'POST',
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            dataType: "json",
+        }).done(function (ketqua) {
+            if (ketqua.Success) {
+                location.reload();
+                $.notify("Xóa thành công !", "success");
+                return;
+            }
+
+        }).fail(function (result) {
+            if (!result.Success) {
+                $.notify("Có lỗi xảy ra !", "error");
+            }
+        });
+    }
+    SaveInfo = () => {
+        let name = $("[name='NAME']").val();
+        let datcoc = $("[name='DATCOC']").val();
+        let city = $("[name='CITY']").val();
+        let quan = $("[name='QUAN']").val();
+        let phuong = $("[name='PHUONG']").val();
+        let diachi = $("[name='DIACHI']").val();
+        let tang = $("[name='TANG']").val();
+        let huong = $("[name='HUONG']").val();
+        let mota = CKEDITOR.instances['MOTA'].getData();
+        let dientich = $("[name='DIENTICH']").val();
+        let date = $("[name='DATE']").val();
+        let manager = $("[name='MANAGER']").val();
+        let phone = $("[name='PHONE']").val();
+        let nhanvien = $("[name='NHANVIEN']").val();
+        let tinhtrang = $("[name='STATUS']").val();
+        let loai = $("[name='LOAI']").val();
+        let gia = $("[name='GIA']").val();
+
+
+        if (name == '' || city == '' || quan == '' || phuong == '' || diachi == '' || tang == '' || huong == '' || dientich == '' || date == '' || manager == '' || phone == '' || nhanvien == '' || loai == '' || tinhtrang == '' || gia == '') {
+            $.notify("Vui lòng nhập thông tin !", "error");
+            $('.invalid-feedback').show();
+            return;
+        }
+        $.ajax({
+            url: '/Ajax/PostBuild',
+            type: 'POST',
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            dataType: "json",
+            data: {
+                idBuild: idToaNha,
+                nameBuild: name,
+                street: diachi,
+                floorarea: dientich,
+                floor: tang,
+                conent: mota,
+                price: gia,
+                depositDate: date,
+                nameManager: manager,
+                phoneManager: phone,
+                idHuong: huong,
+                deposits: datcoc,
+                idStatus: tinhtrang,
+                idWard: phuong,
+                idUser: nhanvien,
+                idType: loai,
+
+            },
+        }).done(function (result) {
+            if (result.Success) {
+                SaveImg(result.Message);
+                location.reload();
+                return;
+            }
+            $.notify('Lưu thành công', 'successs');
+        });
+    }
+
+
+</script>
+
+<script>
+    UpdateDistrict();
+    function UpdateDistrict() {
+        var idcity = $("#IdCity").val();
+        $(".option-district").each(function () {
+            var option_idcity = $(this).attr("id-city");
+            if (option_idcity == idcity) $(this).show();
+            else $(this).hide();
+            // $('#IdDistrict').selectpicker('refresh');
+
+
+        });
+        //$(".selectpicker").selectpicker('refresh');
+
+        $("#IdDistrict").val("");
+        UpdateWard();
+    }
+    function UpdateWard() {
+        var iddistrict = $("#IdDistrict").val();
+        $(".option-ward").each(function () {
+            var option_iddistrict = $(this).attr("id-district");
+            if (option_iddistrict == iddistrict) $(this).show();
+            else $(this).hide();
+            // $('#IdWard').selectpicker('refresh');
+        });
+        $("#IdWard").val("");
+
+        //$(".selectpicker").selectpicker('refresh');
+
+    }
+    $('.input-images-1').imageUploader();
+
+    function SaveImg(id) {
+
+        var formData = new FormData();
+        var files = $('input[name^="images"]').get(0).files;
+        formData.append("file", files[0]);
+
+        $.ajax({
+            type: 'POST',
+            url: "/Ajax/SaveImg/" + id,
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response == 1) {
+                    $.notify('Lưu thành công', 'successs');
+                }
+                else {
+                    console.log(error);
+                }
+            }
+        });
+    }
+   
+</script>
+

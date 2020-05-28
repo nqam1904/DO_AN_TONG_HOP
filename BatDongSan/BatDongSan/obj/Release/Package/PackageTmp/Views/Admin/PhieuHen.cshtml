@@ -1,0 +1,405 @@
+﻿
+@{
+    ViewBag.Title = "PhieuHen";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<link href="~/Content/phieuhen.css" rel="stylesheet" />
+<link href="~/Content/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/dataTables.bootstrap4.min.js"></script>
+
+<style>
+    .phieu-hen {
+        margin: 40px
+    }
+
+    h2 {
+        margin-bottom: 20px
+    }
+
+    .form-dangky {
+        margin: 40px;
+    }
+
+    .chu-ky {
+        margin-top: 10px;
+    }
+
+
+    .tab_style {
+        margin-left: 10px;
+        margin-right: 30px;
+    }
+
+    .tab-content {
+        margin-left: 20px;
+    }
+
+    #nav-tab {
+        margin-left: 20px;
+    }
+
+    .btn-warning {
+        color: white;
+    }
+</style>
+
+<br />
+<div class="container-fluid">
+    <h2>Danh sách phiếu hẹn</h2>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Dashboard / Phiếu hẹn</li>
+    </ol>
+</div>
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"> Danh sách phiếu hẹn</a>
+        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Phiếu hẹn</a>
+
+    </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped" id="myTable">
+                    <thead>
+                        <tr>
+                            <th scope="col">Tên người hẹn</th>
+                            <th scope="col">Số điện thoại</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Nhân viên</th>
+                            <th scope="col">Ngày tạo</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @using (BDSEntities db = new BDSEntities())
+                        {
+                            var idTK = ((USER)Session["AdminLogin"]);
+                            var tk = db.USERs.Where(x => x.idUser == idTK.idUser).FirstOrDefault();
+
+                            foreach (var item in db.PHIEUHENs.Where(x => x.idUserNV == tk.idUser || tk.idRole == 1 || tk.idRole == 2).ToList())
+                            {
+
+                                <tr>
+                                    <td>@item.CUSTOMER.nameCustom</td>
+                                    <td>@item.CUSTOMER.phoneCustom</td>
+                                    <td>@item.CUSTOMER.emailCustom</td>
+                                    <td>@item.USER.FullName</td>
+                                    <td>@item.createPhieu</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-info" onclick="InfoPhieu(@item.idPhieu)" data-toggle="tooltip"
+                                                    data-html="true" title="<em>Xem chi tiết phiếu hẹn</em>">
+                                                <i class="far fa-eye"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-danger" onclick="DeletePhieu(@item.idPhieu)" data-toggle="tooltip"
+                                                    data-html="true" title="<em>Xóa phiếu hẹn</em>">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-success" onclick="SendMail(@item.idPhieu)" data-toggle="tooltip"
+                                                    data-html="true" title="<em>Gửi Email</em>">
+                                                <i class="fas fa-envelope-open-text"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+        <div class="phieu-hen">
+            <h2 class="text-center">PHIẾU HẸN</h2>
+            @using (BDSEntities db = new BDSEntities())
+            {
+                var idRole = 3;
+                var role = db.ROLEs.Where(x => x.idRole == idRole).FirstOrDefault();
+                var tk = db.USERs.Where(x => x.idRole == role.idRole).FirstOrDefault();
+
+                <form method="post">
+                </form>
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label><b>SỐ ĐIỆN THOẠI:</b></label>
+                    </div>
+                    <div class="form-group col-10">
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="SDT" id="SDT" onchange="GetSDT()" placeholder="Số điện thoại khách hàng">
+                            <div class="input-group-append" id="button-addon4">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-2">
+                        <label><b>HỌ TÊN NGƯỜI HẸN:</b></label>
+                    </div>
+                    <div class="form-group col-10">
+                        <input type="text" class="form-control" id="NAMEKH" name="NAMEKH" disabled>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-2 ">
+                        <label><b>NỘI DUNG HẸN:</b></label>
+                    </div>
+                    <div class="form-group col-10">
+                        <textarea type="text" class="form-control" rows="3" name="CONTENT" placeholder="Có thể bỏ trống"></textarea>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-2 ">
+                        <label><b>ĐỊA ĐIỂM:</b></label>
+                    </div>
+                    <div class="form-group col-10">
+                        <select class="form-control" name="BUILD">
+                            @foreach (var build in db.BUILDINGs.Where(x => x.idUser == tk.idUser || tk.idRole == 1).ToList())
+                            {
+                                <option value="@build.idBuild">@build.nameBuild</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-2 ">
+                        <label><b>NGÀY HẸN:</b></label>
+                    </div>
+                    <div class="form-group col-10">
+                        <input class="form-control" name="NGAYHEN" type="datetime-local" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-2 ">
+                        <label><b>NHÂN VIÊN:</b></label>
+                    </div>
+                    <div class="form-group col-10">
+                        <select class="form-control" name="NHANVIEN">
+                            @foreach (var user in db.USERs.Where(x => x.idUser == tk.idUser && tk.idRole == 3).ToList())
+                            {
+                                <option value="@user.idUser">@user.FullName - @user.Phone</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="dang-ky text-right">
+                    <button onclick="SaveInfo()" class="btn btn-primary">Đăng ký</button>
+                </div>
+            }
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Thông tin phiếu hẹn</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="infoDiv">
+                <div id="content_phieu">
+                    <div class="tieude"><h3>Phiếu hẹn</h3></div>
+                    <div class="createdate text-right"> <span name="NGAYTAO"></span></div>
+                    <div class="to"><b>Người nhận:</b> <span name="SDT"></span></div><br />
+                    <div class="address"><b>Địa điểm:</b> <span name="BUILD"></span></div><br />
+                    <div class="noidung"><b>Về việc:</b> <span name="CONTENT"></span></div><br />
+                    <div><b>Hẹn anh/chị: </b>Vào lúc <span name="NGAYHEN"></span></div><br />
+                    <div class="camon text-right">
+                        <h6>
+                            Xin cảm ơn !
+                        </h6>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-warning" onclick="PrintElem('infoDiv')"><i class="fas fa-print"></i> In phiếu</button>
+                @*<button type="button" class="btn btn-primary"><i class="far fa-save"></i> Lưu lại</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="SendMail">
+    @{
+        Html.RenderPartial("_PartialGuiEmail");
+    }
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+
+    });
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+
+    function PrintElem(elem) {
+        let tieude = $(".tieude").html();
+        let body = $(".modal-body").html();
+        var mywindow = window.open('', 'IN PHIẾU', 'height=326,width=800');
+        mywindow.document.write('<html><head><title></title>');
+        mywindow.document.write('<link href="~/Content/phieuhen.css" rel="stylesheet" />');
+        mywindow.document.write('</head>');
+        mywindow.document.write('<body>');
+        //mywindow.document.write(document.getElementById(elem).innerHTML);
+        mywindow.document.write(body);
+        mywindow.document.write('</body></html>');
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10*/
+
+        mywindow.print();
+        //mywindow.close();
+
+        return true;
+    }
+
+    function GetSDT() {
+        var phone = $("[name='SDT']").val();
+        if (phone == '') {
+            alert('Vui lòng nhập số điện thoại')
+        }
+        $.ajax({
+            url: '/Ajax/GetCustomer?phone=' + phone,
+            type: 'GET',
+            dataType: 'text'
+        }).done(function (ketqua) {
+            if (ketqua == null)
+                return;
+
+            if (ketqua == "") {
+                $("#NAMEKH").prop("disabled", false);
+            }
+            else {
+                var json = JSON.parse(ketqua);
+                $("#NAMEKH").val(json.NAME);
+                $("#NAMEKH").prop("disabled", true);
+            }
+        });
+
+    }
+
+    let idPH = 0;
+
+
+    function SaveInfo() {
+        let phone = $("[name='SDT']").val();
+        let noidung = $("[name='CONTENT']").val();
+        let toanha = $("[name='BUILD']").val();
+        let nv = $("[name='NHANVIEN']").val();
+        let nh = $("[name='NGAYHEN']").val();
+        let ngaytao = $("[name='NGAYTAO']").val();
+        if (nh == '' || phone == '') {
+            $.notify("Vui lòng điền thông tin!", "warning");
+        }
+
+        $.ajax({
+            url: '/Ajax/PostPhieuHen',
+            type: 'POST',
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            dataType: "json",
+            data: {
+                idPhieu: 0,
+                idBuild: toanha,
+                idUserNV: nv,
+                contentPhieu: noidung,
+                createPhieu: ngaytao,
+                ngayhen: nh,
+                phone: phone,
+                cusname: $("#NAMEKH").val()
+            }
+        }).done(function (result) {
+            if (result.Success) {
+                $.notify('Tạo thành công', 'successs');
+                location.reload();
+                return;
+                $.notify('Tạo thành công', 'successs');
+            }
+            $.notify('Có lỗi xảy ra', 'error');
+        });
+    }
+    function InfoPhieu(id) {
+        idPH = id;
+        $.ajax({
+            url: '/Ajax/GetPhieu/' + idPH,
+            type: 'POST',
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            dataType: "json",
+            data: {
+                id: idPH,
+            },
+        }).done(function (json) {
+            //var json = JSON.parse(ketqua);
+            $("[name='SDT']").html(json.SDT);
+            $("[name='CONTENT']").html(json.CONTENT);
+            $("[name='NGAYHEN']").html(json.NGAYHEN);
+            $("[name='NGAYTAO']").html(json.NGAYTAO);
+            $("[name='BUILD']").html(json.BUILD);
+            $("#modal").modal("show");
+        }).fail(() => {
+
+            $.notify("Có lỗi!", "error");
+        });
+    }
+
+    SendMail = (id) => {
+        idPH = id;
+        $.ajax({
+            url: '/Ajax/GetPhieu/' + idPH,
+            type: 'POST',
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            dataType: "json",
+            data: {
+                id: idPH,
+            },
+        }).done(function (json) {
+            $("#EMAIL").val(json.EMAIL);
+
+            $("#modalGuiMail").modal('show');
+        }).fail(() => {
+
+            $.notify("Có lỗi!", "error");
+        });
+
+    }
+
+    function DeletePhieu(id) {
+        if (!confirm("Bạn có muốn xóa phiếu hẹn này không?")) return;
+        $.ajax({
+            url: '/Ajax/DeletePhieu/' + id,
+            type: 'POST',
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            dataType: "json",
+        }).done(function (ketqua) {
+            if (ketqua.Success) {
+                location.reload();
+                $.notify("Xóa thành công !", "success");
+                return;
+            }
+
+        }).fail(function (result) {
+            if (!result.Success) {
+                $.notify("Có lỗi xảy ra !", "error");
+            }
+        });
+    }
+</script>

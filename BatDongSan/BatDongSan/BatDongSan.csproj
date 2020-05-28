@@ -151,7 +151,6 @@
     <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\AppApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\VinhController.cs" />
     <Compile Include="CUSTOMER.cs">
       <DependentUpon>DATH.tt</DependentUpon>
     </Compile>
@@ -309,6 +308,7 @@
     <Content Include="DATH.edmx.diagram">
       <DependentUpon>DATH.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\ckeditor.js" />
     <Content Include="Scripts\dataTables.bootstrap4.min.js" />

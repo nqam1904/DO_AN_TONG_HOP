@@ -510,8 +510,13 @@ namespace BatDongSan.Controllers
                     result.Message = "Vui lòng thử lại";
                     return Json(result);
                 }
+                var phieuhen = db.PHIEUHENs.Where(x => x.idCustom == kh.idCustom).FirstOrDefault();
+
                 try
                 {
+                    db.PHIEUHENs.Remove(phieuhen);
+                    db.SaveChanges();
+
                     db.CUSTOMERs.Remove(kh);
                     db.SaveChanges();
                     result.Success = true;
@@ -630,43 +635,7 @@ namespace BatDongSan.Controllers
             ApiResult result = new ApiResult();
             return Json(result);
         }
-        //public JsonResult GetGuiMailMaPhieuHen(int id)
-        //{
-        //    GuiEmailPhieuHen result = new GuiEmailPhieuHen();
-        //    using (BDSEntities db = new BDSEntities())
-        //    {
-        //        var ma = db.PHIEUHENs.Where(x => x.idPhieu == id).FirstOrDefault();
-        //        if (ma is null) return null;
-        //        result.magui = ma.contentPhieu;
-        //        return Json(result);
-        //    }
-        //}
-        //[HttpPost]
-        //public JsonResult GuiMailPhieuHen(PHIEUHEN data, string emailgui)
-        //{
-        //    ApiResult result = new ApiResult();
-        //    if (data is null)
-        //    {
-        //        result.Message = "Dữ liệu không hợp lệ";
-        //        return Json(result);
-        //    }
-        //    using (BDSEntities db = new BDSEntities())
-        //    {
-        //        var phieuhen = db.PHIEUHENs.Where(x => x.idPhieu == data.idPhieu).FirstOrDefault();
-
-                
-        //        var nguoiNhan = db.CUSTOMERs.Where(x => x.emailCustom == emailgui).FirstOrDefault();
-        //        if (!String.IsNullOrEmpty(nguoiNhan.emailCustom))
-        //        {
-        //            string noidung = "<b>Xin chao</b><br>Bạn nhận được 1 phiếu hẹn";
-        //            SendMail.Send(nguoiNhan.emailCustom, nguoiNhan.nameCustom, "XÁC NHẬN PHIẾU HẸN CỦA QUÝ KHÁCH" , noidung);
-        //        }
-
-        //    }
-        //    result.Success = true;
-        //    return Json(result);
-        //}
-
+     
 
     }
 }

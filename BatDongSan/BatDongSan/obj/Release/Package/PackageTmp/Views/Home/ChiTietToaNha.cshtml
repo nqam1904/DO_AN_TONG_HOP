@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewBag.Title = "ChiTietToaNha";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int idBuild = ViewBag.IdBuild;
+}
+
+}
+<style>
+    .date {
+        font-style: italic;
+    }
+
+    .noidung {
+        margin-top: 20px;
+        width: 600px;
+    }
+
+    .breadcrumb {
+        margin-top: 20px
+    }
+</style>
+<div class="container-fluid">
+
+    <div class="container">
+        @using (BDSEntities db = new BDSEntities())
+        {
+            var chitiet = db.BUILDINGs.Where(x => x.idBuild == idBuild).FirstOrDefault();
+            <div class="text-center">
+                <h2>Văn phòng cho thuê tại tòa nhà @chitiet.nameBuild</h2>
+            </div>
+        }
+        <br />
+        <div class="row">
+            <div class="col-6">
+                @using (BDSEntities db = new BDSEntities())
+                {
+                    var chitiet = db.BUILDINGs.Where(x => x.idBuild == idBuild).ToList();
+
+                    foreach (var item in chitiet)
+                    {
+                        var hinh = db.IMAGEs.Where(x => x.idBuild == item.idBuild).FirstOrDefault();
+
+                        <img src="~/Images/@hinh.nameImage" width="550" />
+                    }
+                }
+            </div>
+            <div class="col-6">
+                @using (BDSEntities db = new BDSEntities())
+                {
+
+                }
+            </div>
+
+            @using (BDSEntities db = new BDSEntities())
+            {
+                var chitiet = db.BUILDINGs.Where(x => x.idBuild == idBuild).ToList();
+                <div class="noidung">
+
+                    @foreach (var item in chitiet)
+                    {
+                        @Html.Raw(item.conent)
+                    }
+
+                </div>
+            }
+        </div>
+    </div>
+</div>

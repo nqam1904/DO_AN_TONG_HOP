@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewBag.Title = "TinTuc";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .img{
+        margin-right: 20px;
+    }
+</style>
+<div class="container-fluid">
+    <div class="container">
+        <br />
+       
+     
+        <div class="row">
+            <div class="col-7">
+                <h2>Tin tức bất động sản</h2>
+                <br />
+                @using (BDSEntities db = new BDSEntities())
+                {
+                    foreach (var item in db.NEWS.ToList())
+                    {
+                        string noidung = item.Description ?? "";
+                        noidung = System.Text.RegularExpressions.Regex.Replace(noidung, "<.*?>", String.Empty);
+                        if (noidung.Length > 200)
+                        {
+                            noidung = noidung.Substring(0, 200) + "...";
+
+                        }
+                        <div class="card" onclick="window.location.href = '/Home/ChiTietTinTuc/' + @item.idNews;">
+                            <div class="card-header">
+                                <h4><b>@item.titleNews</b></h4>
+                            </div>
+                            <div class="card-body">
+                                <blockquote class="blockquote mb-0">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <img src="~/Images/@item.Img" width="200" />
+                                        </div>
+                                        <div class="col-8">
+                                            <span>@noidung</span>
+                                        </div>
+                                    </div>
+                                    <footer class="blockquote-footer text-right">@item.createDate</footer>
+                                </blockquote>
+                            </div>
+                        </div>
+                        <br />
+                    }
+                }
+            </div>
+            <div class="col-3">
+                <h2>Tin khác</h2>
+                <br />
+                @using (BDSEntities db = new BDSEntities())
+                {
+                    foreach (var item in db.NEWS.ToList().GetRange(1, 5))
+                    {
+                        string noidung = item.Description ?? "";
+                        noidung = System.Text.RegularExpressions.Regex.Replace(noidung, "<.*?>", String.Empty);
+                        if (noidung.Length > 100)
+                        {
+                            noidung = noidung.Substring(0, 100) + "...";
+
+                        }
+                        <div class="list-group" onclick="window.location.href = '/Home/ChiTietTinTuc/' + @item.idNews;">
+                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <small class="img"><img src="~/Images/@item.Img" width="90" /></small>
+                                    <p class="mb-1">@item.titleNews</p>
+
+                                </div>
+                            </a>
+                        </div>
+                        <br />
+                    }
+
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+ 
+</script>

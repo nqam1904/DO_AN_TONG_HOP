@@ -1,0 +1,190 @@
+﻿
+@{
+    ViewBag.Title = "Districts";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link href="~/Content/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/dataTables.bootstrap4.min.js"></script>
+
+<style>
+    h2 {
+        margin-left: 10px;
+    }
+
+    .btn-add {
+        margin-right: 20px;
+    }
+</style>
+<br />
+<h2>Danh sách tài khoản</h2>
+
+<div class="text-right btn-add">
+    <button type="button" class="btn btn-primary" onclick="CreateQuan()"><i class="fa fa-plus"></i> Thêm quận mới</button>
+</div>
+<br />
+
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-striped" id="myTable">
+            <thead>
+                <tr>
+                    <th scope="col">Quận</th>
+                    <th scope="col">Thành phố</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @using (BDSEntities db = new BDSEntities())
+                {
+
+                    foreach (var item in db.DISTRICTs.ToList())
+                    {
+                        <tr>
+                            <td>@item.nameDistrict</td>
+                            <td>@item.CITY.nameCity</td>
+                            
+                            <th>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-primary" onclick="EditQuan(@item.idDistrict)"><i class="fa fa-edit"></i></button>
+                                    <button type="button" class="btn btn-danger" onclick="DeleteQuan(@item.idDistrict)"><i class="fa fa-trash"></i></button>
+                                </div>
+                            </th>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@*--Modal dialog--*@
+<div id="model" class="modal fade create-service-md" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thêm Quận</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label class="col-form-label">Quận</label>
+                        <input type="text" class="form-control" name="QUAN">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-form-label">Tỉnh thành phố</label>
+                        <select name="CITY" class="form-control select">
+                            @using (BDSEntities db = new BDSEntities())
+                            {
+                                foreach (var item in db.CITies.ToList())
+                                {
+                                    <option value="@item.idCity">@item.nameCity</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="SaveInfo()">Lưu lại</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+        $("#show_hide_password a").on('click', function (event) {
+            event.preventDefault();
+            if ($('#show_hide_password input').attr("type") == "text") {
+                $('#show_hide_password input').attr('type', 'password');
+                $('#show_hide_password i').addClass("fa-eye-slash");
+                $('#show_hide_password i').removeClass("fa-eye");
+            } else if ($('#show_hide_password input').attr("type") == "password") {
+                $('#show_hide_password input').attr('type', 'text');
+                $('#show_hide_password i').removeClass("fa-eye-slash");
+                $('#show_hide_password i').addClass("fa-eye");
+            }
+        });
+    });
+    let idQuan = 0;
+    CreateQuan = () => {
+        idQuan = 0;
+        $("[name='QUAN']").val('');
+        $("[name='CITY']").val('');
+        $("#model").modal("show");
+    }
+    EditUser = (id) => {
+        idTaikhoan = id;
+        $.ajax({
+            url: '/Ajax/GetQuan/' + idQuan,
+            type: 'GET',
+            dataType: 'text',
+            data: {
+                id: idQuan,
+            }
+        }).done(function (ketqua) {
+            var json = JSON.parse(ketqua);
+            $("#addTitle").html("Chỉnh sửa quận");
+            $("[name='QUAN']").val(json.quan);
+            $("[name='CITY']").val(json.city);
+            $("#model").modal("show");
+
+        });
+
+    }
+    function DeleteUser(id) {
+        if (!confirm("Bạn có muốn xóa tài khoản này không?")) return;
+        $.ajax({
+            url: '/Ajax/DeleteQuan/' + id,
+            type: 'POST',
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            dataType: "json",
+        }).done(function (ketqua) {
+            if (ketqua.Success) {
+                $.notify("Xóa thành công !", "success");
+                location.reload();
+                return;
+            }
+        }).fail(function (result) {
+            if (!result.Success) {
+                $.notify("Có lỗi xảy ra !", "error");
+            }
+        });
+    }
+    SaveInfo = () => {
+        let quan = $("[name='QUAN']").val();
+        let city = $("[name='CITY']").val();
+        if (quan == '' || city == '') {
+            $.notify('Vui lòng điền đủ thông tin!', 'warn');
+        }
+        $.ajax({
+            url: '/Ajax/PostQuan',
+            type: 'POST',
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            dataType: "json",
+            data: {
+                nameQuan: quan,
+                nameDistrict: city,
+            },
+        }).done(function(result){
+            if (result.Success) {
+                $.notify('Lưu thành công', 'successs');
+                location.reload();
+                return;
+            }
+            $.notify('Có lỗi xảy ra', 'error');
+        });
+    }
+
+
+</script>
+
+

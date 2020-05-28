@@ -1,0 +1,237 @@
+﻿
+@{
+    ViewBag.Title = "TinTuc";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<link href="~/Content/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
+<style>
+
+ 
+    .btn-add {
+        margin-right: 20px;
+    }
+</style>
+<br />
+<div class="container-fluid">
+    <h2>Tin Tức</h2>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Dashboard / Tin tức</li>
+    </ol>
+</div>
+<br />
+<div class="text-right btn-add">
+    <button type="button" class="btn btn-primary btn-lg" onclick="addNews()"><i style="padding-right:5px" class="fas fa-plus"></i>Thêm tin tức</button>
+</div>
+<br />
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-striped" id="myTable">
+            <thead>
+                <tr>
+                    <th scope="col">Tiêu đề</th>
+                    <th scope="col">Hình ảnh</th>
+                    <th scope="col">Nội dung</th>
+                    <th scope="col">Ngày tạo</th>
+                    <th scope="col">Người tạo</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @using (BDSEntities db = new BDSEntities())
+                {
+
+                    var tintuc = db.NEWS.ToList();
+                    foreach (var item in tintuc.ToList())
+                    {
+                        string noidung = item.Description ?? "";
+                        noidung = System.Text.RegularExpressions.Regex.Replace(noidung, "<.*?>", String.Empty);
+                        if (noidung.Length > 100)
+                        {
+                            noidung = noidung.Substring(0, 100) + "...";
+                        }
+
+                        string tieude = item.titleNews ?? "";
+                        tieude = System.Text.RegularExpressions.Regex.Replace(tieude, "<.*?>", String.Empty);
+                        if(tieude.Length > 20)
+                        {
+                            tieude = tieude.Substring(0, 20) + "...";
+                        }
+                        <tr>
+                            <td>@tieude</td>
+                            <td><img src="~/Images/@item.Img" width="120" /></td>
+                           
+                            <td>@Html.Raw(noidung)</td>
+                            <td>@item.createDate</td>
+                            <td>@item.USER.FullName</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-primary mr-10" onclick="EditNews(@item.idNews)"><i class="far fa-eye"></i></button>
+                                    <button type="button" class="btn btn-danger ml-10" onclick="DeleteNews(@item.idNews)"><i class="fa fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<!--Model Thêm-->
+<div class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addTitle">Thông tin tin tức</h5>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label class="col-form-label">Tiêu đề</label>
+                        <input type="text" class="form-control" name="TITLE">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label">Hình ảnh</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                            </div>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="hinh" onchange="readURL(this, 'blah1');" aria-describedby="inputGroupFileAddon01" name="HINH">
+                                <label class="custom-file-label" for="inputGroupFile01">Chọn hình ảnh</label>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="imges">
+                            <img id="blah1" width="250">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label">Nội dung</label>
+                        <textarea class="form-control" rows="5" name="NOIDUNG" id="NOIDUNG"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="SaveInfo()"><i class="far fa-save"></i> Lưu</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+        CKEDITOR.replace('NOIDUNG');
+    });
+
+    function addNews() {
+        $("[name='TITLE']").val('');
+        CKEDITOR.instances['NOIDUNG'].setData();
+        $("#modalAdd").modal('show');
+    }
+    var idNews = 0;
+    function SaveInfo() {
+      
+        let title = $("[name='TITLE']").val();
+        let noidung = CKEDITOR.instances['NOIDUNG'].getData();
+
+        var formData = new FormData();
+        var files = $("[name='HINH']").get(0).files;
+        formData.append("file", files[0]);
+        formData.append("idNews", idNews);
+        formData.append("titleNews", title);
+        formData.append("Description", noidung);
+      
+        if (title == '' || noidung == '') {
+            $.notify('Vui lòng điền thông tin', 'error');
+            return;
+        }
+        $.ajax({
+            url: '/Ajax/PostNews',
+            type: 'POST',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+        }).done(function (result) {
+            if (result.Success) {
+                $.notify("Lưu thành công", "success");
+                location.reload();
+                return;
+            }
+           
+        }).fail(() => {
+
+            $.notify("Lưu thất bại", "error");
+        });
+    }
+    function EditNews(id) {
+        idNews = id;
+        $.ajax({
+            url: '/Ajax/GetNews/' + idNews,
+            type: 'GET',
+            dataType: 'text',
+            data: {
+                id: idNews,
+            }
+        }).done(function (ketqua) {
+            var json = JSON.parse(ketqua);
+            $("[name='TITLE']").val(json.TITLE);
+            $("#blah1").attr('src', '/Images/' + json.HINH);
+            CKEDITOR.instances['NOIDUNG'].setData(json.NOIDUNG);
+            $("#modalAdd").modal("show");
+        }).fail(() => {
+            $.notify("Có lỗi!", "error");
+        });
+    }
+    function DeleteNews(id) {
+        var dialog = bootbox.dialog({
+            title: 'Thông báo xóa',
+            message: "Bạn có muốn xóa không?",
+            size: 'large',
+            closeButton: false,
+            buttons: {
+                ok: {
+                    label: "Có",
+                    className: 'btn-info',
+                    callback: function () {
+                        $.ajax({
+                            url: '/Ajax/DeleteNews/' + id,
+                            type: 'POST',
+                            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                            dataType: "json",
+
+                        }).done(function (ketqua) {
+                            if (ketqua.Success) {
+                                $.notify("Xóa thành công !", "success");
+                                location.reload();
+                                return;
+                            }
+                        });
+                    }
+
+                },
+                cancel: {
+                    label: "Không",
+                    className: 'btn-danger',
+                }
+            }
+        });
+
+    }
+    function readURL(input, idhinh) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#' + idhinh)
+                    .attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>

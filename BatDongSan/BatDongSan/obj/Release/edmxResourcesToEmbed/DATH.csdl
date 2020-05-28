@@ -1,0 +1,523 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BDSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="BILL">
+    <Key>
+      <PropertyRef Name="idBill" />
+    </Key>
+    <Property Name="idBill" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idCustom" Type="Int32" Nullable="false" />
+    <Property Name="idUserNV" Type="Int32" Nullable="false" />
+    <Property Name="idBuild" Type="Int32" Nullable="false" />
+    <Property Name="totalPrice" Type="Int32" />
+    <Property Name="createDate" Type="DateTime" Precision="3" />
+    <Property Name="content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="cmndTruoc" Type="String" MaxLength="55" FixedLength="false" Unicode="true" />
+    <Property Name="cmndSau" Type="String" MaxLength="55" FixedLength="false" Unicode="true" />
+    <Property Name="ngayKyTen" Type="DateTime" Precision="3" />
+    <Property Name="kyten" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="BUILDING" Relationship="Self.FK__BILL__idBuild__30F848ED" FromRole="BILL" ToRole="BUILDING" />
+    <NavigationProperty Name="CUSTOMER" Relationship="Self.FK_BILL_CUSTOMER" FromRole="BILL" ToRole="CUSTOMER" />
+    <NavigationProperty Name="USER" Relationship="Self.FK_BILL_USER" FromRole="BILL" ToRole="USER" />
+  </EntityType>
+  <EntityType Name="BUILDING">
+    <Key>
+      <PropertyRef Name="idBuild" />
+    </Key>
+    <Property Name="idBuild" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idWard" Type="Int32" Nullable="false" />
+    <Property Name="idUser" Type="Int32" Nullable="false" />
+    <Property Name="idType" Type="Int32" Nullable="false" />
+    <Property Name="nameBuild" Type="String" MaxLength="55" FixedLength="false" Unicode="true" />
+    <Property Name="street" Type="String" MaxLength="55" FixedLength="false" Unicode="true" />
+    <Property Name="floorarea" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="floor" Type="Int32" />
+    <Property Name="conent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="price" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="depositDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="nameManager" Type="String" MaxLength="55" FixedLength="false" Unicode="true" />
+    <Property Name="phoneManager" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+    <Property Name="idHuong" Type="Int32" />
+    <Property Name="idStatus" Type="Int32" />
+    <Property Name="deposits" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="BILLs" Relationship="Self.FK__BILL__idBuild__30F848ED" FromRole="BUILDING" ToRole="BILL" />
+    <NavigationProperty Name="TYPE" Relationship="Self.FK__BUILDING__idType__31EC6D26" FromRole="BUILDING" ToRole="TYPE" />
+    <NavigationProperty Name="USER" Relationship="Self.FK__BUILDING__idUser__29572725" FromRole="BUILDING" ToRole="USER" />
+    <NavigationProperty Name="WARD" Relationship="Self.FK__BUILDING__idWard__35BCFE0A" FromRole="BUILDING" ToRole="WARD" />
+    <NavigationProperty Name="PHIEUHENs" Relationship="Self.FK__PHIEUHEN__idBuil__2E1BDC42" FromRole="BUILDING" ToRole="PHIEUHEN" />
+    <NavigationProperty Name="HUONG" Relationship="Self.FK_BUILDING_HUONG" FromRole="BUILDING" ToRole="HUONG" />
+    <NavigationProperty Name="STATUS" Relationship="Self.FK_BUILDING_STATUS" FromRole="BUILDING" ToRole="STATUS" />
+    <NavigationProperty Name="IMAGEs" Relationship="Self.FK_IMAGE_BUILDING" FromRole="BUILDING" ToRole="IMAGE" />
+    <NavigationProperty Name="SERVICES" Relationship="Self.SER_BUILD" FromRole="BUILDING" ToRole="SERVICES" />
+  </EntityType>
+  <EntityType Name="CITY">
+    <Key>
+      <PropertyRef Name="idCity" />
+    </Key>
+    <Property Name="idCity" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nameCity" Type="String" MaxLength="55" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="DISTRICTs" Relationship="Self.FK__DISTRICT__idCity__33D4B598" FromRole="CITY" ToRole="DISTRICT" />
+  </EntityType>
+  <EntityType Name="CUSTOMER">
+    <Key>
+      <PropertyRef Name="idCustom" />
+    </Key>
+    <Property Name="idCustom" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nameCustom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="phoneCustom" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+    <Property Name="emailCustom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="addressCustom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="BILLs" Relationship="Self.FK_BILL_CUSTOMER" FromRole="CUSTOMER" ToRole="BILL" />
+    <NavigationProperty Name="PHIEUHENs" Relationship="Self.FK_PHIEUHEN_CUSTOMER" FromRole="CUSTOMER" ToRole="PHIEUHEN" />
+  </EntityType>
+  <EntityType Name="DISTRICT">
+    <Key>
+      <PropertyRef Name="idDistrict" />
+    </Key>
+    <Property Name="idDistrict" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nameDistrict" Type="String" MaxLength="55" FixedLength="false" Unicode="true" />
+    <Property Name="idCity" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="CITY" Relationship="Self.FK__DISTRICT__idCity__33D4B598" FromRole="DISTRICT" ToRole="CITY" />
+    <NavigationProperty Name="WARDs" Relationship="Self.FK__WARD__idDistrict__34C8D9D1" FromRole="DISTRICT" ToRole="WARD" />
+  </EntityType>
+  <EntityType Name="HUONG">
+    <Key>
+      <PropertyRef Name="idHuong" />
+    </Key>
+    <Property Name="idHuong" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nameHuong" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="BUILDINGs" Relationship="Self.FK_BUILDING_HUONG" FromRole="HUONG" ToRole="BUILDING" />
+  </EntityType>
+  <EntityType Name="IMAGE">
+    <Key>
+      <PropertyRef Name="idImage" />
+    </Key>
+    <Property Name="idImage" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nameImage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="idBuild" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="BUILDING" Relationship="Self.FK_IMAGE_BUILDING" FromRole="IMAGE" ToRole="BUILDING" />
+  </EntityType>
+  <EntityType Name="NEWS">
+    <Key>
+      <PropertyRef Name="idNews" />
+    </Key>
+    <Property Name="idNews" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idUser" Type="Int32" Nullable="false" />
+    <Property Name="titleNews" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="createDate" Type="DateTime" Precision="3" />
+    <Property Name="Img" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="USER" Relationship="Self.FK__NEWS__idUser__286302EC" FromRole="NEWS" ToRole="USER" />
+  </EntityType>
+  <EntityType Name="PHIEUHEN">
+    <Key>
+      <PropertyRef Name="idPhieu" />
+    </Key>
+    <Property Name="idPhieu" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idCustom" Type="Int32" Nullable="false" />
+    <Property Name="idUserNV" Type="Int32" Nullable="false" />
+    <Property Name="idBuild" Type="Int32" Nullable="false" />
+    <Property Name="contentPhieu" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="createPhieu" Type="DateTime" Precision="3" />
+    <Property Name="ngayhen" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="BUILDING" Relationship="Self.FK__PHIEUHEN__idBuil__2E1BDC42" FromRole="PHIEUHEN" ToRole="BUILDING" />
+    <NavigationProperty Name="CUSTOMER" Relationship="Self.FK_PHIEUHEN_CUSTOMER" FromRole="PHIEUHEN" ToRole="CUSTOMER" />
+    <NavigationProperty Name="USER" Relationship="Self.FK_PHIEUHEN_USER" FromRole="PHIEUHEN" ToRole="USER" />
+  </EntityType>
+  <EntityType Name="ROLE">
+    <Key>
+      <PropertyRef Name="idRole" />
+    </Key>
+    <Property Name="idRole" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nameRole" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="USERs" Relationship="Self.FK__USER__idRole__276EDEB3" FromRole="ROLE" ToRole="USER" />
+  </EntityType>
+  <EntityType Name="SERVICE">
+    <Key>
+      <PropertyRef Name="idService" />
+    </Key>
+    <Property Name="idService" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="typeService" Type="String" MaxLength="22" FixedLength="false" Unicode="true" />
+    <Property Name="nameService" Type="String" MaxLength="55" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="BUILDINGs" Relationship="Self.SER_BUILD" FromRole="SERVICES" ToRole="BUILDING" />
+  </EntityType>
+  <EntityType Name="STATUS">
+    <Key>
+      <PropertyRef Name="idStatus" />
+    </Key>
+    <Property Name="idStatus" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nameStatuts" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="BUILDINGs" Relationship="Self.FK_BUILDING_STATUS" FromRole="STATUS" ToRole="BUILDING" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="TYPE">
+    <Key>
+      <PropertyRef Name="idType" />
+    </Key>
+    <Property Name="idType" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nameType" Type="String" MaxLength="55" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="BUILDINGs" Relationship="Self.FK__BUILDING__idType__31EC6D26" FromRole="TYPE" ToRole="BUILDING" />
+  </EntityType>
+  <EntityType Name="USER">
+    <Key>
+      <PropertyRef Name="idUser" />
+    </Key>
+    <Property Name="idUser" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idRole" Type="Int32" Nullable="false" />
+    <Property Name="userName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="userPassword" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="55" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+    <Property Name="Address" Type="String" MaxLength="55" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="BILLs" Relationship="Self.FK_BILL_USER" FromRole="USER" ToRole="BILL" />
+    <NavigationProperty Name="BUILDINGs" Relationship="Self.FK__BUILDING__idUser__29572725" FromRole="USER" ToRole="BUILDING" />
+    <NavigationProperty Name="NEWS" Relationship="Self.FK__NEWS__idUser__286302EC" FromRole="USER" ToRole="NEWS" />
+    <NavigationProperty Name="PHIEUHENs" Relationship="Self.FK_PHIEUHEN_USER" FromRole="USER" ToRole="PHIEUHEN" />
+    <NavigationProperty Name="ROLE" Relationship="Self.FK__USER__idRole__276EDEB3" FromRole="USER" ToRole="ROLE" />
+  </EntityType>
+  <EntityType Name="WARD">
+    <Key>
+      <PropertyRef Name="idWard" />
+    </Key>
+    <Property Name="idWard" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nameWard" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="idDistrict" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="BUILDINGs" Relationship="Self.FK__BUILDING__idWard__35BCFE0A" FromRole="WARD" ToRole="BUILDING" />
+    <NavigationProperty Name="DISTRICT" Relationship="Self.FK__WARD__idDistrict__34C8D9D1" FromRole="WARD" ToRole="DISTRICT" />
+  </EntityType>
+  <Association Name="FK__BILL__idBuild__30F848ED">
+    <End Role="BUILDING" Type="Self.BUILDING" Multiplicity="1" />
+    <End Role="BILL" Type="Self.BILL" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BUILDING">
+        <PropertyRef Name="idBuild" />
+      </Principal>
+      <Dependent Role="BILL">
+        <PropertyRef Name="idBuild" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BILL_CUSTOMER">
+    <End Role="CUSTOMER" Type="Self.CUSTOMER" Multiplicity="1" />
+    <End Role="BILL" Type="Self.BILL" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CUSTOMER">
+        <PropertyRef Name="idCustom" />
+      </Principal>
+      <Dependent Role="BILL">
+        <PropertyRef Name="idCustom" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BILL_USER">
+    <End Role="USER" Type="Self.USER" Multiplicity="1" />
+    <End Role="BILL" Type="Self.BILL" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="USER">
+        <PropertyRef Name="idUser" />
+      </Principal>
+      <Dependent Role="BILL">
+        <PropertyRef Name="idUserNV" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__BUILDING__idType__31EC6D26">
+    <End Role="TYPE" Type="Self.TYPE" Multiplicity="1" />
+    <End Role="BUILDING" Type="Self.BUILDING" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TYPE">
+        <PropertyRef Name="idType" />
+      </Principal>
+      <Dependent Role="BUILDING">
+        <PropertyRef Name="idType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__BUILDING__idUser__29572725">
+    <End Role="USER" Type="Self.USER" Multiplicity="1" />
+    <End Role="BUILDING" Type="Self.BUILDING" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="USER">
+        <PropertyRef Name="idUser" />
+      </Principal>
+      <Dependent Role="BUILDING">
+        <PropertyRef Name="idUser" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__BUILDING__idWard__35BCFE0A">
+    <End Role="WARD" Type="Self.WARD" Multiplicity="1" />
+    <End Role="BUILDING" Type="Self.BUILDING" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="WARD">
+        <PropertyRef Name="idWard" />
+      </Principal>
+      <Dependent Role="BUILDING">
+        <PropertyRef Name="idWard" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PHIEUHEN__idBuil__2E1BDC42">
+    <End Role="BUILDING" Type="Self.BUILDING" Multiplicity="1" />
+    <End Role="PHIEUHEN" Type="Self.PHIEUHEN" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BUILDING">
+        <PropertyRef Name="idBuild" />
+      </Principal>
+      <Dependent Role="PHIEUHEN">
+        <PropertyRef Name="idBuild" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BUILDING_HUONG">
+    <End Role="HUONG" Type="Self.HUONG" Multiplicity="0..1" />
+    <End Role="BUILDING" Type="Self.BUILDING" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HUONG">
+        <PropertyRef Name="idHuong" />
+      </Principal>
+      <Dependent Role="BUILDING">
+        <PropertyRef Name="idHuong" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BUILDING_STATUS">
+    <End Role="STATUS" Type="Self.STATUS" Multiplicity="0..1" />
+    <End Role="BUILDING" Type="Self.BUILDING" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="STATUS">
+        <PropertyRef Name="idStatus" />
+      </Principal>
+      <Dependent Role="BUILDING">
+        <PropertyRef Name="idStatus" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_IMAGE_BUILDING">
+    <End Role="BUILDING" Type="Self.BUILDING" Multiplicity="1" />
+    <End Role="IMAGE" Type="Self.IMAGE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BUILDING">
+        <PropertyRef Name="idBuild" />
+      </Principal>
+      <Dependent Role="IMAGE">
+        <PropertyRef Name="idBuild" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DISTRICT__idCity__33D4B598">
+    <End Role="CITY" Type="Self.CITY" Multiplicity="1" />
+    <End Role="DISTRICT" Type="Self.DISTRICT" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CITY">
+        <PropertyRef Name="idCity" />
+      </Principal>
+      <Dependent Role="DISTRICT">
+        <PropertyRef Name="idCity" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PHIEUHEN_CUSTOMER">
+    <End Role="CUSTOMER" Type="Self.CUSTOMER" Multiplicity="1" />
+    <End Role="PHIEUHEN" Type="Self.PHIEUHEN" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CUSTOMER">
+        <PropertyRef Name="idCustom" />
+      </Principal>
+      <Dependent Role="PHIEUHEN">
+        <PropertyRef Name="idCustom" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__WARD__idDistrict__34C8D9D1">
+    <End Role="DISTRICT" Type="Self.DISTRICT" Multiplicity="1" />
+    <End Role="WARD" Type="Self.WARD" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DISTRICT">
+        <PropertyRef Name="idDistrict" />
+      </Principal>
+      <Dependent Role="WARD">
+        <PropertyRef Name="idDistrict" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__NEWS__idUser__286302EC">
+    <End Role="USER" Type="Self.USER" Multiplicity="1" />
+    <End Role="NEWS" Type="Self.NEWS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="USER">
+        <PropertyRef Name="idUser" />
+      </Principal>
+      <Dependent Role="NEWS">
+        <PropertyRef Name="idUser" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PHIEUHEN_USER">
+    <End Role="USER" Type="Self.USER" Multiplicity="1" />
+    <End Role="PHIEUHEN" Type="Self.PHIEUHEN" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="USER">
+        <PropertyRef Name="idUser" />
+      </Principal>
+      <Dependent Role="PHIEUHEN">
+        <PropertyRef Name="idUserNV" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__USER__idRole__276EDEB3">
+    <End Role="ROLE" Type="Self.ROLE" Multiplicity="1" />
+    <End Role="USER" Type="Self.USER" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ROLE">
+        <PropertyRef Name="idRole" />
+      </Principal>
+      <Dependent Role="USER">
+        <PropertyRef Name="idRole" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="SER_BUILD">
+    <End Role="BUILDING" Type="Self.BUILDING" Multiplicity="*" />
+    <End Role="SERVICES" Type="Self.SERVICE" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="BDSEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="BILLs" EntityType="Self.BILL" />
+    <EntitySet Name="BUILDINGs" EntityType="Self.BUILDING" />
+    <EntitySet Name="CITies" EntityType="Self.CITY" />
+    <EntitySet Name="CUSTOMERs" EntityType="Self.CUSTOMER" />
+    <EntitySet Name="DISTRICTs" EntityType="Self.DISTRICT" />
+    <EntitySet Name="HUONGs" EntityType="Self.HUONG" />
+    <EntitySet Name="IMAGEs" EntityType="Self.IMAGE" />
+    <EntitySet Name="NEWS" EntityType="Self.NEWS" />
+    <EntitySet Name="PHIEUHENs" EntityType="Self.PHIEUHEN" />
+    <EntitySet Name="ROLEs" EntityType="Self.ROLE" />
+    <EntitySet Name="SERVICES" EntityType="Self.SERVICE" />
+    <EntitySet Name="STATUS" EntityType="Self.STATUS" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="TYPEs" EntityType="Self.TYPE" />
+    <EntitySet Name="USERs" EntityType="Self.USER" />
+    <EntitySet Name="WARDs" EntityType="Self.WARD" />
+    <AssociationSet Name="FK__BILL__idBuild__30F848ED" Association="Self.FK__BILL__idBuild__30F848ED">
+      <End Role="BUILDING" EntitySet="BUILDINGs" />
+      <End Role="BILL" EntitySet="BILLs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BILL_CUSTOMER" Association="Self.FK_BILL_CUSTOMER">
+      <End Role="CUSTOMER" EntitySet="CUSTOMERs" />
+      <End Role="BILL" EntitySet="BILLs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BILL_USER" Association="Self.FK_BILL_USER">
+      <End Role="USER" EntitySet="USERs" />
+      <End Role="BILL" EntitySet="BILLs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__BUILDING__idType__31EC6D26" Association="Self.FK__BUILDING__idType__31EC6D26">
+      <End Role="TYPE" EntitySet="TYPEs" />
+      <End Role="BUILDING" EntitySet="BUILDINGs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__BUILDING__idUser__29572725" Association="Self.FK__BUILDING__idUser__29572725">
+      <End Role="USER" EntitySet="USERs" />
+      <End Role="BUILDING" EntitySet="BUILDINGs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__BUILDING__idWard__35BCFE0A" Association="Self.FK__BUILDING__idWard__35BCFE0A">
+      <End Role="WARD" EntitySet="WARDs" />
+      <End Role="BUILDING" EntitySet="BUILDINGs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PHIEUHEN__idBuil__2E1BDC42" Association="Self.FK__PHIEUHEN__idBuil__2E1BDC42">
+      <End Role="BUILDING" EntitySet="BUILDINGs" />
+      <End Role="PHIEUHEN" EntitySet="PHIEUHENs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BUILDING_HUONG" Association="Self.FK_BUILDING_HUONG">
+      <End Role="HUONG" EntitySet="HUONGs" />
+      <End Role="BUILDING" EntitySet="BUILDINGs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BUILDING_STATUS" Association="Self.FK_BUILDING_STATUS">
+      <End Role="STATUS" EntitySet="STATUS" />
+      <End Role="BUILDING" EntitySet="BUILDINGs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_IMAGE_BUILDING" Association="Self.FK_IMAGE_BUILDING">
+      <End Role="BUILDING" EntitySet="BUILDINGs" />
+      <End Role="IMAGE" EntitySet="IMAGEs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DISTRICT__idCity__33D4B598" Association="Self.FK__DISTRICT__idCity__33D4B598">
+      <End Role="CITY" EntitySet="CITies" />
+      <End Role="DISTRICT" EntitySet="DISTRICTs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PHIEUHEN_CUSTOMER" Association="Self.FK_PHIEUHEN_CUSTOMER">
+      <End Role="CUSTOMER" EntitySet="CUSTOMERs" />
+      <End Role="PHIEUHEN" EntitySet="PHIEUHENs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__WARD__idDistrict__34C8D9D1" Association="Self.FK__WARD__idDistrict__34C8D9D1">
+      <End Role="DISTRICT" EntitySet="DISTRICTs" />
+      <End Role="WARD" EntitySet="WARDs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__NEWS__idUser__286302EC" Association="Self.FK__NEWS__idUser__286302EC">
+      <End Role="USER" EntitySet="USERs" />
+      <End Role="NEWS" EntitySet="NEWS" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PHIEUHEN_USER" Association="Self.FK_PHIEUHEN_USER">
+      <End Role="USER" EntitySet="USERs" />
+      <End Role="PHIEUHEN" EntitySet="PHIEUHENs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__USER__idRole__276EDEB3" Association="Self.FK__USER__idRole__276EDEB3">
+      <End Role="ROLE" EntitySet="ROLEs" />
+      <End Role="USER" EntitySet="USERs" />
+    </AssociationSet>
+    <AssociationSet Name="SER_BUILD" Association="Self.SER_BUILD">
+      <End Role="BUILDING" EntitySet="BUILDINGs" />
+      <End Role="SERVICES" EntitySet="SERVICES" />
+    </AssociationSet>
+    <FunctionImport Name="proc_CryptData" ReturnType="Collection(String)">
+      <Parameter Name="Data" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(BDSModel.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(BDSModel.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+  </EntityContainer>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+</Schema>

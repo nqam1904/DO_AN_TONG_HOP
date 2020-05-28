@@ -1,0 +1,414 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="https://file4.batdongsan.com.vn/images/icon-bds.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kênh thông tin bất động sản</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/home.css" rel="stylesheet" />
+    <link href="~/Content/footer.css" rel="stylesheet" />
+    <link href="~/Content/dropdown_custom.css" rel="stylesheet" />
+    <link href="~/Content/Loading.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/style.js"></script>
+
+    <script src="~/Scripts/loadingoverlay.min.js"></script>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary ">
+        <a href="/" style="color: white; font-size: 30px;"><i class="fas fa-home"></i></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <br />
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/Home/ListBuild">VĂN PHÒNG THEO QUẬN </a>
+                    @using (BDSEntities db = new BDSEntities())
+                    {
+                        <div class="header_notify">
+                            <ul class="header_notify_list">
+                                <li class="header_notify_item">
+                                    @foreach (var item in db.DISTRICTs.ToList())
+                                    {
+                                        <div class="item_link">
+                                            <a href="/Home/Theo_Quan/@item.idDistrict" class="header_notify_link" value="@item.idDistrict">@item.nameDistrict</a>
+                                        </div>
+                                    }
+
+                                </li>
+                            </ul>
+                        </div>
+
+                    }
+
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">VĂN PHÒNG THEO HẠNG</a>
+                    @using (BDSEntities db = new BDSEntities())
+                    {
+                        <div class="dropdown-menu">
+                            @foreach (var item in db.TYPEs.ToList())
+                            {
+                                <a href="/Home/Theo_Loai/@item.idType" class="dropdown-item" value="@item.idType">@item.nameType</a>
+                            }
+                        </div>
+
+                    }
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Home/TinTuc">TIN TỨC</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">VĂN PHÒNG THEO HƯỚNG</a>
+                    @using (BDSEntities db = new BDSEntities())
+                    {
+                        <div class="dropdown-menu">
+                            @foreach (var item in db.HUONGs.ToList())
+                            {
+                                <a href="/Home/Theo_Huong/@item.idHuong" class="dropdown-item" value="@item.idHuong">@item.nameHuong</a>
+                            }
+                        </div>
+
+                    }
+                </li>
+            </ul>
+
+        </div>
+        <div class="form-login">
+            <ul class="navbar-nav lv1">
+                <li class="nav-item item_separate">
+                    Tải ứng dụng
+                    <div class="header_qr">
+                        <img src="~/HinhAnh/qr_code.png" alt="QR code" class="header_qr_img">
+                        <div class="header_qr_apps">
+                            <a href="#" class="header_qr_link"> <img src="~/HinhAnh/google_play.png" alt="Google Play" class="header-qr-dowload-img"></a>
+                            <a href="#" class="header_qr_link"> <img src="~/HinhAnh/app_store.png" alt="Appstore" class="header-qr-dowload-img"></a>
+                        </div>
+                    </div>
+                </li>
+                <li class="header_navbar_item">
+                    <span class="header_navbar_no_pointer">Kết nối</span>
+                    <a href="#" class="header_navbar_icon_link">
+                        <i class="header_navbar_icon fab fa-facebook"></i>
+                    </a>
+                    <a href="#" class="header_navbar_icon_link">
+                        <i class="header_navbar_icon fab fa-instagram"></i>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+    @RenderBody()
+    <!--Danh sách các quận tỉnh -->
+    <div class="home-center bg-grey2">
+        <div class="home-small">
+            <div class="html-content">
+                <div class="home-list-tag">
+                    <div class="footer-middle">
+                        <div class="footer-middle-colum1">
+                            <div class="footer-middle-colum1-title">
+                                <h3>
+                                    <a href="/nha-dat-ban-tp-hcm">Nhà đất TP HCM</a>
+                                </h3>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/nha-dat-ban-tp-hcm">Mua bán nhà đất TPHCM</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/nha-dat-ban-quan-1">Bán nhà Quận 1</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/nha-dat-ban-quan-2">Bán nhà Quận 2</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/nha-dat-ban-quan-3">Bán nhà Quận 3</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/ban-nha-rieng-quan-4">Bán nhà Quận 4</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/nha-dat-ban-quan-5">Bán nhà Quận 5</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/nha-dat-ban-quan-6">Bán nhà Quận 6</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/ban-nha-rieng-quan-7">Bán nhà Quận 7</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/ban-nha-rieng-quan-8">Bán nhà Quận 8</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/nha-dat-ban-quan-9">Bán nhà Quận 9</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/ban-nha-rieng-quan-10">Bán nhà Quận 10</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/ban-nha-rieng-quan-11">Bán nhà Quận 11</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/ban-nha-rieng-quan-12">Bán nhà Quận 12</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/ban-nha-rieng-tan-phu">Bán nhà Tân Phú</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/nha-dat-ban-thu-duc">Bán nhà Thủ Đức</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/nha-dat-ban-binh-chanh">Bán nhà Bình Chánh</a>
+                            </div>
+                            <div class="clear">
+                            </div>
+                        </div>
+                        <div class="footer-middle-colum1">
+                            <div class="footer-middle-colum1-title">
+                                <h3>
+                                    <a href="/nha-dat-ban-ha-noi">Nhà đất Hà Nội</a>
+                                </h3>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/ban-nha-rieng-ha-noi">Bán nhà Hà Nội</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/tags/ban/ban-nha-chinh-chu-co-so-do-tai-ha-noi">Bán nhà chính chủ Hà Nội</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/nha-dat-ban-ha-noi">Mua&nbsp;bán&nbsp;nhà&nbsp;đất Hà Nội</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/nha-dat-ban-ha-dong">Nhà đất Long Biên</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/nha-dat-ban-long-bien">Nhà đất Hà Đông</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/ban-can-ho-chung-cu-ha-noi">Chung cư Hà Nội</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/ban-nha-rieng-bac-tu-liem">Bán nhà Bắc Từ Liêm</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/cho-thue-nha-rieng-ha-noi">Thuê nhà Hà Nội</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/cho-thue-can-ho-chung-cu-ha-noi">Thuê chung cư hà nội</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/cho-thue-nha-rieng-ha-dong">Thuê nhà Hà Đông</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/nha-dat-ban-dong-anh">Nhà đất Đông Anh</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/cho-thue-cua-hang-ki-ot-ha-noi">Cho thuê mặt bằng</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/cho-thue-nha-tro-phong-tro-ha-noi">Thuê nhà trọ</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/ban-can-ho-chung-cu-times-city">Time City</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/ban-can-ho-chung-cu-vinhomes-ocean-park-gia-lam">Vinhomes Ocean Park</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="/ban-can-ho-chung-cu-vinhomes-smart-city-dai-mo">Vinhomes Smart City</a>
+                            </div>
+                            <div class="clear">
+                            </div>
+                        </div>
+                        <div class="footer-middle-colum1">
+                            <div class="footer-middle-colum1-title">
+                                <h3>
+                                    <a href="/nha-dat-ban-hai-phong">Nhà đất Hải Phòng</a>
+                                </h3>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="https://batdongsan.com.vn/ban-nha-rieng-kien-an-hp">Bán nhà Kiến An</a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="https://batdongsan.com.vn/ban-nha-rieng-hong-bang-hp">
+                                    Bán nhà quận Hồng
+                                    Bàng
+                                </a>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="https://batdongsan.com.vn/ban-nha-biet-thu-lien-ke-vinhomes-imperia-hai-phong">
+                                    Bán
+                                    Vinhomes Imperia Hải Phòng
+                                </a>
+                            </div>
+                            <div class="footer-middle-colum1-title">
+                                <h3>
+                                    <a href="/nha-dat-ban-lao-cai">NHÀ ĐẤT LÀO CAI</a>
+                                </h3>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="https://batdongsan.com.vn/ban-nha-biet-thu-lien-ke-sapa-jade-hill">
+                                    Biệt thự
+                                    Sapa Jade Hill
+                                </a>
+                            </div>
+                            <div class="footer-middle-colum1-title">
+                                <h3>
+                                    <a href="/nha-dat-ban-thanh-hoa">NHÀ ĐẤT THANH HÓA</a>
+                                </h3>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="https://batdongsan.com.vn/ban-nha-biet-thu-lien-ke-vincom-thanh-hoa">
+                                    Căn hộ
+                                    Vincom Shophouse Thanh Hóa
+                                </a>
+                            </div>
+                            <div class="footer-middle-colum1-title">
+                                <h3>
+                                    <a href="/nha-dat-ban-yen-bai">NHÀ ĐẤT YÊN BÁI</a>
+                                </h3>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="https://batdongsan.com.vn/ban-nha-biet-thu-lien-ke-vincom-yen-bai">
+                                    Căn hộ
+                                    Vincom Shophouse Yên Bái
+                                </a>
+                            </div>
+                            <div class="footer-middle-colum1-title">
+                                <h3>
+                                    <a href="/nha-dat-ban-da-nang">Nhà đất Đà Nẵng</a>
+                                </h3>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="https://batdongsan.com.vn/ban-nha-biet-thu-lien-ke-vinpearl-premium-da-nang">
+                                    Biệt
+                                    thự Vinpearl Premium Đà Nẵng
+                                </a>
+                            </div>
+                            <div class="footer-middle-colum1-title">
+                                <h3>
+                                    <a href="/nha-dat-ban-kien-giang">NHÀ ĐẤT KIÊN GIANG</a>
+                                </h3>
+                            </div>
+                            <div class="footer-middle-colum1-link">
+                                <a href="https://batdongsan.com.vn/ban-can-ho-chung-cu-premier-residences-phu-quoc">
+                                    Căn
+                                    hộ Premier Residences Phú Quốc
+                                </a>
+                            </div>
+                            <div class="clear">
+                            </div>
+                        </div>
+
+                        <div class="clear">
+                        </div>
+                    </div>
+                </div>
+                <div class="clear">
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="site-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <h6>About</h6>
+                    <p class="text-justify">
+                        Scanfcode.com <i>CODE WANTS TO BE SIMPLE </i> is an initiative to help the
+                        upcoming programmers with the code. Scanfcode focuses on providing the most efficient code or
+                        snippets as the code wants to be simple. We will help programmers build up concepts in different
+                        programming languages that include C, C++, Java, HTML, CSS, Bootstrap, JavaScript, PHP, Android,
+                        SQL and Algorithm.
+                    </p>
+                </div>
+
+                <div class="col-xs-6 col-md-3">
+                    <h6>Categories</h6>
+                    <ul class="footer-links">
+                        <li><a href="http://scanfcode.com/category/c-language/">C</a></li>
+                        <li><a href="http://scanfcode.com/category/front-end-development/">UI Design</a></li>
+                        <li><a href="http://scanfcode.com/category/back-end-development/">PHP</a></li>
+                        <li><a href="http://scanfcode.com/category/java-programming-language/">Java</a></li>
+                        <li><a href="http://scanfcode.com/category/android/">Android</a></li>
+                        <li><a href="http://scanfcode.com/category/templates/">Templates</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-xs-6 col-md-3">
+                    <h6>Quick Links</h6>
+                    <ul class="footer-links">
+                        <li><a href="http://scanfcode.com/about/">About Us</a></li>
+                        <li><a href="http://scanfcode.com/contact/">Contact Us</a></li>
+                        <li><a href="http://scanfcode.com/contribute-at-scanfcode/">Contribute</a></li>
+                        <li><a href="http://scanfcode.com/privacy-policy/">Privacy Policy</a></li>
+                        <li><a href="http://scanfcode.com/sitemap/">Sitemap</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-sm-6 col-xs-12">
+                    <p class="copyright-text">
+                        Copyright &copy; 2017 All Rights Reserved by
+                        <a href="#">Scanfcode</a>.
+                    </p>
+                </div>
+
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <ul class="social-icons">
+                        <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a class="dribbble" href="#"><i class="fa fa-dribbble"></i></a></li>
+                        <li><a class="linkedin" href="#"><i class="fa fa-linkedin"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script type="text/javascript">
+        $(".search-cate .select-custom").click(function () {
+            $(".search-cate").find(".advance-select-options").show();
+            $(document).unbind("mousedown");
+            $(document).mousedown(function (j) {
+                var i = $(".search-cate");
+                if (!i.is(j.target) && i.has(j.target).length === 0) {
+                    $(".search-cate").find(".advance-select-options").hide();
+                    $("body").trigger("click");
+                    $(document).unbind("mousedown");
+
+                }
+            })
+        });
+        $(".card .card-img-top").click(() => {
+            location.href = 'chitiettoanha.html'
+        });
+
+
+        $.LoadingOverlay("show", {
+            image: "",
+            fontawesome: "fas fa-sync fa-spin"
+        });
+
+        // Hide it after 3 seconds
+        setTimeout(function () {
+            $.LoadingOverlay("hide");
+        }, 1000);
+    </script>
+</body>
+
+</html>

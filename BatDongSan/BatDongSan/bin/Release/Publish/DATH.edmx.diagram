@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="547583f6601b44ce8c048cd32193433f" Name="Diagram1">
+        <EntityTypeShape EntityType="BDSModel.BILL" Width="1.5" PointX="9.75" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSModel.BUILDING" Width="1.5" PointX="7.5" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSModel.CITY" Width="1.5" PointX="0.75" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSModel.CUSTOMER" Width="1.5" PointX="7.5" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSModel.DISTRICT" Width="1.5" PointX="3" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSModel.HUONG" Width="1.5" PointX="5.25" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSModel.IMAGE" Width="1.5" PointX="9.75" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSModel.NEWS" Width="1.5" PointX="7.5" PointY="14" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSModel.PHIEUHEN" Width="1.5" PointX="12.75" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSModel.ROLE" Width="1.5" PointX="3" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSModel.SERVICE" Width="1.5" PointX="9.75" PointY="17.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSModel.STATUS" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSModel.sysdiagram" Width="1.5" PointX="0.75" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSModel.TYPE" Width="1.5" PointX="5.25" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSModel.USER" Width="1.5" PointX="5.25" PointY="13.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDSModel.WARD" Width="1.5" PointX="5.25" PointY="7.75" IsExpanded="true" />
+        <AssociationConnector Association="BDSModel.FK__BILL__idBuild__30F848ED" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSModel.FK_BILL_CUSTOMER" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSModel.FK_BILL_USER" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSModel.FK__BUILDING__idType__31EC6D26" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSModel.FK__BUILDING__idUser__29572725" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSModel.FK__BUILDING__idWard__35BCFE0A" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSModel.FK__PHIEUHEN__idBuil__2E1BDC42" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSModel.FK_BUILDING_HUONG" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSModel.FK_BUILDING_STATUS" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSModel.FK_IMAGE_BUILDING" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSModel.FK__DISTRICT__idCity__33D4B598" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSModel.FK_PHIEUHEN_CUSTOMER" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSModel.FK__WARD__idDistrict__34C8D9D1" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSModel.FK__NEWS__idUser__286302EC" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSModel.FK_PHIEUHEN_USER" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSModel.FK__USER__idRole__276EDEB3" ManuallyRouted="false" />
+        <AssociationConnector Association="BDSModel.SER_BUILD" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

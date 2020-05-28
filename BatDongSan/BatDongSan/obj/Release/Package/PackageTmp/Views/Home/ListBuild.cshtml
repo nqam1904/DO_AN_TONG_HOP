@@ -1,0 +1,216 @@
+﻿
+@{
+    ViewBag.Title = "ListBuild";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .jumbotron {
+        background: rgba(0,0,0,.7);
+    }
+
+    .col-form-label {
+        color: white;
+    }
+
+    .btn-css {
+        width: 100%;
+    }
+
+    .custom-btn {
+        position: relative;
+        margin: -20px -50px;
+        width: 100px;
+        top: 50%;
+        left: 50%;
+    }
+
+    .title-vanphong {
+        margin-bottom: 20px;
+    }
+</style>
+<div class="container">
+    <br />
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <div class="text-center">
+                        <label class="col-form-label">Tỉnh/Thành Phố</label>
+                    </div>
+                    <select class="form-control " id="IdCity" name="CITY" onchange="UpdateDistrict()">
+                        @using (BDSEntities db = new BDSEntities())
+                        {
+                            <option>---- Chọn Thành Phố ----</option>
+                            foreach (var city in db.CITies.ToList())
+                            {
+
+                                <option value="@city.idCity">@city.nameCity</option>
+
+                            }
+
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <div class="text-center">
+                        <label class="col-form-label">Quận/Huyện</label>
+                    </div>
+                    <select class="form-control" id="IdDistrict" name="QUAN" onchange="UpdateWard()">
+                        @using (BDSEntities db = new BDSEntities())
+                        {
+
+                            foreach (var quan in db.DISTRICTs.ToList())
+                            {
+                                <option value="@quan.idDistrict" class="option-district" id-city="@quan.idCity">@quan.nameDistrict</option>
+                            }
+
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <div class="text-center">
+                        <label class="col-form-label">Phường/Xã</label>
+                    </div>
+                    <select class="form-control" id="IdWard" name="PHUONG">
+                        @using (BDSEntities db = new BDSEntities())
+                        {
+                            foreach (var phuong in db.WARDs.ToList())
+                            {
+                                <option value="@phuong.idWard" class="option-ward" id-district="@phuong.idDistrict">@phuong.nameWard</option>
+                            }
+
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="btn-css">
+                <button class="btn btn-primary custom-btn">Tìm kiếm</button>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="title-vanphong text-center">
+
+
+        <h2>Danh sách các tòa nhà </h2>
+    </div>
+    <div class="row">
+        @using (BDSEntities db = new BDSEntities())
+        {
+
+            var lstBuild = db.BUILDINGs.ToList();
+            foreach (var item in lstBuild)
+            {
+                string noidung = item.conent ?? "";
+                noidung = System.Text.RegularExpressions.Regex.Replace(noidung, "<.*?>", String.Empty);
+                if (noidung.Length > 100)
+                {
+                    noidung = noidung.Substring(0, 100) + "...";
+                }
+                var hinh = db.IMAGEs.Where(x => x.idBuild == item.idBuild).FirstOrDefault();
+                string GiaTien = String.Format("{0:N0}", item.price);
+                <div class="col-3" onclick="">
+                    <br />
+                    <div class="card" style="width: 18rem;">
+                        <img src="~/Images/@hinh.nameImage" height="200" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.nameBuild</h5>
+                            <p class="card-text">
+                                <span><i class="fas fa-dollar-sign"></i> Giá thuê:</span>
+                                <span style="color: red;">@GiaTien VNĐ</span>
+                            </p>
+                            <p class="card-text">
+                                <span><i class="fas fa-map-marker-alt"></i> @item.street</span>
+                            </p>
+                            <p class="card-text">
+                                <span><i class="fas fa-dollar-sign"></i> Diên tích:</span>
+                                <span>@item.floorarea m<sup>2</sup></span>
+                            </p>
+                            <p class="card-text">
+                                <span><i class="fas fa-dollar-sign"></i> Hướng:</span>
+                                <span>@item.HUONG.nameHuong</span>
+                            </p>
+                            @*<p class="card-text">@Html.Raw(noidung)</p>*@
+                            <button class="btn btn-warning btn-block" style="color: white" onclick="CreatePhieu()">Chọn ngày đi xem</button>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        }
+    </div>
+
+
+</div>
+@*<div id="ModalPhieuHen">
+        @{
+            Html.RenderPartial("__PartialPhieuHen");
+        }
+    </div>*@
+<!-- Modal -->
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function CreatePhieu() {
+
+        $("#modal").modal('show');
+    }
+</script>
+<script type="text/javascript">
+
+    UpdateDistrict();
+    function UpdateDistrict() {
+        var idcity = $("#IdCity").val();
+        $(".option-district").each(function () {
+            var option_idcity = $(this).attr("id-city");
+            if (option_idcity == idcity) $(this).show();
+            else $(this).hide();
+            // $('#IdDistrict').selectpicker('refresh');
+
+
+        });
+        //$(".selectpicker").selectpicker('refresh');
+
+        $("#IdDistrict").val("");
+        UpdateWard();
+    }
+    function UpdateWard() {
+        var iddistrict = $("#IdDistrict").val();
+        $(".option-ward").each(function () {
+            var option_iddistrict = $(this).attr("id-district");
+            if (option_iddistrict == iddistrict) $(this).show();
+            else $(this).hide();
+            // $('#IdWard').selectpicker('refresh');
+        });
+        $("#IdWard").val("");
+
+        //$(".selectpicker").selectpicker('refresh');
+
+    }
+
+   
+
+</script>
+
