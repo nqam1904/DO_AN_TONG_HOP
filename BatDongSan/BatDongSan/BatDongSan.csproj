@@ -182,6 +182,7 @@
       <DependentUpon>DATH.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ApiResult.cs" />
+    <Compile Include="Models\Api\BILL.cs" />
     <Compile Include="Models\Api\TOANHA.cs" />
     <Compile Include="Models\Api\CITY.cs" />
     <Compile Include="Models\Api\CUSTOMER.cs" />
@@ -233,6 +234,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\ChiTietToaNha.css" />
     <Content Include="Content\dataTables.bootstrap4.min.css" />
     <Content Include="Content\demo.css" />
     <Content Include="Content\dropdown_custom.css" />
@@ -241,6 +243,7 @@
     <Content Include="Content\image-uploader.css" />
     <Content Include="Content\image-uploader.min.css" />
     <Content Include="Content\Loading.css" />
+    <Content Include="Content\main.css" />
     <Content Include="Content\phieuhen.css" />
     <Content Include="Content\ruang-admin.min.css" />
     <Content Include="Content\home.css" />
@@ -256,6 +259,8 @@
       <LastGenOutput>DATH.cs</LastGenOutput>
     </Content>
     <Content Include="HinhAnh\app_store.png" />
+    <Content Include="HinhAnh\chplay.png" />
+    <Content Include="HinhAnh\compass-regular.svg" />
     <Content Include="HinhAnh\google_play.png" />
     <Content Include="HinhAnh\images\loader-128x\Preloader_1.gif" />
     <Content Include="HinhAnh\images\loader-128x\Preloader_2.gif" />
@@ -869,6 +874,7 @@
     <None Include="template\button_template.minh" />
     <None Include="template\email_template.minh" />
     <Content Include="Views\Admin\HopDong.cshtml" />
+    <Content Include="Views\Shared\_PartialLoadMore.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

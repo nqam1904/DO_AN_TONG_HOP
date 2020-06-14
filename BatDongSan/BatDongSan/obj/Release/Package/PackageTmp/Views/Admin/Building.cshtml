@@ -84,7 +84,7 @@ else
                     var idTK = ((USER)Session["AdminLogin"]);
                     var tk = db.USERs.Where(x => x.idUser == idTK.idUser).FirstOrDefault();
 
-                    foreach (var item in db.BUILDINGs.Where(x => x.idUser == tk.idUser || tk.idRole == 1 || tk.idRole == 2).ToList())
+                    foreach (var item in db.BUILDINGs.Where(x => x.idUser == tk.idUser || tk.idRole == 1 || tk.idRole == 3).ToList())
                     {
 
                         var phuong = db.WARDs.Where(x => x.idWard == item.idWard).FirstOrDefault();
@@ -447,6 +447,7 @@ else
         $("[name='STATUS']").val('');
         $("[name='LOAI']").val('');
         $("[name='GIA']").val('');
+        $("#blah1").val();
         $("#model").modal("show");
         $(".invalid-feedback").hide();
     }
@@ -559,7 +560,7 @@ else
         }).done(function (result) {
             if (result.Success) {
                 SaveImg(result.Message);
-                location.reload();
+                
                 return;
             }
             $.notify('Lưu thành công', 'successs');
@@ -616,7 +617,9 @@ else
             processData: false,
             success: function (response) {
                 if (response == 1) {
+
                     $.notify('Lưu thành công', 'successs');
+                    location.reload();
                 }
                 else {
                     console.log(error);

@@ -45,9 +45,9 @@ namespace BatDongSan.Controllers
                 }
                 Session["AdminLogin"] = adlogin;
                 int idRole = ((USER)Session["AdminLogin"]).idRole;
-                if (idRole != 1 && idRole != 2)
+                if (idRole != 1 && idRole != 3)
                 {
-                    ViewBag.Error = "Không đủ quyền truy cập !!!";
+                    ViewBag.Error2 = "Không đủ quyền truy cập !!!";
                     return View("AdminLogin");
                 }
                 return RedirectToAction("Index", "Admin");

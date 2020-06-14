@@ -214,7 +214,8 @@
             <div class="modal-body" id="infoDiv">
                 <div id="content_phieu">
                     <div class="tieude"><h3>Phiếu hẹn</h3></div>
-                    <div class="createdate text-right"> <span name="NGAYTAO"></span></div>
+                    <div class="createdate text-right"> <span id="date" name="NGAYTAO"></span></div>
+                    <br/>
                     <div class="to"><b>Người nhận:</b> <span name="SDT"></span></div><br />
                     <div class="address"><b>Địa điểm:</b> <span name="BUILD"></span></div><br />
                     <div class="noidung"><b>Về việc:</b> <span name="CONTENT"></span></div><br />
@@ -258,7 +259,7 @@
         let body = $(".modal-body").html();
         var mywindow = window.open('', 'IN PHIẾU', 'height=326,width=800');
         mywindow.document.write('<html><head><title></title>');
-        mywindow.document.write('<link href="~/Content/phieuhen.css" rel="stylesheet" />');
+        mywindow.document.write('<link href="../Content/phieuhen.css" rel="stylesheet" />');
         mywindow.document.write('</head>');
         mywindow.document.write('<body>');
         //mywindow.document.write(document.getElementById(elem).innerHTML);

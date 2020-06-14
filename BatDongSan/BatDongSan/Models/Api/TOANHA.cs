@@ -7,6 +7,7 @@ namespace BatDongSan.Models.Api
 {
     public class TOANHA
     {
+        public string HinhAnh { get; set; }
         public int idBuild{ get; set; }
         public int idWard{ get; set; }
         public int idUser{ get; set; }

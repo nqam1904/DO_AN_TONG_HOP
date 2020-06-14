@@ -22,12 +22,17 @@ namespace BatDongSan.Controllers
         }
         public ActionResult ListType()
         {
+            //ViewBag.idCity = idCity;
+            //ViewBag.idDistrict = idDistrict;
+            //ViewBag.idWard = idWard;
+            //ViewBag.Id = id;
             return View();
         }
         public ActionResult Theo_Quan(int id)
         {
            
             ViewBag.IdQuan = id;
+            
             return View();
         }
         public ActionResult Theo_Loai(int id)

@@ -25,8 +25,9 @@
                         noidung = System.Text.RegularExpressions.Regex.Replace(noidung, "<.*?>", String.Empty);
                         if (noidung.Length > 200)
                         {
-                            noidung = noidung.Substring(0, 200) + "...";
-
+                            List<string> result = noidung.Substring(0, 200).Split(' ').ToList();
+                            result.RemoveAt(result.Count() - 1);
+                            noidung = string.Join(" ", result.ToArray()) + " ...";
                         }
                         <div class="card" onclick="window.location.href = '/Home/ChiTietTinTuc/' + @item.idNews;">
                             <div class="card-header">
@@ -39,7 +40,8 @@
                                             <img src="~/Images/@item.Img" width="200" />
                                         </div>
                                         <div class="col-8">
-                                            <span>@noidung</span>
+                                            <span>@Html.Raw(noidung)</span>
+                                            @*<span>@noidung</span>*@
                                         </div>
                                     </div>
                                     <footer class="blockquote-footer text-right">@item.createDate</footer>

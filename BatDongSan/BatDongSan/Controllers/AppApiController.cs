@@ -69,6 +69,7 @@ namespace BatDongSan.Controllers
                     b.depositDate = build.depositDate;
                     b.deposits = build.deposits;
                     b.floorarea = (decimal)build.floorarea;
+                    b.HinhAnh = build.IMAGEs.FirstOrDefault().nameImage;
                     result.Add(b);
                 }
             }
@@ -83,21 +84,14 @@ namespace BatDongSan.Controllers
             {
 
                 var lstBuild = db.BUILDINGs.Where(x=>x.idBuild == id).FirstOrDefault();
-                var phuong = db.WARDs.Where(x => x.idWard == lstBuild.idWard).FirstOrDefault();
-                var quan = db.DISTRICTs.Where(x => x.idDistrict == phuong.idDistrict).FirstOrDefault();
-                var city = db.CITies.Where(x => x.idCity == quan.idCity).FirstOrDefault();
-                var huong = db.HUONGs.Where(x => x.idHuong == lstBuild.idHuong).FirstOrDefault();
-                var loai = db.TYPEs.Where(x => x.idType == lstBuild.idType).FirstOrDefault();
-                var nhanvien = db.USERs.Where(x => x.idUser == lstBuild.idUser).FirstOrDefault();
-                var hinh = db.IMAGEs.Where(x => x.idBuild == lstBuild.idBuild).FirstOrDefault();
-                var trangthai = db.STATUS.Where(x => x.idStatus == lstBuild.idStatus).FirstOrDefault();
+
                 TOANHA b = new TOANHA();
                 b.idBuild = lstBuild.idBuild;
-                b.idWard = phuong.idWard;
-                b.idHuong = huong.idHuong;
-                b.idType = loai.idType;
-                b.idUser = nhanvien.idUser;
-                b.idStatus = trangthai.idStatus;
+                b.idWard = lstBuild.idWard;
+                b.idHuong = lstBuild.idHuong ?? 0;
+                b.idType = lstBuild.idType;
+                b.idUser = lstBuild.idUser;
+                b.idStatus = lstBuild.idStatus ?? 0;
                 b.nameBuild = lstBuild.nameBuild;
                 b.nameManager = lstBuild.nameManager;
                 b.phoneManager = lstBuild.phoneManager;
@@ -189,6 +183,28 @@ namespace BatDongSan.Controllers
                 k.addressCustom = khachhang.addressCustom;
                 k.emailCustom = khachhang.emailCustom;
                 result.Add(k);
+            }
+            return Json(result);
+        }
+        [HttpGet]
+        public JsonResult<List<BILL>> Bill()
+        {
+            List<BILL> result = new List<BILL>();
+            using (BDSEntities db = new BDSEntities())
+            {
+                var lshopdong = db.BILLs.ToList();
+                foreach (var hopdong in lshopdong)
+                {
+                    BILL bill = new BILL();
+                    bill.idBill = hopdong.idBill;
+                    bill.kyten = hopdong.kyten;
+                    bill.totalPrice = hopdong.totalPrice;
+                    bill.ngayKyTen = hopdong.ngayKyTen;
+                    bill.idCustom = hopdong.idCustom;
+                    bill.idUserNV = hopdong.idUserNV;
+
+                    result.Add(bill);
+                }
             }
             return Json(result);
         }

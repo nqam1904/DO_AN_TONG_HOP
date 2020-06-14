@@ -1,9 +1,15 @@
-﻿
+﻿@using BatDongSan.Controllers
 @{
     ViewBag.Title = "ListBuild";
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
 
+    //int id = (int)ViewBag.Id;
+    //int? idCity = (int?)ViewBag.idCity;
+    //int? idDistrict = (int?)ViewBag.idDistrict;
+    //int? idWard = (int?)ViewBag.idWard;
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <style>
     .jumbotron {
         background: rgba(0,0,0,.7);
@@ -28,6 +34,8 @@
     .title-vanphong {
         margin-bottom: 20px;
     }
+ 
+ 
 </style>
 <div class="container">
     <br />
@@ -99,12 +107,13 @@
 
         <h2>Danh sách các tòa nhà </h2>
     </div>
+
     <div class="row">
         @using (BDSEntities db = new BDSEntities())
         {
 
-            var lstBuild = db.BUILDINGs.ToList();
-            foreach (var item in lstBuild)
+            //var lstBuild = ;
+            foreach (var item in db.BUILDINGs.ToList())
             {
                 string noidung = item.conent ?? "";
                 noidung = System.Text.RegularExpressions.Regex.Replace(noidung, "<.*?>", String.Empty);
@@ -114,10 +123,10 @@
                 }
                 var hinh = db.IMAGEs.Where(x => x.idBuild == item.idBuild).FirstOrDefault();
                 string GiaTien = String.Format("{0:N0}", item.price);
-                <div class="col-3" onclick="">
+                <div class="col-4" onclick="window.location.href = '/Home/ChiTietToaNha/@item.idBuild'">
                     <br />
-                    <div class="card" style="width: 18rem;">
-                        <img src="~/Images/@hinh.nameImage" height="200" class="card-img-top" alt="...">
+                    <div class="card" style="width: 18rem; height:500px; padding:10px">
+                        <img src="~/Images/@hinh.nameImage" class="card-img-top" alt="..." style="height:250px">
                         <div class="card-body">
                             <h5 class="card-title">@item.nameBuild</h5>
                             <p class="card-text">
@@ -128,15 +137,15 @@
                                 <span><i class="fas fa-map-marker-alt"></i> @item.street</span>
                             </p>
                             <p class="card-text">
-                                <span><i class="fas fa-dollar-sign"></i> Diên tích:</span>
+                                <span><i class="fas fa-cube"></i> Diên tích:</span>
                                 <span>@item.floorarea m<sup>2</sup></span>
                             </p>
                             <p class="card-text">
-                                <span><i class="fas fa-dollar-sign"></i> Hướng:</span>
+                                <span><i class="far fa-compass"></i> Hướng:</span>
                                 <span>@item.HUONG.nameHuong</span>
                             </p>
-                            @*<p class="card-text">@Html.Raw(noidung)</p>*@
-                            <button class="btn btn-warning btn-block" style="color: white" onclick="CreatePhieu()">Chọn ngày đi xem</button>
+
+                           
                         </div>
                     </div>
                 </div>
@@ -145,11 +154,12 @@
         }
     </div>
 
-
 </div>
+<br />
+<br />
 @*<div id="ModalPhieuHen">
         @{
-            Html.RenderPartial("__PartialPhieuHen");
+            Html.RenderPartial("_PartialPhieuHen");
         }
     </div>*@
 <!-- Modal -->
@@ -209,8 +219,17 @@
         //$(".selectpicker").selectpicker('refresh');
 
     }
+    function myFunction(x) {
+        if (x.matches) {
+            $('.card').css("width", "29rem");
+        } else {
+         
+            $('.card').css("width", "18rem");
+        }
+    }
 
-   
-
+    var x = window.matchMedia("(max-width: 920px)")
+    myFunction(x) 
+    x.addListener(myFunction) 
 </script>
 

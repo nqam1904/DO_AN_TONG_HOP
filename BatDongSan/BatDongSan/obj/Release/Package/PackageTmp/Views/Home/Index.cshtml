@@ -45,7 +45,7 @@
                                    name="timkiem" class="ui-autocomplete-input">
                         </div>
                         <div class="search-button">
-                            <button type="submit" class="btn-home-search"id="btnSearch">Tìm kiếm</button>
+                            <button type="submit" class="btn-home-search" id="btnSearch">Tìm kiếm</button>
                         </div>
                         <div class="clear"></div>
                     </form>
@@ -89,15 +89,24 @@
             <div class="tab-content" id="myTabContent">
                 @using (BDSEntities db = new BDSEntities())
                 {
-                    int id = 1;
-                    foreach (var item in db.NEWS.Where(x => x.idNews == id).ToList())
+                    int id = 3;
+                    var lstNews = db.NEWS.Where(x => x.idNews == id);
+                    var a = lstNews.FirstOrDefault();
+                    foreach (var item in lstNews)
                     {
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                            <img src="~/Images/@item.Img" class="img-news" width="450" />
-                            <div class="content-news">
-                                <h2><b>@item.titleNews</b></h2>
-                            </div>
-                        </div>
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    @if (item.Img == null)
+                    {
+                        <img src="~/Images/@item.Img" class="img-news" width="450" />
+                    }
+                    else
+                    {
+                        <img src="~/HinhAnh/no-img.jpg" class="img-news" width="450" />
+                    }
+                    <div class="content-news">
+                        <h2><b>@item.titleNews</b></h2>
+                    </div>
+                </div>
                     }
                 }
                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
@@ -138,33 +147,77 @@
             @using (BDSEntities db = new BDSEntities())
             {
                 var list = db.BUILDINGs.Where(x => (idBuild == null || x.idBuild == idBuild) && (timKiem == null || x.nameBuild.ToLower().IndexOf(timKiem.ToLower()) >= 0)).ToList();
+                int lay8item = 0;
                 foreach (var item in list)
                 {
+                    lay8item++;
+                    if (lay8item >= 9)
+                    {
+                        break;
+                    }
                     var hinh = db.IMAGEs.Where(x => x.idBuild == item.idBuild).FirstOrDefault();
-                    <div class="col-sm-3">
+                  
+                    string GiaTien = String.Format("{0:N0}", item.price);
+                    <div class="col-3" onclick="window.location.href = '/Home/ChiTietToaNha/@item.idBuild' ">
                         <br />
                         <div class="card" style="width: 18rem;">
-                            <img src="~/Images/@hinh.nameImage" height="180" class="card-img-top">
+                            @if (hinh != null)
+                            {
+                                <img src="~/Images/@hinh.nameImage" height="180" class="card-img-top">
+                            }
+                            else
+                            {
+
+                                <img src="~/HinhAnh/no-img.jpg" height="180" class="card-img-top" />
+                            }
+
                             <div class="card-body">
                                 <h5 class="card-title">@item.nameBuild</h5>
                                 <p class="card-text">
-                                    Some quick example text to build on the card title and make up the bulk
-                                    of the card's content.
+                                    <span><i class="fas fa-dollar-sign"></i> Giá thuê:</span>
+                                    <span style="color: red;">@GiaTien VNĐ</span>
+                                </p>
+                                <p class="card-text">
+                                    <span><i class="fas fa-map-marker-alt"></i> @item.street</span>
+                                </p>
+                                <p class="card-text">
+                                    <span><i class="fas fa-cube"></i> Diên tích:</span>
+                                    <span>@item.floorarea m<sup>2</sup></span>
+                                </p>
+                                <p class="card-text">
+                                    <span><i class="fas fa-dollar-sign"></i> Hướng:</span>
+                                    <span>@item.HUONG.nameHuong</span>
                                 </p>
                             </div>
                         </div>
                     </div>
+
                 }
             }
         </div>
+        <div id="ShowBuild" style="display: none;">
+            @{
+                Html.RenderPartial("_partialloadmore");
+            }
+        </div>
         <br>
+
         <div class="nut-xem-them">
             <div class="center">
-                <button class="btn btn-outline-primary" onclick="location.reload()">
-                    Mở rộng <i class="fa fa-arrow-down" style="margin-top: 5px;" ></i>
+                <button class="btn btn-outline-primary" onclick="Loadmore()">
+                    Mở rộng <i class="fa fa-arrow-down" style="margin-top: 5px;"></i>
                 </button>
             </div>
         </div>
         <br>
+
     </div>
 </div>
+
+<script>
+
+    Loadmore = () => {
+        $("#ShowBuild").show();
+    }
+
+</script>

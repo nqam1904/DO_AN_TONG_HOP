@@ -3,6 +3,7 @@
     ViewBag.Title = "Theo_Quan";
     Layout = "~/Views/Shared/_Layout.cshtml";
     int IdQuan = (int)ViewBag.IdQuan;
+
 }
 <style>
     .jumbotron {
@@ -16,6 +17,7 @@
     .btn-css {
         width: 100%;
     }
+
     .custom-btn {
         position: relative;
         margin: -20px -50px;
@@ -59,7 +61,7 @@
 
                             foreach (var quan in db.DISTRICTs.ToList())
                             {
-                                <option value="@quan.idDistrict" class="option-district" id-city="@quan.idCity">@quan.nameDistrict</option>
+                                <option value="@quan.idDistrict" class="option-district" id-city="@quan.idCity" >@quan.nameDistrict</option>
                             }
 
                         }
@@ -76,16 +78,16 @@
                         {
                             foreach (var phuong in db.WARDs.ToList())
                             {
-                                <option value="@phuong.idWard" class="option-ward" id-district="@phuong.idDistrict">@phuong.nameWard</option>
+                                <option value="@phuong.idWard" class="option-ward" id-district="@phuong.idDistrict" >@phuong.nameWard</option>
                             }
 
                         }
                     </select>
                 </div>
             </div>
-            <div class="btn-css">
+            @*<div class="btn-css">
                 <button class="btn btn-primary custom-btn">Tìm kiếm</button>
-            </div>
+            </div>*@
         </div>
     </div>
     <br />
@@ -113,37 +115,38 @@
                 }
                 var hinh = db.IMAGEs.Where(x => x.idBuild == item.idBuild).FirstOrDefault();
                 string GiaTien = String.Format("{0:N0}", item.price);
-        <div class="col-3">
-            <div class="card" style="width: 18rem;">
-                <img src="~/Images/@hinh.nameImage" height="250" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">@item.nameBuild</h5>
-                    <p class="card-text">
-                        <span><i class="fas fa-dollar-sign"></i> Giá thuê:</span>
-                        <span style="color: red;">@GiaTien VNĐ</span>
-                    </p>
-                    <p class="card-text">
-                        <span><i class="fas fa-map-marker-alt"></i> @item.street</span>
-                    </p>
-                    <p class="card-text">
-                        <span><i class="fas fa-dollar-sign"></i> Diên tích:</span>
-                        <span>@item.floorarea m<sup>2</sup></span>
-                    </p>
-                    <p class="card-text">
-                        <span><i class="fas fa-dollar-sign"></i> Hướng:</span>
-                        <span>@item.HUONG.nameHuong</span>
-                    </p>
-                    @*<p class="card-text">@Html.Raw(noidung)</p>*@
-                    <button href="#" class="btn btn-warning btn-block" style="color: white">Chọn ngày đi xem</button>
+
+                <div class="col-3" onclick="window.location.href = '/Home/ChiTietToaNha/@item.idBuild'">
+                    <div class="card" style="width: 18rem;">
+                        <img src="~/Images/@hinh.nameImage" height="250" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.nameBuild</h5>
+                            <p class="card-text">
+                                <span><i class="fas fa-dollar-sign"></i> Giá thuê:</span>
+                                <span style="color: red;">@GiaTien VNĐ</span>
+                            </p>
+                            <p class="card-text">
+                                <span><i class="fas fa-map-marker-alt"></i> @item.street</span>
+                            </p>
+                            <p class="card-text">
+                                <span><i class="fas fa-cube"></i> Diên tích:</span>
+                                <span>@item.floorarea m<sup>2</sup></span>
+                            </p>
+                            <p class="card-text">
+                                <span><i class="far fa-compass"></i> Hướng:</span>
+                                <span>@item.HUONG.nameHuong</span>
+                            </p>
+                            @*<p class="card-text">@Html.Raw(noidung)</p>*@
+                            <button href="#" class="btn btn-warning btn-block" style="color: white">Chọn ngày đi xem</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-              
+
             }
 
         }
     </div>
-   
+
 </div>
 <script>
     UpdateDistrict();

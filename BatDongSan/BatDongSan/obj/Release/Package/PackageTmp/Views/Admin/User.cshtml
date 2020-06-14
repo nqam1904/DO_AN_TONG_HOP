@@ -213,7 +213,7 @@
         let email = $("[name='EMAIL']").val();
         let diachi = $("[name='DIACHI']").val();
         let role = $("[name='ROLE']").val();
-        if (username == '' || password == '' || fullname == '' || phone == '' || email == '' || diachi == '') {
+        if (username == '' || fullname == '' || phone == '' || email == '' || diachi == '') {
             $.notify('Vui lòng điền đủ thông tin!', 'warn');
         }
         $.ajax({

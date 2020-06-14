@@ -1,8 +1,13 @@
 ﻿.camon {
-    font-style: italic;
-    padding-top: 10px;
-    padding-left: 20px;
+    font-style: italic!important;
+    text-align: right!important;
+    float: right!important;
+    margin-right: 500px!important;
 }
-.tieude h3{
+.h3{
     text-align: center;
+}
+#date {
+    margin-right: 550px !important;
+    float: right !important;
 }

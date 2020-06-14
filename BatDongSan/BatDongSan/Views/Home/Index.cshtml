@@ -3,168 +3,180 @@
     int? idBuild = (int?)ViewBag.idBuild;
     string timKiem = ViewBag.TimKiem;
 }
-<style>
-    .list-news:hover {
-        text-decoration: none;
-        color: blue;
-    }
-</style>
-<div class="slide">
-    <div class="home-search">
-        <div class="home-search-tool">
-            <ul class="home-search-tab">
-                <li class="actived" ptype="38">
-                    <h2>Nhà đất bán</h2>
-                </li>
-                <li>
-                    <h2>Nhà đất cho thuê</h2>
-                </li>
-            </ul>
-            <div class="home-search-content">
-                <div class="home-search-control">
-                    <div class="search-cate">
-                        <div class="select-custom">
-                            <o id="lblCurrCate">Văn phòng theo quận</o>
+<div class="banner" style="background: url(https://static.homedy.com/src/images/home/banner-080719.jpg)">
+    <div class="container box-content">
+        <div class="box-right content-overview" id="Search">
+            <div class="content-search">
+                <div class="logo">Tìm kiếm tòa nhà</div>
+                <div class="title">
+                    @using (BDSEntities db = new BDSEntities())
+                    {
+                        var tongtoanha = db.BUILDINGs.Count();
+                        <span>với hơn <strong>@tongtoanha</strong> dự án tại đây</span>
+                    }
+
+                </div>
+                <div class="box-search">
+                    <div class="tab-panel" id="tab_panel_search">
+                        <div>
+                            <form action="/Home/Index" method="get">
+                                <div class="search-input">
+                                    <input type="text" id="txtSearch" placeholder="Nhập địa điểm hoặc từ khóa (ví dụ: Vinhomes)" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" name="timkiem" class="ui-autocomplete-input">
+                                </div>
+                                <div class="search-button">
+                                    <button type="submit" class="btn-search" id="btn_search">
+                                        <span class="ic-search"></span>
+                                        <span class="text">Tìm kiếm</span>
+                                    </button>
+                                </div>
+                                <div class="clear"></div>
+                            </form>
                         </div>
-                        <div id="divCatagoryReOptions" class="advance-select-options" style="display: none;">
-                            <ul>
-                                <li vl="0"><span>Tất cả nhà đất</span></li>
-                                <li vl="0"><span>Tất cả nhà đất</span></li>
-                                <li vl="0"><span>Tất cả nhà đất</span></li>
-                                <li vl="0"><span>Tất cả nhà đất</span></li>
-                                <li vl="0"><span>Tất cả nhà đất</span></li>
-                                <li vl="0"><span>Tất cả nhà đất</span></li>
-                                <li vl="0"><span>Tất cả nhà đất</span></li>
-                            </ul>
+                        <!-- Autocomplete suggest -->
+                        <div class="box-suggest" id="Suggest">
+                            <div class="suggest-top">
+                                <ul>
+                                    <li><a href="javascript:void(0)" class="my-location-search" onclick="SearchByMyLocation()">Tìm theo vị trí của bạn</a></li>
+                                    <li class="lable-fix" id="lable_suggest_top"><span>Từ khóa được vừa tìm</span></li>
+                                </ul>
+                                <ul id="ul_keyword_searched"></ul>
+                                <ul id="ul_top_keyword"></ul>
+                            </div>
+                            <div class="suggest-keyword">
+                                <ul id="ul_suggest_keyword" tabindex='1'></ul>
+                            </div>
                         </div>
                     </div>
-                    <form action="/Home/Index" method="get">
-                        <div class="search-input">
-                            <input type="text" id="txtSearch" placeholder="Nhập địa điểm hoặc từ khóa (ví dụ: Vinhomes)"
-                                   autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true"
-                                   name="timkiem" class="ui-autocomplete-input">
-                        </div>
-                        <div class="search-button">
-                            <button type="submit" class="btn-home-search"id="btnSearch">Tìm kiếm</button>
-                        </div>
-                        <div class="clear"></div>
-                    </form>
                 </div>
             </div>
         </div>
     </div>
-    <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="~/HinhAnh/slide 1.png" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="~/HinhAnh/slide 2.png" class="d-block w-100" alt="...">
+</div>
+<!-- Tiện ích -->
+<div class="project">
+    <div class="container">
+        <div class="box-title">
+            <div class="col-sm-6 title-left">
+                <div class="category-location-dropdown">
+                    <h2 class="box-title-font" style="float: left;">Dự án nổi bật tại </h2>
+                    <div class="location-dropdown pj-location-dropdown" style="float: left;">
+                        <button type="button" class="dropdownlist box-title-font project-filter" onclick="pj_ShowLocationPopup()" id="pj_location" city-id="0">Toàn Quốc </button>
+                        <div class="filter-popup filter-popup-city mb-popup">
+                            <div class="title">
+                                <div class="city-title" id="pj_city_title">Hồ Chí Minh</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-<!--carousel-->
-<!--Page tin tức-->
-<div class="page-news">
-    <div class="container container-news">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item font-new">
-                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                   aria-controls="home" aria-selected="true">Tin nổi bật</a>
-            </li>
-            <li class="nav-item font-new">
-                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-                   aria-controls="profile" aria-selected="false">Tin tức</a>
-            </li>
-            <li class="nav-item font-new">
-                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
-                   aria-controls="contact" aria-selected="false">Tư vấn</a>
-            </li>
-            <li class="option-more">
-                <a href="/Home/TinTuc">Xem thêm <i class="fa fa-arrow-right"></i> </a>
-            </li>
-        </ul>
-        <div class="section-content">
-            <div class="tab-content" id="myTabContent">
+        <div class="box-content">
+            <div class="col-sm-8">
                 @using (BDSEntities db = new BDSEntities())
                 {
-                    int id = 1;
-                    foreach (var item in db.NEWS.Where(x => x.idNews == id).ToList())
+                    var lay4item = 0;
+                    var list = db.BUILDINGs.Where(x => (idBuild == null || x.idBuild == idBuild) && (timKiem == null || x.nameBuild.ToLower().IndexOf(timKiem.ToLower()) >= 0)).ToList();
+                    foreach (var item in list)
                     {
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                            <img src="~/Images/@item.Img" class="img-news" width="450" />
-                            <div class="content-news">
-                                <h2><b>@item.titleNews</b></h2>
+                        lay4item++;
+                        if (lay4item >= 5)
+                        {
+                            break;
+                        }
+
+
+                        var hinh = db.IMAGEs.Where(x => x.idBuild == item.idBuild).FirstOrDefault();
+                        var status = db.STATUS.Where(x => x.idStatus == item.idStatus).FirstOrDefault();
+                        string GiaTien = String.Format("{0:N0}", item.price);
+                        var xephang = db.TYPEs.Where(x => x.idType == item.idType).FirstOrDefault();
+                        var tinhtrang = db.STATUS.Where(x => x.idStatus == item.idStatus).FirstOrDefault();
+                        var huong = db.HUONGs.Where(x => x.idHuong == item.idHuong).FirstOrDefault();
+
+
+
+                        <div class="project-carousel owl-carousel owl-theme" id="pj_item_aj">
+                            <div class="pj-sell-panel">
+                                <div class="pj-item border-radius-5px color-red">
+                                    <a href="/Home/ChiTietToaNha/@item.idBuild" class="image-thumb" title="@item.nameBuild">
+                                        <img class="lazy avatar" src="~/Images/@hinh.nameImage" />
+                                        <div class="bg-opacity dangban">
+                                            <span class="status-bg">@huong.nameHuong</span>
+                                            <span class="status-icon"></span>
+                                        </div>
+                                    </a>
+                                    <a href="javascript:void(0)" title="Yêu thích" data-Favorite="4631" class="cmd_save_to_wishlist add-wish" data-productId="4631" data-isStatus="0" data-productType="2"></a>
+                                    <a href="/Home/ChiTietToaNha/@item.idBuild" class="project-name" title="Khu đô thị Aqua City">
+                                        @item.nameBuild
+                                    </a>
+                                    <div class="ver-box-address info-address border-bottom">@item.street</div>
+                                    <span class="ver-box-price info-price">
+                                        <span style="color: red">Gía thuê: @GiaTien VNĐ</span>
+                                    </span>
+                                    <a href="tel:@item.phoneManager" target="_blank" class="info-icon info-investor ver-box-detail" title="">Liên hệ: @item.phoneManager  </a>
+                                    <span class="info-acreage info-icon ver-box-detail" title="100, 120, 160, 220 m2">Diện tích:  @item.floorarea m<sup>2</sup></span>
+                                    <span class="info-finish info-icon ver-box-detail">Thời hạn thuê: @item.depositDate Tháng</span>
+                                    <span class="info-constructor info-icon ver-box-detail">@status.nameStatuts</span>
+                                </div>
+
                             </div>
                         </div>
                     }
                 }
-                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
-                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+
             </div>
-            @using (BDSEntities db = new BDSEntities())
-            {
-
-                <div class="main2">
-
-                    <div class="list-item">
-                        @foreach (var list in db.NEWS.ToList().GetRange(1, 5))
-                        {
-                            <ul class="list-news">
-                                <li class="">
-                                    <h3>
-                                        <a class="list-news" data-index="#hottab-0" href="/Home/ChiTietTinTuc/@list.idNews">@list.titleNews</a>
-                                    </h3>
-                                </li>
-                            </ul>
-                        }
+            <div class="col-sm-4">
+                <div class="ads-right">
+                    <div class="ads-370-200">
+                        <div id="slot-1-hdy-banner-homepage-2__2__10003__370__200"></div>
+                    </div>
+                    <div class="ads-370-430">
+                        <div id="slot-2-hdy-banner-homepage-3__3__10012__370__430"></div>
                     </div>
                 </div>
-            }
-
+            </div>
         </div>
 
+        <p class="read-more">
+            <a href="ListBuild" id="pj_read_more" title="Xem thêm tòa nhà">Xem thêm</a>
+        </p>
     </div>
 </div>
 
-<!--page sản phẩm-->
-<div class="page-toa-nha">
+<div class="product-hoz" style="padding-top: 20px;">
     <div class="container">
-        <br>
-        <h2>Tin rao nhanh cho bạn</h2>
-        <br>
-        <div class="row">
+        <h1>Tin tức bất động sản</h1>
+        <div class="row" style="display: flex">
             @using (BDSEntities db = new BDSEntities())
             {
-                var list = db.BUILDINGs.Where(x => (idBuild == null || x.idBuild == idBuild) && (timKiem == null || x.nameBuild.ToLower().IndexOf(timKiem.ToLower()) >= 0)).ToList();
-                foreach (var item in list)
+                foreach (var item in db.NEWS.ToList().GetRange(0, 4))
                 {
-                    var hinh = db.IMAGEs.Where(x => x.idBuild == item.idBuild).FirstOrDefault();
-                    <div class="col-sm-3">
-                        <br />
-                        <div class="card" style="width: 18rem;">
-                            <img src="~/Images/@hinh.nameImage" height="180" class="card-img-top">
-                            <div class="card-body">
-                                <h5 class="card-title">@item.nameBuild</h5>
-                                <p class="card-text">
-                                    Some quick example text to build on the card title and make up the bulk
-                                    of the card's content.
-                                </p>
+                    string noidung = item.Description ?? "";
+                    noidung = System.Text.RegularExpressions.Regex.Replace(noidung, "<.*?>", String.Empty);
+                    if (noidung.Length > 250)
+                    {
+                        List<string> result = noidung.Substring(0, 250).Split(' ').ToList();
+                        result.RemoveAt(result.Count() - 1);
+                        noidung = string.Join(" ", result.ToArray()) + " ...";
+                    }
+                    <div class="col-3">
+                        <div class="product-carousel owl-carousel owl-theme" id="p_item_aj">
+                            <div class="p-item border-radius-5px color-red">
+                                <a href="ai-cung-co-the-mua-nha-vinhomes-tra-gop-chi-ngang-tien-thue-nha-hang-thang-xem-ngay-thong-tin-es1288440" class="image-thumb" title="Ai cũng có thể mua nhà Vinhomes - Trả góp chỉ ngang tiền thuê nhà hàng tháng, Xem ngay thông tin">
+                                    <img src="~/Images/@item.Img" />
+                                    <div class="bg-opacity"></div>
+                                    <span class="status"></span>
+                                    <span class="hoz-box-title p-info-title">@item.titleNews</span>
+                                    <span class="hoz-box-address p-info-address">@Html.Raw(noidung)</span>
+                                </a>
                             </div>
+
                         </div>
                     </div>
                 }
             }
         </div>
-        <br>
-        <div class="nut-xem-them">
-            <div class="center">
-                <button class="btn btn-outline-primary" onclick="location.reload()">
-                    Mở rộng <i class="fa fa-arrow-down" style="margin-top: 5px;" ></i>
-                </button>
-            </div>
-        </div>
-        <br>
+        <p class="read-more">
+            <a href="/Home/TinTuc" id="p_read_more" title="Mua bán nhà đất, Mua bán Bất động sản mới nhất">Xem thêm</a>
+        </p>
     </div>
 </div>

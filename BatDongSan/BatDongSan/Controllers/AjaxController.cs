@@ -286,6 +286,7 @@ namespace BatDongSan.Controllers
                 }
                 try
                 {
+                    db.Database.ExecuteSqlCommand("delete from IMAGE where IdBuild=" + id);
                     db.BUILDINGs.Remove(build);
                     db.SaveChanges();
                     result.Success = true;
@@ -312,13 +313,9 @@ namespace BatDongSan.Controllers
             {
                 if (file != null)
                 {
-                    var fileName = Path.GetFileName(file.FileName);
+                    var fileName = DateTime.Now.ToFileTimeUtc() + ".png";
                     var path = Path.Combine(Server.MapPath("~/Images/"), fileName);
-                    if (System.IO.File.Exists(path))
-                    {
 
-                        System.IO.File.Delete(path);
-                    }
                     file.SaveAs(path);
 
                     using (BDSEntities db = new BDSEntities())
@@ -327,7 +324,7 @@ namespace BatDongSan.Controllers
 
 
                         IMAGE img = new IMAGE();
-                        img.nameImage = file.FileName;
+                        img.nameImage = fileName;
                         img.idBuild = id;
                         db.IMAGEs.Add(img);
                         db.SaveChanges();
@@ -553,6 +550,8 @@ namespace BatDongSan.Controllers
                 n.Description = news.Description;
                 if (news.idNews == 0)
                 {
+                    n.titleNews = news.titleNews;
+                    n.Description = news.Description;
                     n.idUser = user;
                     n.createDate = DateTime.Now;
                    
@@ -560,7 +559,7 @@ namespace BatDongSan.Controllers
                 try
                 {
                     db.NEWS.Add(n);
-                    db.SaveChanges();
+                  
 
                     if (file != null)
                     {
@@ -635,7 +634,7 @@ namespace BatDongSan.Controllers
             ApiResult result = new ApiResult();
             return Json(result);
         }
-     
+      
 
     }
 }

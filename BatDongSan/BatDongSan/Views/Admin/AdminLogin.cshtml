@@ -49,12 +49,20 @@
                                         <h1 class="h4 text-gray-900 mb-4">Hệ thống quản lý</h1>
                                     </div>
                                     <div>
-                                        <form class="user" method="post" action="/Admin/AdminLogin" id="userForm" >
+                                        <form class="user" method="post" action="/Admin/AdminLogin" id="userForm">
                                             @if (!String.IsNullOrEmpty(ViewBag.Error))
                                             {
                                                 @*<div class="alert alert-danger" role="alert"></div>*@
                                                 <script type="text/javascript">
                                                     let nameNotify = @Html.Raw(Json.Encode(@ViewBag.Error));
+                                                    $.notify(nameNotify, "error");
+                                                </script>
+                                            }
+                                            @if (!String.IsNullOrEmpty(ViewBag.Error2))
+                                            {
+                                                @*<div class="alert alert-danger" role="alert"></div>*@
+                                                <script type="text/javascript">
+                                                    let nameNotify = @Html.Raw(Json.Encode(@ViewBag.Error2));
                                                     $.notify(nameNotify, "error");
                                                 </script>
                                             }
@@ -99,7 +107,7 @@
                                                         closeButton: false,
                                                     }).on('shown.bs.modal', function () {
                                                         $("#userForm").submit();
-                                                      
+
                                                     });
                                                 }
                                             </script>

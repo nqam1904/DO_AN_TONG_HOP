@@ -62,7 +62,7 @@
         @using (BDSEntities db = new BDSEntities())
         {
             var idhuong = db.HUONGs.Where(x => x.idHuong == IdHuong).FirstOrDefault();
-            
+
             var lstBuild = db.BUILDINGs.Where(x => x.idHuong == idhuong.idHuong).ToList();
             foreach (var item in lstBuild)
             {
@@ -74,7 +74,8 @@
                 }
                 var hinh = db.IMAGEs.Where(x => x.idBuild == item.idBuild).FirstOrDefault();
                 string GiaTien = String.Format("{0:N0}", item.price);
-                <div class="col-3">
+
+                <div class="col-3" onclick="window.location.href = '/Home/ChiTietToaNha/@item.idBuild' ">
                     <div class="card" style="width: 18rem;">
                         <img src="~/Images/@hinh.nameImage" height="250" class="card-img-top" alt="...">
                         <div class="card-body">
@@ -87,14 +88,13 @@
                                 <span><i class="fas fa-map-marker-alt"></i> @item.street</span>
                             </p>
                             <p class="card-text">
-                                <span><i class="fas fa-dollar-sign"></i> Diên tích:</span>
+                                <span><i class="fas fa-cube"></i> Diên tích:</span>
                                 <span>@item.floorarea m<sup>2</sup></span>
                             </p>
                             <p class="card-text">
-                                <span><i class="fas fa-dollar-sign"></i> Hướng:</span>
+                                <span><i class="far fa-compass"></i> Hướng:</span>
                                 <span>@item.HUONG.nameHuong</span>
                             </p>
-                            @*<p class="card-text">@Html.Raw(noidung)</p>*@
                             <button href="#" class="btn btn-warning btn-block" style="color: white">Chọn ngày đi xem</button>
                         </div>
                     </div>
