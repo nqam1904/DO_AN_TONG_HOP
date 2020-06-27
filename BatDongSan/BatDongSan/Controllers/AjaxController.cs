@@ -345,11 +345,25 @@ namespace BatDongSan.Controllers
 
                 return new JsonResult()
                 {
-                    Data = new { NAME = customer.nameCustom, SDT = customer.phoneCustom },
+                    Data = new { NAME = customer.nameCustom, SDT = customer.phoneCustom, EMAIL = customer.emailCustom },
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet
                 };
             }
         }
+        //public JsonResult GetQuanLy(BUILDING build)
+        //{
+        //    using(BDSEntities db = new BDSEntities())
+        //    {
+        //        var quanly = db.BUILDINGs.Where(x=>x.nameBuild == build.nameBuild).FirstOrDefault();
+        //        if (quanly is null) return null;
+        //        return new JsonResult()
+        //        {
+        //            Data = new {NAMEQL = quanly.nameManager, TOANHA = quanly.nameBuild},
+        //            JsonRequestBehavior = JsonRequestBehavior.AllowGet
+
+        //        };
+        //    }
+        //}
         [HttpPost]
         public JsonResult DeletePhieu(int id)
         {
@@ -437,7 +451,7 @@ namespace BatDongSan.Controllers
                 if (phieu == null) return null;
                 return new JsonResult()
                 {
-                    Data = new { CONTENT = phieu.contentPhieu, NGAYHEN = phieu.ngayhen.Value.ToString(" HH:mm dd/MM/yyyy"), NGAYTAO = phieu.createPhieu.Value.ToString("dd/MM/yyyy"), BUILD = build.nameBuild, SDT = idKH.nameCustom, EMAIL = idKH.emailCustom },
+                    Data = new { CONTENT = phieu.contentPhieu, NGAYHEN = phieu.ngayhen.Value.ToString(" HH:mm dd/MM/yyyy"), NGAYTAO = phieu.createPhieu.Value.ToString("HH:mm dd/MM/yyyy"), BUILD = build.nameBuild, SDT = idKH.nameCustom, EMAIL = idKH.emailCustom },
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet
                 };
             }
@@ -634,7 +648,151 @@ namespace BatDongSan.Controllers
             ApiResult result = new ApiResult();
             return Json(result);
         }
-      
+        [HttpPost]
+        public JsonResult PostPhieuHen2(PHIEUHEN ph, string phone, string cusname, string email)
+        {
+            ApiResult result = new ApiResult();
+            if (ph is null)
+            {
+                result.Message = "Vui lòng điền đầy đủ thông tin bên trên";
+                return Json(result.Data);
+            }
+            using (BDSEntities db = new BDSEntities())
+            {
+                PHIEUHEN p = new PHIEUHEN();
+                if (ph.idPhieu > 0) p = db.PHIEUHENs.Where(x => x.idPhieu == ph.idPhieu).FirstOrDefault();
+                if (p is null)
+                {
+                    result.Message = "Vui lòng thử lại";
+                    return Json(result);
+                }
+
+                var kh = db.CUSTOMERs.Where(x => x.phoneCustom.Equals(phone)).FirstOrDefault();
+                if (kh == null)
+                {
+                    kh = new CUSTOMER();
+                    kh.nameCustom = cusname;
+                    kh.phoneCustom = phone;
+                    kh.emailCustom = email;
+                    db.CUSTOMERs.Add(kh);
+                    db.SaveChanges();
+                }
+              
+               
+                p.ngayhen = ph.ngayhen;
+                p.idBuild = ph.idBuild;
+                p.contentPhieu = ph.contentPhieu;
+                p.idUserNV = ph.idUserNV;
+                p.createPhieu = DateTime.Now;
+                p.idCustom = kh.idCustom;
+                if (ph.idPhieu == 0) db.PHIEUHENs.Add(p);
+                try
+                {
+                    db.SaveChanges();
+
+                    result.Success = true;
+                }
+                catch (Exception ex)
+                {
+                    result.Message = ex.Message;
+                }
+
+            }
+            return Json(result);
+        }
+        
+
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public JsonResult EditHopDong(BILL bill, HttpPostedFileBase file, string phone, string cusname)
+        {
+            ApiResult result = new ApiResult();
+            using (BDSEntities db = new BDSEntities())
+            {
+                BILL b = new BILL();
+                if (bill.idBill > 0) b = db.BILLs.Where(x => x.idBill == bill.idBill).FirstOrDefault();
+
+                if (b is null)
+                {
+
+                    result.Message = "Vui lòng thử lại";
+                    return Json(result);
+                }
+                var kh = db.CUSTOMERs.Where(x => x.phoneCustom.Equals(phone)).FirstOrDefault();
+                if (kh == null)
+                {
+                    kh = new CUSTOMER();
+                    kh.nameCustom = cusname;
+                    kh.phoneCustom = phone;
+                    db.CUSTOMERs.Add(kh);
+                    db.SaveChanges();
+                }
+
+                var user = ((USER)Session["AdminLogin"]).idUser;
+                b.idBuild = bill.idBuild;
+                b.idCustom = kh.idCustom;
+                b.totalPrice = bill.totalPrice;
+                b.content = bill.content;
+                b.createDate = DateTime.Now;
+                if (bill.idBill == 0)
+                {
+                    b.idBuild = bill.idBuild;
+                    b.idCustom = kh.idCustom;
+                    b.totalPrice = bill.totalPrice;
+                    b.content = bill.content;
+                    b.idUserNV = user;
+                    b.ngayKyTen = bill.ngayKyTen;
+                    b.createDate = DateTime.Now;
+
+                }
+                try
+                {
+                    db.BILLs.Add(b);
+
+
+                    if (file != null)
+                    {
+                        // upload image
+                        var fileName = Path.GetFileName(file.FileName);
+
+                        var path = Path.Combine(Server.MapPath("~/Images/"), fileName);
+                        if (System.IO.File.Exists(path))
+                        {
+                            System.IO.File.Delete(path);
+                        }
+                        file.SaveAs(path);
+                        b.cmndTruoc = fileName;
+                        db.SaveChanges();
+
+                    }
+                    result.Success = true;
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Error = ex;
+                    result.Message = ex.Message;
+                }
+            }
+            return Json(result);
+        }
+        [HttpGet]
+        public JsonResult GetBill(int id)
+        {
+            if (Session["AdminLogin"] is null) return null;
+
+            using (BDSEntities db = new BDSEntities())
+            {
+                var bill = db.BILLs.Where(x => x.idBill == id).FirstOrDefault();
+                string GiaTien = String.Format("{0:N0}", bill.totalPrice);
+                if (bill is null) return null;
+                return new JsonResult()
+                {
+                    Data = new { NAME = bill.CUSTOMER.nameCustom, PHONE = bill.CUSTOMER.phoneCustom, BUILD = bill.BUILDING.nameBuild, PRICE = GiaTien, NAMEQL = bill.BUILDING.nameManager, CREATEDATE = bill.createDate.Value.ToString("dd/MM/yyyy"), HINH = bill.cmndTruoc, MOTA = bill.content, DIACHI = bill.BUILDING.street, TANG = bill.BUILDING.floor, DIENTICH = bill.BUILDING.floorarea },
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+        }
 
     }
 }

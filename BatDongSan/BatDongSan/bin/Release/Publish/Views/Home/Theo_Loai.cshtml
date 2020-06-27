@@ -31,12 +31,12 @@
     <div class="jumbotron">
         <div class="form-group">
             <div class="text-center">
-                <label class="col-form-label">Loại văn phòng</label>
+                <label class="col-form-label">Hướng</label>
             </div>
-            <select class="form-control" name="LOAI">
+            <select class="form-control" name="HUONG">
                 @using (BDSEntities db = new BDSEntities())
                 {
-                    <option>---- chọn loại văn phòng ----</option>
+                    <option>---- Chọn Hướng ----</option>
                     foreach (var city in db.TYPEs.ToList())
                     {
 
@@ -61,9 +61,9 @@
     <div class="row">
         @using (BDSEntities db = new BDSEntities())
         {
-            var id = db.TYPEs.Where(x => x.idType == IdLoai).FirstOrDefault();
+            var idLoai = db.TYPEs.Where(x => x.idType == IdLoai).FirstOrDefault();
 
-            var lstBuild = db.BUILDINGs.Where(x => x.idType == id.idType).ToList();
+            var lstBuild = db.BUILDINGs.Where(x => x.idType == idLoai.idType).ToList();
             foreach (var item in lstBuild)
             {
                 string noidung = item.conent ?? "";
@@ -74,33 +74,31 @@
                 }
                 var hinh = db.IMAGEs.Where(x => x.idBuild == item.idBuild).FirstOrDefault();
                 string GiaTien = String.Format("{0:N0}", item.price);
-                <a href="/Home/ChiTietToaNha/@item.idBuild" style="color: black; text-decoration: none">
-                    <div class="col-3">
-                        <div class="card" style="width: 18rem;">
-                            <img src="~/Images/@hinh.nameImage" height="250" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">@item.nameBuild</h5>
-                                <p class="card-text">
-                                    <span><i class="fas fa-dollar-sign"></i> Giá thuê:</span>
-                                    <span style="color: red;">@GiaTien VNĐ</span>
-                                </p>
-                                <p class="card-text">
-                                    <span><i class="fas fa-map-marker-alt"></i> @item.street</span>
-                                </p>
-                                <p class="card-text">
-                                    <span><i class="fas fa-cube"></i> Diên tích:</span>
-                                    <span>@item.floorarea m<sup>2</sup></span>
-                                </p>
-                                <p class="card-text">
-                                    <span><i class="far fa-compass"></i> Hướng:</span>
-                                    <span>@item.HUONG.nameHuong</span>
-                                </p>
-                                @*<p class="card-text">@Html.Raw(noidung)</p>*@
-                                <button href="#" class="btn btn-warning btn-block" style="color: white">Chọn ngày đi xem</button>
-                            </div>
+
+                <div class="col-3" onclick="window.location.href = '/Home/ChiTietToaNha/@item.idBuild' ">
+                    <div class="card" style="width: 18rem;">
+                        <img src="~/Images/@hinh.nameImage" height="250" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.nameBuild</h5>
+                            <p class="card-text">
+                                <span><i class="fas fa-dollar-sign"></i> Giá thuê:</span>
+                                <span style="color: red;">@GiaTien VNĐ</span>
+                            </p>
+                            <p class="card-text">
+                                <span><i class="fas fa-map-marker-alt"></i> @item.street</span>
+                            </p>
+                            <p class="card-text">
+                                <span><i class="fas fa-cube"></i> Diên tích:</span>
+                                <span>@item.floorarea m<sup>2</sup></span>
+                            </p>
+                            <p class="card-text">
+                                <span><i class="far fa-compass"></i> Hướng:</span>
+                                <span>@item.HUONG.nameHuong</span>
+                            </p>
+                            <button href="#" class="btn btn-warning btn-block" style="color: white">Chọn ngày đi xem</button>
                         </div>
                     </div>
-                </a>
+                </div>
 
             }
 

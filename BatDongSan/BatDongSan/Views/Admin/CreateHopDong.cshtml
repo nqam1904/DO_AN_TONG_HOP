@@ -1,0 +1,202 @@
+﻿
+@{
+    ViewBag.Title = "CreateHopDong";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
+
+
+<div class="container">
+    <br />
+    <h1 class="text-center">Thông tin hợp đồng</h1>
+    <br />
+    <form>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>SỐ ĐIỆN THOẠI KHÁCH HÀNG  <span style="color: red">(*)</span></label>
+                    <input type="number" class="form-control" name="SDT" id="SDT" onchange="GetSDT()" placeholder="Số điện thoại khách hàng">
+                </div>
+
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>HỌ TÊN NGƯỜI HẸN <span style="color: red">(*)</span></label>
+                    <input type="text" class="form-control" id="NAMEKH" name="NAMEKH" placeholder="Tên khách hàng" disabled>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>TÒA NHÀ <span style="color: red">(*)</span></label>
+                    <select class="form-control" id="idBuild" name="TOANHA" onchange="GetName()">
+                        @using (BDSEntities db = new BDSEntities())
+                        {
+                            <option>--Chọn tòa nhà--</option>
+                            foreach (var build in db.BUILDINGs.ToList())
+                            {
+                                <option value="@build.idBuild" name="TOANHA">@build.nameBuild</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>QUẢN LÝ TÒA NHÀ <span style="color: red">(*)</span></label>
+                    <input type="text" class="form-control" id="NAMEQL" name="NAMEQL" placeholder="Tên quản lý" disabled>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>TIỀN ĐẶT CỌC <span style="color: red">(*)</span></label>
+                    <input type="text" class="form-control" id="PRICE" name="PRICE" placeholder="Tiền đặt cọc">
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>NGÀY ĐẶT CỌC <span style="color: red">(*)</span></label>
+                    <input class="form-control" name="NGAYHEN" type="datetime-local" />
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label class="col-form-label">CMDN/CCCD <span style="color: red">(*)</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupFileAddon01">Tải ảnh lên</span>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="hinh" onchange="readURL(this, 'blah1');" aria-describedby="inputGroupFileAddon01" name="HINH">
+                            <label class="custom-file-label" for="inputGroupFile01">Chọn hình ảnh</label>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="imges">
+                        <img id="blah1" width="250">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label>NỘI DUNG HỢP ĐỒNG <span style="color: red">(*)</span></label>
+                    <textarea class="form-control" rows="10" name="MOTA" id="MOTA"></textarea>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="text-right">
+                    <button class="btn btn-success" onclick="Submit()">Lưu</button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        CKEDITOR.replace('MOTA');
+        var noidung = $("#dieukhoan").html();
+        CKEDITOR.instances['MOTA'].setData(noidung);
+    });
+    function readURL(input, idhinh) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#' + idhinh)
+                    .attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function GetSDT() {
+        var phone = $("[name='SDT']").val();
+        if (phone == '') {
+            alert('Vui lòng nhập số điện thoại')
+        }
+        $.ajax({
+            url: '/Ajax/GetCustomer?phone=' + phone,
+            type: 'GET',
+            dataType: 'text'
+        }).done(function (ketqua) {
+            if (ketqua == null)
+                return;
+
+            if (ketqua == "") {
+                $("#NAMEKH").prop("disabled", false);
+            }
+            else {
+                var json = JSON.parse(ketqua);
+                $("#NAMEKH").val(json.NAME);
+                $("#NAMEKH").prop("disabled", true);
+            }
+        });
+
+    }
+    function GetName() {
+        var ten = $("[name='TOANHA']").val();
+        $.ajax({
+            type: 'GET',
+            url: '/Ajax/GetQuanLy?build=' + ten,
+            dataType: 'text'
+        }).done(function (ketqua) {
+            if (ketqua == null)
+                return;
+            if (ketqua == "") {
+                $("#NAMEQL").prop("disabled", false);
+            } else {
+                var json = JSON.parse(ketqua);
+                $("#NAMEQL").val(json.NAMEQL);
+                $("#NAMEQL").prop("disabled", true);
+            }
+        });
+    }
+    var idBill = 0;
+
+
+    function Submit() {
+        var phone = $("[name='SDT']").val();
+        var tenkh = $("[name='NAMEKH']").val();
+        var toanha = $("[name='TOANHA']").val();
+        var tien = $("[name='PRICE']").val();
+        var ngayhen = $("[name='NGAYHEN']").val();
+        let mota = CKEDITOR.instances['MOTA'].getData();
+        if (phone == '' || tenkh == '' || toanha == '' || tien == '' || ngayhen == '' || mota == '') {
+            $.notify("Vui lòng điền đủ thông tin", "error");
+            return;
+        }
+        var formData = new FormData();
+        var files = $("[name='HINH']").get(0).files;
+        formData.append("file", files[0]);
+        formData.append("idBuild", toanha);
+        formData.append("createDate", ngayhen);
+        FormData.append("totalPrice", tien);
+        formData.append("idCustom", tenkh);
+        formData.append("content", mota.setData());
+
+        $.ajax({
+            url: '/Admin/CreateHopDong',
+            type: 'POST',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+        }).done(function (result) {
+            if (result.Success) {
+                $.notify("Lưu thành công", "success");
+                location.reload();
+                return;
+            }
+
+        }).fail(() => {
+
+            $.notify("Lưu thất bại", "error");
+        });
+    }
+
+
+
+
+</script>

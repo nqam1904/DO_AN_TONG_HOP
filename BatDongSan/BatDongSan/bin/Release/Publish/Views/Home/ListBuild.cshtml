@@ -8,7 +8,8 @@
     //int? idDistrict = (int?)ViewBag.idDistrict;
     //int? idWard = (int?)ViewBag.idWard;
 }
-
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <style>
     .jumbotron {
         background: rgba(0,0,0,.7);
@@ -33,10 +34,12 @@
     .title-vanphong {
         margin-bottom: 20px;
     }
+ 
+ 
 </style>
 <div class="container">
     <br />
-    <div class="jumbotron">
+    @*<div class="jumbotron">
         <div class="row">
             <div class="col-4">
                 <div class="form-group">
@@ -50,7 +53,7 @@
                             foreach (var city in db.CITies.ToList())
                             {
 
-                                <option value="@city.idCity" >@city.nameCity</option>
+                                <option value="@city.idCity">@city.nameCity</option>
 
                             }
 
@@ -97,20 +100,25 @@
                 <button class="btn btn-primary custom-btn">Tìm kiếm</button>
             </div>
         </div>
-    </div>
+    </div>*@
     <br />
     <div class="title-vanphong text-center">
 
-
         <h2>Danh sách các tòa nhà </h2>
     </div>
+
     <div class="row">
         @using (BDSEntities db = new BDSEntities())
         {
 
-            //var lstBuild = ;
+            var lay9item = 0;
             foreach (var item in db.BUILDINGs.ToList())
             {
+                lay9item++;
+                if (lay9item >= 10)
+                {
+                    break;
+                }
                 string noidung = item.conent ?? "";
                 noidung = System.Text.RegularExpressions.Regex.Replace(noidung, "<.*?>", String.Empty);
                 if (noidung.Length > 100)
@@ -119,10 +127,10 @@
                 }
                 var hinh = db.IMAGEs.Where(x => x.idBuild == item.idBuild).FirstOrDefault();
                 string GiaTien = String.Format("{0:N0}", item.price);
-                <div class="col-3" onclick="window.location.href = '/Home/ChiTietToaNha/@item.idBuild' ">
+                <div class="col-4" onclick="window.location.href = '/Home/ChiTietToaNha/@item.idBuild'">
                     <br />
-                    <div class="card" style="width: 18rem;">
-                        <img src="~/Images/@hinh.nameImage" height="200" class="card-img-top" alt="...">
+                    <div class="card" id="card" style="width: 18rem; height:500px; padding:10px">
+                        <img src="~/Images/@hinh.nameImage" class="card-img-top" alt="..." style="height:250px">
                         <div class="card-body">
                             <h5 class="card-title">@item.nameBuild</h5>
                             <p class="card-text">
@@ -140,8 +148,8 @@
                                 <span><i class="far fa-compass"></i> Hướng:</span>
                                 <span>@item.HUONG.nameHuong</span>
                             </p>
-                       
-                            <button class="btn btn-warning btn-block" style="color: white" onclick="CreatePhieu()">Chọn ngày đi xem</button>
+
+                           
                         </div>
                     </div>
                 </div>
@@ -151,7 +159,8 @@
     </div>
 
 </div>
-<br/><br />
+<br />
+<br />
 @*<div id="ModalPhieuHen">
         @{
             Html.RenderPartial("_PartialPhieuHen");
@@ -192,12 +201,11 @@
             var option_idcity = $(this).attr("id-city");
             if (option_idcity == idcity) $(this).show();
             else $(this).hide();
-            // $('#IdDistrict').selectpicker('refresh');
+  
 
 
         });
-        //$(".selectpicker").selectpicker('refresh');
-
+  
         $("#IdDistrict").val("");
         UpdateWard();
     }
@@ -207,15 +215,38 @@
             var option_iddistrict = $(this).attr("id-district");
             if (option_iddistrict == iddistrict) $(this).show();
             else $(this).hide();
-            // $('#IdWard').selectpicker('refresh');
+  
         });
         $("#IdWard").val("");
 
-        //$(".selectpicker").selectpicker('refresh');
+    
 
     }
+    //function myFunction(x) {
+    //    if (x.matches) {
+    //        $('#card').css("width", "29rem");
+    //    } else {
+         
+    //        $('#card').css("width", "18rem");
+    //    }
+    //}
 
-   
+    //var x = window.matchMedia("(max-width: 920px)")
+    //myFunction(x) 
+    //x.addListener(myFunction) 
 
+
+    //function checkPosition() {
+    //    if (window.matchMedia('(max-width: 920px)').matches) {
+    //         $('#card').css("width", "29rem");
+    //    } else {
+    //        $('#card').css("width", "18rem");
+    //    }
+    //}
+    //$(window).resize(function () {
+    //    if ($(window).width() <= 920) {
+    //        $('#card').css("width", "29rem");
+    //    }
+    //});
 </script>
 

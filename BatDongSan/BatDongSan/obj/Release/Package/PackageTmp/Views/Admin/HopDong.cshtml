@@ -1,8 +1,9 @@
-﻿
+﻿@model BatDongSan.BILL
 @{
     ViewBag.Title = "HopDong";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
+<script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
 <link href="~/Content/dataTables.bootstrap4.min.css" rel="stylesheet" />
 <script src="~/Scripts/jquery.dataTables.min.js"></script>
 <script src="~/Scripts/dataTables.bootstrap4.min.js"></script>
@@ -11,12 +12,522 @@
     h2 {
         margin-top: 20px;
     }
+
+    .btn-add {
+        margin-right: 20px;
+    }
+
+    .cachdong {
+        margin-top: -25px;
+    }
 </style>
 <div class="container-fluid">
 
-    <h2>Danh sách hợp đồng thuê nhà</h2>
+    <h2>Danh sách hợp đồng</h2>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active">Dashboard / Hợp đồng</li>
     </ol>
 </div>
+<div class="text-right btn-add">
+    <button type="button" class="btn btn-primary btn-lg" @*onclick="window.location.href = '@Url.Action("CreateHopDong","Admin")';"*@ onclick="CreateHopDong()"><i class="fa fa-plus"></i> Thêm hợp đồng</button>
+</div>
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-striped" id="myTable">
+            <thead>
+                <tr>
+                    <th scope="col">Tên khách hàng</th>
+                   
+                    <th scope="col">Tòa nhà</th>
+                    <th scope="col">Giá đặt cọc</th>
+                    <th scope="col">Ngày tạo</th>
+                    <th scope="col"></th>
 
+                </tr>
+            </thead>
+            <tbody>
+                @using (BDSEntities db = new BDSEntities())
+                {
+
+
+                    foreach (var kh in db.BILLs.ToList())
+                    {
+                        string GiaTien = String.Format("{0:N0}", kh.totalPrice);
+
+                        <tr>
+                            <td>@kh.CUSTOMER.nameCustom</td>
+                          
+                            <td>
+                                @kh.BUILDING.nameBuild
+                            </td>
+                            <td style="color: red">@GiaTien VNĐ</td>
+
+                            <td>@kh.createDate</td>
+                            <th>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-primary" onclick="EditKH(@kh.idBill)"><i class="far fa-eye"></i></button>
+                                  
+                                </div>
+                            </th>
+                        </tr>
+
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thông tin hợp đồng</h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="userForm">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>SĐT KHÁCH HÀNG  <span style="color: red">(*)</span></label>
+
+                                <input type="number" class="form-control" name="SDT" id="SDT" onchange="GetSDT()" placeholder="Số điện thoại khách hàng">
+                            </div>
+
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>HỌ TÊN NGƯỜI HẸN <span style="color: red">(*)</span></label>
+                                <input type="text" class="form-control" id="NAMEKH" name="NAMEKH" placeholder="Tên khách hàng" disabled>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>TÒA NHÀ <span style="color: red">(*)</span></label>
+                                <select class="form-control" id="idBuild" name="TOANHA" onchange="GetName()">
+                                    @using (BDSEntities db = new BDSEntities())
+                                    {
+                                        <option>--Chọn tòa nhà--</option>
+                                        foreach (var build in db.BUILDINGs.ToList())
+                                        {
+                                            <option value="@build.idBuild" name="TOANHA">@build.nameBuild</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        @*<div class="col-sm-4">
+                            <div class="form-group">
+                                <label>QUẢN LÝ TÒA NHÀ <span style="color: red">(*)</span></label>
+                                <input type="text" class="form-control" id="NAMEQL" name="NAMEQL" placeholder="Tên quản lý" disabled>
+                            </div>
+                        </div>*@
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>TIỀN ĐẶT CỌC <span style="color: red">(*)</span></label>
+                                <input type="text" class="form-control" id="PRICE" name="PRICE" placeholder="Tiền đặt cọc">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>NGÀY ĐẶT CỌC <span style="color: red">(*)</span></label>
+                                <input class="form-control" name="NGAYHEN" type="datetime-local" />
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="col-form-label">CMDN/CCCD <span style="color: red">(*)</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroupFileAddon01">Tải ảnh lên</span>
+                                    </div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="hinh" onchange="readURL(this, 'blah1');" aria-describedby="inputGroupFileAddon01" name="HINH">
+                                        <label class="custom-file-label" for="inputGroupFile01">Chọn hình ảnh</label>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="imges">
+                                    <img id="blah1" width="250">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>NỘI DUNG HỢP ĐỒNG <span style="color: red">(*)</span></label>
+                                <textarea class="form-control" rows="10" name="MOTA" id="MOTA"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button class="btn btn-success" onclick="Submit()">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalHD" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thông tin hợp đồng</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container" id="modal-body">
+                    <div class="text-center">
+                        <p>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
+                        <p style="text-decoration:underline"><b>Độc lập - Tự do - Hạnh phúc</b></p><br />
+                        <h4><b>HỢP ĐỒNG CHO THUÊ TÒA NHÀ</b></h4>
+                    </div>
+                    <p style="margin-left: 50px; margin-top: 20px" class="text-right">Hôm nay <span name="CREATEDATE"></span></p>
+                    <h6 style="margin-bottom: 15px;"><b>BÊN CHO THUÊ:(BÊN A)</b></h6><br />
+                    <p class="cachdong">Quản lý tòa nhà: <span name="NAMEQL"></span></p><br />
+                    <p class="cachdong">Là quản lý tòa nhà: <span name="BUILD"></span></p><br />
+                    <h6 style="margin-bottom: 15px;"><b>BÊN THUÊ TÒA NHÀ:(BÊN B)</b></h6><br />
+                    <p class="cachdong">Ông (bà): <span name="NAME"></span></p><br />
+                    <div class="cachdong">
+                        CMND:
+                        <div class="imges" style="margin-top: 10px">
+                            <img id="blah2" width="150">
+                        </div>
+                    </div><br />
+                    <p class="cachdong" style="margin-top: 20px">Sau khi bàn bạc và thỏa thuận hai bên cùng nhau ký kết hợp đồng thuê tòa với nội dung sau:</p>
+
+                    <div id="dieukhoan">
+                        @*điều 1*@
+                        <div>
+                            <span><b>Điều 1. Nhà ở và các tài sản cho thuê kèm theo nhà ở:</b></span>
+                            <br />
+                            <span>
+                                1.1. Bên A đồng ý cho Bên B thuê và Bên B cũng đồng ý thuê quyền sử dụng đất và một tòa nhà gồm <span name="TANG"></span> tầng gắn liền với quyền sử dụng đất tại địa chỉ <span name="DIACHI"></span> để sử dụng làm văn phòng làm việc.<br />
+
+
+                                Diện tích tòa nhà : <span name="DIENTICH"></span> m<sup>2</sup>;
+                            </span>
+                            <br />
+                            <span>
+                                1.2. Bên A cam kết quyền sử sụng đất và căn nhà gắn liền trên đất trên là tài sản sở hữu hợp pháp của Bên A. Mọi tranh chấp phát sinh từ tài sản cho thuê trên Bên A hoàn toàn chịu trách nhiệm trước pháp luật.
+                            </span>
+                        </div>
+                        @*điều 2*@
+                        <div>
+                            <span><b> Điều 2. Bàn giao và sử dụng diện tích thuê:</b></span><br />
+                            <span>
+                                2.1. Thời điểm Bên A bàn giao Tài sản thuê vào <span name="CREATEDATE"></span> ;<br />
+
+                                2.2. Bên B được toàn quyền sử dụng Tài sản thuê kể từ thời điểm được Bên A bàn giao như quy định tại Mục 2.1 trên đây.
+                            </span>
+                        </div>
+                        @*điều 3*@
+                        <div>
+                            <span><b>Điều 3. Đặc cọc tiền thuê nhà</b></span>
+                            <br />
+                            <span>
+                                3.1. Bên B sẽ giao cho Bên A một khoản tiền là <b><span name="PRICE"></span></b> VNĐ ngay sau khi ký hợp đồng này. Số tiền này là tiền đặt cọc để đảm bảm thực hiện Hợp đồng cho thuê nhà. Kể từ ngày Hợp Đồng có hiệu lực.<br />
+
+                                3.2. Nếu Bên B đơn phương chấm dứt hợp đồng mà không thực hiện nghĩa vụ báo trước tới Bên A thì Bên A sẽ không phải hoàn trả lại Bên B số tiền đặt cọc này.
+
+                                Nếu Bên A đơn phương chấm dứt hợp đồng mà không thực hiện nghĩa vụ báo trước tới bên B thì bên A sẽ phải hoàn trả lại Bên B số tiền đặt cọc và phải bồi thường thêm một khoản bằng chính tiền đặt cọc.<br />
+
+                                3.3. Tiền đặt cọc của Bên B sẽ không được dùng để thanh toán Tiền Thuê. Nếu Bên B vi phạm Hợp Đồng làm phát sinh thiệt hại cho Bên A thì Bên A có quyền khấu trừ Tiền Đặt Cọc để bù đắp các chi phí khắc phục thiệt hại phát sinh. Mức chi phí bù đắp thiệt hại sẽ được Các Bên thống nhất bằng văn bản.<br />
+
+                                3.4. Vào thời điểm kết thúc Thời Hạn Thuê hoặc kể từ ngày Chấm dứt Hợp Đồng, Bên A sẽ hoàn lại cho Bên B số Tiền Đặt Cọc sau khi đã khấu trừ khoản tiền chi phí để khắc phục thiệt hại (nếu có).<br />
+                            </span>
+                        </div>
+                        @*điều 4*@
+                        <div>
+                            <span>
+                                <b>Điều 4. Tiền thuê nhà:</b>
+
+                            </span>
+                            <br />
+                            <span>
+                                4.1. Tiền Thuê nhà đối với Diện Tích Thuê nêu tại mục 1.1 Điều 1 là: <b><span name="PRICE"></span></b> VNĐ/tháng<br />
+
+                                4.2 Tiền Thuê nhà không bao gồm chi phí sử dụng Diên tích thuê. Mọi chi phí sử dụng Diện tích thuê nhà bao gồm tiền điện, nước, vệ sinh....sẽ do bên B trả theo khối lượng, công suất sử dụng thực tế của Bên B hàng tháng, được tính theo đơn giá của nhà nước.<br />
+                            </span>
+                        </div>
+                        <div>
+                            <span> <b> Điều 5. Phương thức thanh toán tiền thuê nhà: </b> </span><br />
+                            <span>
+                                Tiền Thuê nhà và chi phí sử dụng Diện tích thuê được thành toán theo 01 (một) tháng/lần vào ngày 05 hàng tháng. Việc thanh toán Tiền Thuê nhà và chi phí sử dụng Diện tích thuê theo Hợp Đồng này được thực hiện bằng đồng tiền Việt Nam theo hình thức trả trực tiếp bằng tiền mặt.
+                            </span>
+                        </div>
+                    </div>
+                    <br />
+                    <p class="text-right">TPHCM ngày <span name="CREATEDATE"></span></p><br />
+                    <div class="row">
+                        <div class="col-9">
+                            Bên A ký tên <br />
+                            <span class="cachdong">(Ghi rõ họ tên)</span><br />
+                            <span name="NAMEQL"></span>
+                        </div>
+                        <div class="col-3">
+                            Bên B ký tên <br />
+                            <span class="cachdong">(Ghi rõ họ tên)</span>
+                            <span name="NAME"></span>
+                        </div>
+                    </div>
+                    <br /><br />  <br /><br />
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="PrintElem()"><i class="far fa-file-pdf"></i> In file PDF</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="dieukhoan" style="display:none">
+    @*điều 1*@
+    <div>
+        <span><b>Điều 1. Nhà ở và các tài sản cho thuê kèm theo nhà ở:</b></span>
+        <br />
+        <span>
+            1.1. Bên A đồng ý cho Bên B thuê và Bên B cũng đồng ý thuê quyền sử dụng đất và một tòa nhà.........tầng gắn liền với quyền sử dụng đất tại địa chỉ ... để sử dụng làm văn phòng làm việc.<br />
+
+
+            Diện tích tòa nhà :....................m<sup>2</sup>;
+        </span>
+        <br />
+        <span>
+            1.2. Bên A cam kết quyền sử sụng đất và căn nhà gắn liền trên đất trên là tài sản sở hữu hợp pháp của Bên A. Mọi tranh chấp phát sinh từ tài sản cho thuê trên Bên A hoàn toàn chịu trách nhiệm trước pháp luật.
+        </span>
+    </div>
+    @*điều 2*@
+    <div>
+        <span><b> Điều 2. Bàn giao và sử dụng diện tích thuê:</b></span><br />
+        <span>
+            2.1. Thời điểm Bên A bàn giao Tài sản thuê vào ngày.....tháng.....năm;<br />
+
+            2.2. Bên B được toàn quyền sử dụng Tài sản thuê kể từ thời điểm được Bên A bàn giao như quy định tại Mục 2.1 trên đây.
+        </span>
+    </div>
+    @*điều 3*@
+    <div>
+        <span><b>Điều 3. Đặc cọc tiền thuê nhà</b></span>
+        <br />
+        <span>
+            3.1. Bên B sẽ giao cho Bên A một khoản tiền là ........................ VNĐ (bằng chứ:............................) ngay sau khi ký hợp đồng này. Số tiền này là tiền đặt cọc để đảm bảm thực hiện Hợp đồng cho thuê nhà. Kể từ ngày Hợp Đồng có hiệu lực.<br />
+
+            3.2. Nếu Bên B đơn phương chấm dứt hợp đồng mà không thực hiện nghĩa vụ báo trước tới Bên A thì Bên A sẽ không phải hoàn trả lại Bên B số tiền đặt cọc này.
+
+            Nếu Bên A đơn phương chấm dứt hợp đồng mà không thực hiện nghĩa vụ báo trước tới bên B thì bên A sẽ phải hoàn trả lại Bên B số tiền đặt cọc và phải bồi thường thêm một khoản bằng chính tiền đặt cọc.<br />
+
+            3.3. Tiền đặt cọc của Bên B sẽ không được dùng để thanh toán Tiền Thuê. Nếu Bên B vi phạm Hợp Đồng làm phát sinh thiệt hại cho Bên A thì Bên A có quyền khấu trừ Tiền Đặt Cọc để bù đắp các chi phí khắc phục thiệt hại phát sinh. Mức chi phí bù đắp thiệt hại sẽ được Các Bên thống nhất bằng văn bản.<br />
+
+            3.4. Vào thời điểm kết thúc Thời Hạn Thuê hoặc kể từ ngày Chấm dứt Hợp Đồng, Bên A sẽ hoàn lại cho Bên B số Tiền Đặt Cọc sau khi đã khấu trừ khoản tiền chi phí để khắc phục thiệt hại (nếu có).<br />
+        </span>
+    </div>
+    @*điều 4*@
+    <div>
+        <span>
+            <b>Điều 4. Tiền thuê nhà:</b>
+
+        </span>
+        <br />
+        <span>
+            4.1. Tiền Thuê nhà đối với Diện Tích Thuê nêu tại mục 1.1 Điều 1 là: ..........................VNĐ/tháng (Bằng chữ:...........................................)<br />
+
+            4.2 Tiền Thuê nhà không bao gồm chi phí sử dụng Diên tích thuê. Mọi chi phí sử dụng Diện tích thuê nhà bao gồm tiền điện, nước, vệ sinh....sẽ do bên B trả theo khối lượng, công suất sử dụng thực tế của Bên B hàng tháng, được tính theo đơn giá của nhà nước.<br />
+        </span>
+    </div>
+    <div>
+        <span> <b> Điều 5. Phương thức thanh toán tiền thuê nhà: </b> </span><br />
+        <span>
+            Tiền Thuê nhà và chi phí sử dụng Diện tích thuê được thành toán theo 01 (một) tháng/lần vào ngày 05 (năm) hàng tháng. Việc thanh toán Tiền Thuê nhà và chi phí sử dụng Diện tích thuê theo Hợp Đồng này được thực hiện bằng đồng tiền Việt Nam theo hình thức trả trực tiếp bằng tiền mặt.
+        </span>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#myTable").DataTable();
+        CKEDITOR.replace('MOTA');
+        var noidung = $("#dieukhoan").html();
+        CKEDITOR.instances['MOTA'].setData(noidung);
+
+    });
+
+    
+    
+    
+    function readURL(input, idhinh) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#' + idhinh)
+                    .attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+
+
+    var idBill = 0;
+    CreateHopDong = () => {
+
+        $("#exampleModal").modal('show');
+    }
+
+    function GetSDT() {
+        var phone = $("[name='SDT']").val();
+        if (phone == '') {
+            alert('Vui lòng nhập số điện thoại')
+        }
+        $.ajax({
+            url: '/Ajax/GetCustomer?phone=' + phone,
+            type: 'GET',
+            dataType: 'text'
+        }).done(function (ketqua) {
+            if (ketqua == null)
+                return;
+
+            if (ketqua == "") {
+                $("#NAMEKH").prop("disabled", false);
+            }
+            else {
+                var json = JSON.parse(ketqua);
+                $("#NAMEKH").val(json.NAME);
+                $("#NAMEKH").prop("disabled", true);
+            }
+        });
+
+    }
+    function Submit() {
+        setTimeout(function () {
+            var dialog = bootbox.dialog({
+                centerVertical: true,
+                message: '<p class="text-center mb-0"><i class="fas fa-circle-notch fa-spin"></i> Vui lòng đợi trong giây lát...</p>',
+                closeButton: false,
+            }).on('shown.bs.modal', function () {
+                setTimeout(function () {
+                    location.reload();
+                }, 6000);
+
+            });
+        });
+
+
+        let phone = $("[name='SDT']").val();
+        var tenkh = $("[name='NAMEKH']").val();
+        var toanha = $("[name='TOANHA']").val();
+        var tien = $("[name='PRICE']").val();
+        var ngayhen = $("[name='NGAYHEN']").val();
+        let mota = CKEDITOR.instances['MOTA'].getData();
+
+        var formData = new FormData();
+        var files = $("[name='HINH']").get(0).files;
+        formData.append("file", files[0]);
+        formData.append("idBuild", toanha);
+        formData.append("createDate", ngayhen);
+        formData.append("totalPrice", tien);
+        formData.append("phone", phone);
+        formData.append("ngayKyTen", ngayhen);
+        formData.append("cusname", tenkh);
+        formData.append("content", mota);
+
+        if (phone == '' || tenkh == '' || toanha == '' || tien == '' || ngayhen == '' || mota == '') {
+            $.notify("Vui lòng điền đủ thông tin", "error");
+            return;
+        }
+
+
+        $.ajax({
+            url: '/Ajax/EditHopDong',
+            type: 'POST',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+        }).done(function (result) {
+            if (result.Success) {
+                $.notify("Lưu thành công", "success");
+
+                return;
+            }
+
+        }).fail(() => {
+
+            $.notify("Lưu thất bại", "error");
+        });
+    }
+
+    EditKH = (id) => {
+
+        idBill = id;
+        $.ajax({
+            url: '/Ajax/GetBill/' + idBill,
+            type: 'GET',
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            dataType: 'text',
+            data: {
+                id: idBill,
+            }
+        }).done(function (ketqua) {
+            var json = JSON.parse(ketqua);
+            $("#blah2").attr('src', '/Images/' + json.HINH);
+            $("[name='CREATEDATE']").html(json.CREATEDATE);
+            $("[name='NAME']").html(json.NAME);
+            $("[name='BUILD']").html(json.BUILD);
+            $("[name='NAMEQL']").html(json.NAMEQL);
+            $("[name='TANG']").html(json.TANG);
+            $("[name='DIACHI']").html(json.DIACHI);
+            $("[name='DIENTICH']").html(json.DIENTICH);
+            $("[name='PRICE']").html(json.PRICE);
+
+
+
+            $("[name='MOTA']").html(json.MOTA);
+            $("#modalHD").modal('show');
+        }).fail(() => {
+            $.notify("Có lỗi!", "error");
+        });
+
+    }
+  
+
+
+
+
+    function PrintElem(elem) {
+       
+        let body = $("#modal-body").html();
+        var mywindow = window.open('', 'IN PHIẾU', 'height=326,width=800');
+        mywindow.document.write('<html><head><title></title>');
+
+        mywindow.document.write('</head>');
+        mywindow.document.write('<body>');
+        mywindow.document.write(body);
+        mywindow.document.write('</body></html>');
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10*/
+
+        mywindow.print();
+        
+
+        return true;
+    }
+
+   
+
+</script>

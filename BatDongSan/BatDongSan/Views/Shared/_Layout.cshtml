@@ -2,10 +2,16 @@
 <html lang="vi" prefix="og: http://ogp.me/ns#">
 
 <head>
-    <title>Bất động sản Homedy – Kênh mua bán nhà đất #1 Việt Nam</title>
-    <meta name="description" content="Đăng tin bất động sản miễn phí tại Homedy.com  Cổng thông tin batdongsan số 1 Việt Nam về dự án BDS và mua bán nhà đất, cho thuê căn hộ, chung cư, văn phòng..." />
-
+    <title>Bất động sản</title>
+    <meta name="description" content=" Cổng thông tin batdongsan số 1 Việt Nam về dự án BDS thuê văn phòng..." />
+    <link href="~/HinhAnh/Logo_Real_Estate.jpg" rel="icon">
     <link href="~/Content/main.css" rel="stylesheet" />
+    <link href="~/Content/dropdown_custom.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/notify.min.js"></script>
+    <script src="~/Scripts/notify.js"></script>
     <!-- Ads -->
 </head>
 
@@ -29,69 +35,57 @@
                     </div>
                     <a class="logo logo-top" href="/Home/Index" title="Cổng thông tin số 1 về Dự án Bất động sản">
                     </a>
-                  
+
                 </div>
-                <div class="center" id="menu-bar">
+                <div class="center" id="menu-bar" style="height: 42px;">
                     <!-- Chỉ sử dụng cho Mobile -->
-                    <a href="" class="btn-blue post-product" style="display: none;">Đăng tin</a>
+
                     <nav role="navigation" itemscope="" itemtype="">
                         <!-- Sử dụng cho Desktop/Mobile -->
-                        <ul class="menu-bar" id="menu">
-                            <li itemprop="name">
-                                <button class="accordion " onclick="arrow_animate(this)">Dự án</button>
-                                <!-- Chỉ sử dung cho Mobile -->
-                                <a itemprop="url" class="url-project first-menu" href="#" title="Dự án bất động sản">Dự án</a>
-                            </li>
-                            <li itemprop="name">
-                                <button class="accordion " title="Mua bán nhà đất - bất động sản" onclick="arrow_animate(this)">Mua bán</button>
-                                <!-- Chỉ sử dung cho Mobile -->
-                                <a class="url-sell first-menu" href="#" title="Mua bán nhà đất">Mua bán</a>
-                            </li>
-                            <li itemprop="name">
-                                <!-- Chỉ sử dung cho Mobile -->
-                                <button class="accordion " title="Cho thuê nhà đất - bất động sản" onclick="arrow_animate(this)">Cho thuê</button>
-                                <a itemprop="url" class="url-lease first-menu" href="#" title="Cho thuê nhà đất">Cho thuê</a>
-                            </li>
-                            <li itemprop="name">
-                                <!-- Chỉ sử dung cho Mobile -->
-                                <button class="accordion " onclick="arrow_animate(this)" title="vay mua nhà">Vay mua nhà</button>
-                                <a itemprop="url" href="#" class=" first-menu" title="vay mua nhà">Vay mua nhà</a>
-                            </li>
-                            <li itemprop="name">
-                                <!-- Chỉ sử dung cho Mobile -->
-                                <button class="accordion " onclick="arrow_animate(this)" title="Tiện ích">Tiện ích</button>
-                                <a itemprop="url" class="url-tinh-lai first-menu" href="javascript:void(0)" title="Tiện ích">Tiện ích</a>
-                            </li>
-                            <li itemprop="name">
-                                <!-- Chỉ sử dung cho Mobile -->
-                                <button class="accordion " onclick="arrow_animate(this)" title="Danh bạ">Danh bạ</button>
-                                <a itemprop="url" class="url-agency url-company first-menu" href="javascript:void(0)" title="Danh bạ">Danh bạ</a>
-                            </li>
-                            <li itemprop="name">
-                            </li>
-                        </ul>
+                        @using (BDSEntities db = new BDSEntities())
+                        {
+                            <ul class="menu-bar  header_notify_list" id="menu">
+
+                                @*<li itemprop="header_notify_item">
+                                    <button class="accordion " title="Mua bán nhà đất - bất động sản" onclick="arrow_animate(this)">Văn phòng theo quận</button>
+                                  
+                                    <a class="" href="/Home/ListBuild" title="">Văn phòng theo quận</a>
+                                    <div>
+                                   
+                                    </div>
+                                </li>*@
+                                <li itemprop="name">
+                                    <!-- Chỉ sử dung cho Mobile -->
+                                    <button class="accordion " title="Cho thuê nhà đất - bất động sản" onclick="arrow_animate(this)">Văn phòng theo hướng</button>
+                                    <a itemprop="url" class="url-lease first-menu" href="/Home/ListHuong" title="">Văn phòng theo hướng</a>
+                                </li>
+                                <li itemprop="name">
+                                    <!-- Chỉ sử dung cho Mobile -->
+                                    <button class="accordion " onclick="arrow_animate(this)" title="vay mua nhà">Văn phòng theo loại</button>
+                                    <a itemprop="url" href="/Home/ListType" class=" first-menu" title="">Văn phòng theo loại</a>
+                                </li>
+                                <li itemprop="name">
+                                    <!-- Chỉ sử dung cho Mobile -->
+                                    <button class="accordion " onclick="arrow_animate(this)" title="Tiện ích">Tin tức</button>
+                                    <a itemprop="url" class="url-tinh-lai first-menu" href="/Home/TinTuc" title="Tiện ích">Tin tức</a>
+                                </li>
+
+                            </ul>
+                        }
+
                     </nav>
-                    <!-- Chỉ sử dụng cho Mobile -->
-                    <div class="box-bottom" style="display:none">
-                        <a class="ic ic-facebook" href="#" rel="nofollow" title="Facebook"></a>
-                        <a class="ic ic-youtube" href="#" rel="nofollow" title="Youtube"></a>
-                        <a class="ic ic-call" href="#" rel="nofollow" title="Call"></a>
-                        <a class="ic ic-email" href="#" rel="nofollow" title="Email"></a>
-                    </div>
+
+
                 </div>
-                <div class="ic-menu-news" style="display:none">
-                    <div class="ic fa fa-circle"></div>
-                    <div class="ic fa fa-circle"></div>
-                    <div class="ic fa fa-circle"></div>
-                </div>
+
             </div>
         </div>
         <!-- Banner -->
-      
+
         <div class="ads">
             <div id="slot-1-hdy-banner-homepage-1__25__10040__865__100"></div>
         </div>
-       @RenderBody()
+        @RenderBody()
         <style>
             .box-popup .popup-title {
                 height: 40px;
@@ -106,14 +100,14 @@
                 margin-top: 0px;
             }
         </style>
-        <hr style="color: orange; border: 1px solid"/>
+        <hr style="color: orange; border: 1px solid" />
         <!-- Footer -->
         <div class="footer">
             <div class="links">
                 <div class="container">
                     <div class="content">
                         <div class="col-sm-3">
-                            <div class="title">VỀ HOMESTATE.COM</div>
+                            <div class="title">VỀ HOMEDY</div>
                             <ul>
                                 <li>
                                     <a href="#" rel="nofollow" title="Giới thiệu">Giới thiệu</a>
@@ -138,26 +132,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-sm-3">
-                            <div class="title">TÀI KHOẢN</div>
-                            <ul>
-                                <li>
-                                    <a href="#" title="Đăng tin mới" rel="nofollow">Đăng tin mới</a>
-                                </li>
-                                <li>
-                                    <a href="#" target="_blank" title="Tin tức thị trường bất động sản hiện nay, cẩm nang nhà đẹp">Tin tức</a>
-                                </li>
-                                <li>
-                                    <a href="#" target="_blank" rel="nofollow" title="Báo giá truyền thông BĐS Homedy">Báo giá truyền thông BĐS</a>
-                                </li>
-                                <li>
-                                    <a href="#" target="_blank" rel="nofollow" title="Chương trình khuyến mại">Chương trình Khuyến mại - <b style="color: #ff0000">HOT</b></a>
-                                </li>
-                                <li>
-                                    <a href="#" target="_blank" rel="nofollow" title="Chương trình Happy Homedy">Chương trình Happy Homedy - <b style="color: #ff0000">HOT</b></a>
-                                </li>
-                            </ul>
-                        </div>
+
                         <div class="col-sm-3">
                             <div class="title">Liên kết</div>
                             <ul class="connective">
@@ -167,16 +142,9 @@
                                 <li><a href="https://www.topcv.vn" target="_blank" title="TopCV - Việc làm chất" rel="nofollow">TopCV - Việc làm chất</a></li>
                                 <li>
                                     <div class="hepl-contact">
-                                        <div class="title">Hỗ trợ</div>
+                                        <div class="title">Đồ án</div>
                                         <p class="">
-                                            <div>
-                                                <span>Số điện thoại: </span>
-                                                <a href="tel:0788267268" rel="nofollow">0788.267.268</a>
-                                            </div>
-                                            <div>
-                                                <span>Email: </span>
-                                                <a href="mailto:contact@homedy.com" rel="nofollow">contact@homedy.com</a>
-                                            </div>
+                                            Bản quyền của nhóm đồ án Tuấn, Hiếu, Minh
                                         </p>
                                     </div>
                                 </li>
@@ -204,6 +172,10 @@
                                 </li>
                             </ul>
                         </div>
+                        <div class="col-sm-3">
+                            <div class="title title-social">Địa chỉ công ty</div><br />
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.1583255142673!2d106.71737731526044!3d10.79918326172512!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317528a4544f81cb%3A0x9d1d55a3eada5af1!2zVHLGsOG7nW5nIEh1dGVjaA!5e0!3m2!1svi!2s!4v1593194111485!5m2!1svi!2s" width="400" height="200" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -211,10 +183,10 @@
                 <div class="container">
                     <div class="content">
                         <div class="about-address">
-                            © 2020 - Coppy Right
+                            © 2020 - Đồ án Tổng hợp
                         </div>
                         <div class="about-address-mb">
-                            © 2020 - Bản quyền của Công ty TNHH Homedy - Hotline: <a href="tel:0788267268" rel="nofollow">0788.267.268</a>
+                            © 2020 - Bản quyền của nhóm đồ án Tuấn, Hiếu, Minh
                         </div>
                     </div>
                 </div>
@@ -222,266 +194,7 @@
         </div>
     </div>
     <div class="back-to-top" title="Lên đầu trang"></div>
-    <script type="text/javascript">
-        if (location.protocol == 'http:' && location.href.indexOf('homedy.com') >= 0) {
-            location.href = location.href.replace(/^http:/, 'https:');
-        }
-    </script>
-    <script defer src="https://static.homedy.com/src/js/v6.6.5/bundle/main.min.js"></script>
-    <script type="text/javascript">
-        window.PageData = window.PageData || {};
-        window.PageData.JSversion = "v6.6.5";
 
-        // Insider
-        PageData.page = {
-            url: 'https://homedy.com/',
-            title: 'Bất động sản Homedy – Kênh mua bán nhà đất #1 Việt Nam',
-        };
-        //*** END
-    </script>
-    <!---->
-    <script type="text/javascript">
-        var isiOS = navigator.userAgent.match('iPad') || navigator.userAgent.match('iPhone') || navigator.userAgent.match('iPod'),
-            isAndroid = navigator.userAgent.match('Android');
-
-        function OpenApp() {
-            window.location = "https://dynlink.homedy.com/app/";
-        }
-
-        function close_sticky_open_app() {
-            //$('body').css({ 'padding-top': '50px' });
-            //if (window.innerWidth <= 1024) {
-            //    $('.header .center').css({ 'margin-top': '0', 'height': '100%' });
-            //}
-            //$('.image-view-mobile .mobile-back.fixed').css({ 'top': '50px' });
-            //$('.product .image-view-mobile').css({ 'margin-top': '88px'});
-            $('.open-appmobile').hide();
-            localStorage.setItem('sticky_open_app', 'HIDDEN');
-        }
-
-        function show_sticky_open_app() {
-            $('.open-appmobile').show();
-            localStorage.setItem('sticky_open_app', 'SHOW');
-        }
-
-        //function hasTouch() {
-
-
-        document.addEventListener("DOMContentLoaded", function () {
-
-            if (!isiOS && !isAndroid) {
-                $('.open-appmobile').hide();
-            } else {
-                var sticky_open_app = localStorage.getItem('sticky_open_app');
-                if (sticky_open_app !== "HIDDEN") {
-                    show_sticky_open_app();
-                }
-            }
-        })
-    </script>
-    <!-- Count notification by User login -->
-    <!-- User info -->
-    <script>
-        var _type = 4;
-        if (location.href.indexOf('trang-ca-nhan') >= 0)
-            _type = 3;
-
-        window.PageData = window.PageData || {};
-        PageData.user = {
-            logged_in: 0,
-            username: '',
-            mobile: '',
-            email: '',
-            full_name: '',
-            avatar: '',
-        };
-        PageData.chat = {
-            type: _type,
-            system: 'HDY'
-        }
-
-        var element = document.getElementById('loged_in_name');
-        if (element !== null && element !== undefined) {
-            element.innerHTML = '';
-        }
-
-        var element = document.getElementById('filter_loged_in_name');
-        if (element !== null && element !== undefined) {
-            element.innerHTML = '';
-        }
-
-        var element = document.getElementsByClassName('filter_loged_in_avatar');
-        if (element !== null && element !== undefined) {
-            for (var i = 0; i < element.length; i++) {
-                element[i].style.background = 'url(https://static.homedy.com/src/images/broker.jpg)';
-            }
-        }
-    </script>
-    <!-- Js Homepage -->
-    <!-- End Js Homepage -->
-    <script type="text/javascript">
-        window.addEventListener('DOMContentLoaded', function () {
-            HdyLoader.init("homepage", function () {
-                HdyLoader.LoadScript(HdyLoader.domain + 'src/js/' + HdyLoader.Version + '/bundle/home-search.min.js', function () {
-                    //HdyLoader.LoadScript('https://localhost:44315/js/bundle/home-search.min.js?v=637275711886908646', function () {
-                    HdyLoader.LoadCss(HdyLoader.domain + 'src/plugins/malihu-custom-scrollbar-plugin-3.1.5/jquery.mCustomScrollbar.min.css', function () { });
-                    //HdyLoader.LoadScript('/js/homepage/personalize.js', function () {
-                    //HdyLoader.LoadScript('/js/bundle/personalize.min.js?v=637275711886908667', function () {
-                    HdyLoader.LoadScript(HdyLoader.domain + 'src/js/' + HdyLoader.Version + '/bundle/personalize.min.js', function () {
-                        // Ads
-                        if (window.innerWidth >= 920) {
-                            HdyLoader.LoadScript('https://ads.homedy.com/js/ads.js', function () {
-                                window.adsHomedy = window.adsHomedy || [];
-                                window.userId = window.userId || "";
-                                window.adsHomedy.push("slot-1-hdy-banner-homepage-1__25__10040__865__100");
-                                window.adsHomedy.push("slot-1-hdy-banner-homepage-2__2__10003__370__200");
-                                window.adsHomedy.push("slot-2-hdy-banner-homepage-3__3__10012__370__430");
-                                getAllAds();
-                                setTimeout(function () {
-                                    window.userId = getCookieByAds("userId");
-                                }, 300);
-                            });
-                        }
-
-                        //var dom = document.getElementsByTagName('*').length;
-                        //console.log('Number of DOM: ' + dom);
-
-                        window.PersonalizeInit({
-                            "DeviceType": 0,
-                            "IsUserOrAnonymous": true,
-                            "IsAgency": false,
-                            "IsOwner": false,
-                            "IsUser": false,
-                            "UserName": null,
-                            "User": null,
-                            "IsLogin": false,
-                            "LatestProductPublished": null,
-                            "UserLocationCityId": null
-                        });
-                    });
-                });
-            });
-        });
-
-        //*** BEGIN - PageData
-        window.PageData = window.PageData || {};
-
-        // User Behavious
-        PageData.UrlType = "homepage";
-        //*** END - PageData
-    </script>
-    <!-- Google Login SDK -->
-    <!-- Face Login SDK -->
-    <!-- Face Share -->
-    <!-- Facebook Pixel Code -->
-    <script>
-        ! function (f, b, e, v, n, t, s) {
-            if (f.fbq) return;
-            n = f.fbq = function () {
-                n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-            };
-            if (!f._fbq) f._fbq = n;
-            n.push = n;
-            n.loaded = !0;
-            n.version = '2.0';
-            n.queue = [];
-            t = b.createElement(e);
-            t.async = !0;
-            t.src = v;
-            s = b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t, s)
-        }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '1557900877842209');
-        fbq('track', "PageView");
-    </script>
-    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1557900877842209&ev=PageView&noscript=1" /></noscript>
-    <!-- End Facebook Pixel Code -->
-    <!-- Facebook Pixel Code -->
-    <script>
-        ! function (e, t, n, c, o, a, f) {
-            e.fbq || (o = e.fbq = function () {
-                o.callMethod ? o.callMethod.apply(o, arguments) : o.queue.push(arguments)
-            }, e._fbq || (e._fbq = o), (o.push = o).loaded = !0, o.version = "2.0", o.queue = [], (a = t.createElement(n)).async = !0, a.src = "https://connect.facebook.net/en_US/fbevents.js", (f = t.getElementsByTagName(n)[0]).parentNode.insertBefore(a, f))
-        }(window, document, "script"), fbq("init", "268882560278429"), fbq("track", "PageView");
-    </script>
-    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=268882560278429&ev=PageView&noscript=1" /></noscript>
-    <!-- End Facebook Pixel Code -->
-    <!-- Google Remarketing -->
-    <script type="text/javascript">
-        /* <![CDATA[ */
-        var google_conversion_id = 881048285;
-        var google_custom_params = window.google_tag_params;
-        var google_remarketing_only = true; /* ]]> */
-    </script>
-    <script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script>
-    <noscript>
-        <div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/881048285/?guid=ON&amp;script=0" /></div>
-    </noscript>
-    <!-- End Google Remarketing -->
-    <!-- Hotjar Tracking Code for homedy.com -->
-    <!-- End Hotjar -->
-    <!-- Code GA Homedy.com -->
-    <script async>
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
-            a = s.createElement(o), m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-        ga('create', 'UA-65209164-1', 'auto');
-        ga('require', 'GTM-PCNHGHV');
-        ga('send', 'pageview');
-    </script>
-    <!-- End Code GA -->
-    <!-- Google Tag Manager -->
-    <script async>
-        (function (w, d, s, l, i) {
-            w[l] = w[l] || [];
-            w[l].push({
-                'gtm.start': new Date().getTime(),
-                event: 'gtm.js'
-            });
-            var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s),
-                dl = l != 'dataLayer' ? '&l=' + l : '';
-            j.async = true;
-            j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-            f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-MBTJBNZ');
-    </script>
-    <!-- End Google Tag Manager -->
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MBTJBNZ" height="0" width="0" style="display:none;visibility:parent-menu"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-    <!-- Thudoads  -->
-    <!-- BigdataVietnam  -->
-    <script type="text/javascript">
-        var srp = '/';
-        var popups = [];
-        var total_popups = 0;
-        var IsShowList = false;
-    </script>
-    <!-- MePuzz start -->
-    <script>
-        (function (i, s, o, g, r, a, m) {
-            i['MePuzzAnalyticsObject'] = r;
-            i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments);
-            }, i[r].l = 1 * new Date();
-            a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m);
-        })(window, document, 'script', 'https://static.mepuzz.com/sdk/v2/MePuzzSDK.min.js', 'mePuzz');
-        mePuzz('setAppId', 'Ewk9gEP4lY');
-        mePuzz('track', 'pageview');
-    </script>
-    <!-- MePuzz end -->
 </body>
 
 </html>

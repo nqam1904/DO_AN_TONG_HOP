@@ -84,7 +84,7 @@ else
                     var idTK = ((USER)Session["AdminLogin"]);
                     var tk = db.USERs.Where(x => x.idUser == idTK.idUser).FirstOrDefault();
 
-                    foreach (var item in db.BUILDINGs.Where(x => x.idUser == tk.idUser || tk.idRole == 1 || tk.idRole == 3).ToList())
+                    foreach (var item in db.BUILDINGs.Where(x => x.idUser == tk.idUser || tk.idRole == 1 || tk.idRole == 2).ToList())
                     {
 
                         var phuong = db.WARDs.Where(x => x.idWard == item.idWard).FirstOrDefault();
@@ -447,7 +447,7 @@ else
         $("[name='STATUS']").val('');
         $("[name='LOAI']").val('');
         $("[name='GIA']").val('');
-        $("#blah1").val();
+      
         $("#model").modal("show");
         $(".invalid-feedback").hide();
     }
@@ -509,6 +509,20 @@ else
         });
     }
     SaveInfo = () => {
+
+        setTimeout(function () {
+            var dialog = bootbox.dialog({
+                centerVertical: true,
+                message: '<p class="text-center mb-0"><i class="fas fa-circle-notch fa-spin"></i> Vui lòng đợi trong giây lát...</p>',
+                closeButton: false,
+            }).on('shown.bs.modal', function () {
+                setTimeout(function () {
+                    location.reload();
+                }, 2000);
+
+            });
+        });
+
         let name = $("[name='NAME']").val();
         let datcoc = $("[name='DATCOC']").val();
         let city = $("[name='CITY']").val();
@@ -578,11 +592,8 @@ else
             var option_idcity = $(this).attr("id-city");
             if (option_idcity == idcity) $(this).show();
             else $(this).hide();
-            // $('#IdDistrict').selectpicker('refresh');
-
-
         });
-        //$(".selectpicker").selectpicker('refresh');
+      
 
         $("#IdDistrict").val("");
         UpdateWard();
@@ -593,11 +604,11 @@ else
             var option_iddistrict = $(this).attr("id-district");
             if (option_iddistrict == iddistrict) $(this).show();
             else $(this).hide();
-            // $('#IdWard').selectpicker('refresh');
+           
         });
         $("#IdWard").val("");
 
-        //$(".selectpicker").selectpicker('refresh');
+      
 
     }
     $('.input-images-1').imageUploader();

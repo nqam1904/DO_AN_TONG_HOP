@@ -45,7 +45,7 @@ namespace BatDongSan.Controllers
                 }
                 Session["AdminLogin"] = adlogin;
                 int idRole = ((USER)Session["AdminLogin"]).idRole;
-                if (idRole != 1 && idRole != 3)
+                if (idRole != 1 && idRole != 2)
                 {
                     ViewBag.Error2 = "Không đủ quyền truy cập !!!";
                     return View("AdminLogin");
@@ -104,6 +104,15 @@ namespace BatDongSan.Controllers
             if (Session["AdminLogin"] is null) return View("AdminLogin");
             return View();
         }
+        [HttpGet]
+        public ActionResult CreateHopDong()
+        {
+            if (Session["AdminLogin"] is null) return View("AdminLogin");
+
+
+            return View();
+        }
+      
         public ActionResult ModalGuiEmail(int id)
         {
 

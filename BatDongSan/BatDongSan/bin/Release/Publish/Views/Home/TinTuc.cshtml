@@ -3,6 +3,11 @@
     ViewBag.Title = "TinTuc";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <style>
     .img{
         margin-right: 20px;
@@ -68,11 +73,8 @@
                         }
                         <div class="list-group" onclick="window.location.href = '/Home/ChiTietTinTuc/' + @item.idNews;">
                             <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <small class="img"><img src="~/Images/@item.Img" width="90" /></small>
-                                    <p class="mb-1">@item.titleNews</p>
-
-                                </div>
+                                <small class="img"><img src="~/Images/@item.Img" width="90" /></small>
+                                <p class="mb-1">@item.titleNews</p>
                             </a>
                         </div>
                         <br />

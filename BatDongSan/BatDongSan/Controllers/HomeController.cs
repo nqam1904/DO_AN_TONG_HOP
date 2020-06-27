@@ -20,14 +20,20 @@ namespace BatDongSan.Controllers
             
             return View();
         }
-        public ActionResult ListType()
+        public ActionResult ListType(int? idLoai)
         {
-            //ViewBag.idCity = idCity;
-            //ViewBag.idDistrict = idDistrict;
-            //ViewBag.idWard = idWard;
-            //ViewBag.Id = id;
+            ViewBag.idLoai = idLoai;
+           
             return View();
         }
+        public ActionResult ListHuong( int? idHuong)
+        {
+          
+            ViewBag.idHuong = idHuong;
+            return View();
+        }
+       
+        
         public ActionResult Theo_Quan(int id)
         {
            
@@ -58,6 +64,7 @@ namespace BatDongSan.Controllers
         public ActionResult ChiTietToaNha(int id)
         {
             ViewBag.IdBuild = id;
+           
             return View();
         }
       

@@ -248,6 +248,7 @@
     <Content Include="Content\ruang-admin.min.css" />
     <Content Include="Content\home.css" />
     <Content Include="Content\styles.css" />
+    <Content Include="Content\ToaNha.css" />
     <Content Include="DATH.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>DATH.edmx</DependentUpon>
@@ -875,6 +876,8 @@
     <None Include="template\email_template.minh" />
     <Content Include="Views\Admin\HopDong.cshtml" />
     <Content Include="Views\Shared\_PartialLoadMore.cshtml" />
+    <Content Include="Views\Home\ListHuong.cshtml" />
+    <Content Include="Views\Admin\CreateHopDong.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

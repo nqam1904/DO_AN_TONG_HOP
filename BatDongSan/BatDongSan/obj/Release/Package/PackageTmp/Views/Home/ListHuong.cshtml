@@ -1,0 +1,132 @@
+﻿@using BatDongSan.Controllers
+@{
+    ViewBag.Title = "ListBuild";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+    int? IdHuong = (int?)ViewBag.IdHuong;
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<style>
+    .jumbotron {
+        background: rgba(0,0,0,.7);
+    }
+
+    .col-form-label {
+        color: white;
+    }
+
+    .btn-css {
+        width: 100%;
+    }
+
+    .custom-btn {
+        position: relative;
+        margin: -20px -50px;
+        width: 100px;
+        top: 50%;
+        left: 50%;
+    }
+
+    .title-vanphong {
+        margin-bottom: 20px;
+    }
+</style>
+<div class="container">
+    <br />
+    <div class="jumbotron">
+        <div class="form-group">
+            <div class="text-center">
+                <label class="col-form-label">HƯỚNG</label>
+            </div>
+            <select class="form-control" name="HUONG" onchange="XemHuong()">
+                @using (BDSEntities db = new BDSEntities())
+                {
+                    <option>---- Chọn Hướng ----</option>
+                    foreach (var huong in db.HUONGs.ToList())
+                    {
+                        <option value="@huong.idHuong">@huong.nameHuong</option>
+
+
+                    }
+
+                }
+            </select>
+        </div>
+    </div>
+    <br />
+    <div class="title-vanphong text-center">
+
+        <h2>Danh sách các tòa nhà theo hướng </h2>
+    </div>
+
+    <div class="row">
+        @using (BDSEntities db = new BDSEntities())
+        {
+
+            var lay9item = 0;
+
+            foreach (var item in db.BUILDINGs.Where(x => IdHuong == null || IdHuong == 0 || x.idHuong == IdHuong).ToList())
+            {
+                lay9item++;
+                if (lay9item >= 10)
+                {
+                    break;
+                }
+                string noidung = item.conent ?? "";
+                noidung = System.Text.RegularExpressions.Regex.Replace(noidung, "<.*?>", String.Empty);
+                if (noidung.Length > 100)
+                {
+                    noidung = noidung.Substring(0, 100) + "...";
+                }
+                var hinh = db.IMAGEs.Where(x => x.idBuild == item.idBuild).FirstOrDefault();
+                string GiaTien = String.Format("{0:N0}", item.price);
+                <div class="col-4" onclick="window.location.href = '/Home/ChiTietToaNha/@item.idBuild'">
+                    <br />
+                    <div class="card" id="card" style="width: 18rem; height:500px; padding:10px">
+                        <img src="~/Images/@hinh.nameImage" class="card-img-top" alt="..." style="height:250px">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.nameBuild</h5>
+                            <p class="card-text">
+                                <span><i class="fas fa-dollar-sign"></i> Giá thuê:</span>
+                                <span style="color: red;">@GiaTien VNĐ</span>
+                            </p>
+                            <p class="card-text">
+                                <span><i class="fas fa-map-marker-alt"></i> @item.street</span>
+                            </p>
+                            <p class="card-text">
+                                <span><i class="fas fa-cube"></i> Diên tích:</span>
+                                <span>@item.floorarea m<sup>2</sup></span>
+                            </p>
+                            <p class="card-text">
+                                <span><i class="far fa-compass"></i> Hướng:</span>
+                                <span>@item.HUONG.nameHuong</span>
+                            </p>
+
+
+                        </div>
+                    </div>
+                </div>
+            }
+
+        }
+    </div>
+
+</div>
+<br />
+<br />
+
+
+<script type="text/javascript">
+
+    function XemHuong() {
+        var idhuong = $("[name=HUONG]").val();
+        location.href = "/Home/ListHuong?idhuong=" + idhuong;
+
+    }
+
+</script>
+
+
+

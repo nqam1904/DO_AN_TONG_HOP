@@ -68,8 +68,8 @@
                             <th scope="col">Tên người hẹn</th>
                             <th scope="col">Số điện thoại</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Nhân viên</th>
-                            <th scope="col">Ngày tạo</th>
+                            <th scope="col">Nhân viên phụ trách</th>
+                            <th scope="col">Ngày hẹn</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -78,16 +78,16 @@
                         {
                             var idTK = ((USER)Session["AdminLogin"]);
                             var tk = db.USERs.Where(x => x.idUser == idTK.idUser).FirstOrDefault();
-
+                            //var tk2 = db.USERs.Where(x=>x.idRole == tk.idRole || tk.idRole == 2).FirstOrDefault();
                             foreach (var item in db.PHIEUHENs.Where(x => x.idUserNV == tk.idUser || tk.idRole == 1 || tk.idRole == 2).ToList())
                             {
 
                                 <tr>
-                                    <td>@item.CUSTOMER.nameCustom</td>
+                                    <td data-toggle="tooltip" data-html="true" title="<em>Nguời tạo phiếu: @tk.FullName lúc: @item.createPhieu</em>">@item.CUSTOMER.nameCustom</td>
                                     <td>@item.CUSTOMER.phoneCustom</td>
                                     <td>@item.CUSTOMER.emailCustom</td>
                                     <td>@item.USER.FullName</td>
-                                    <td>@item.createPhieu</td>
+                                    <td>@item.ngayhen</td>
                                     <td>
                                         <div class="btn-group" role="group">
                                             <button type="button" class="btn btn-info" onclick="InfoPhieu(@item.idPhieu)" data-toggle="tooltip"
@@ -121,7 +121,7 @@
             @using (BDSEntities db = new BDSEntities())
             {
                 var idRole = 3;
-                var role = db.ROLEs.Where(x => x.idRole == idRole).FirstOrDefault();
+                var role = db.ROLEs.Where(x => x.idRole == 3).FirstOrDefault();
                 var tk = db.USERs.Where(x => x.idRole == role.idRole).FirstOrDefault();
 
                 <form method="post">
@@ -162,7 +162,7 @@
                     </div>
                     <div class="form-group col-10">
                         <select class="form-control" name="BUILD">
-                            @foreach (var build in db.BUILDINGs.Where(x => x.idUser == tk.idUser || tk.idRole == 1).ToList())
+                            @foreach (var build in db.BUILDINGs.Where(x => x.idUser == tk.idUser || tk.idRole == 3).ToList())
                             {
                                 <option value="@build.idBuild">@build.nameBuild</option>
                             }
@@ -183,7 +183,7 @@
                     </div>
                     <div class="form-group col-10">
                         <select class="form-control" name="NHANVIEN">
-                            @foreach (var user in db.USERs.Where(x => x.idUser == tk.idUser && tk.idRole == 3).ToList())
+                            @foreach (var user in db.USERs.Where(x => x.idRole == 3).ToList())
                             {
                                 <option value="@user.idUser">@user.FullName - @user.Phone</option>
                             }
@@ -251,7 +251,7 @@
 
     });
     $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
+        $('[data-toggle="tooltip"]').tooltip();
     });
 
     function PrintElem(elem) {

@@ -1,218 +1,200 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="vi" prefix="og: http://ogp.me/ns#">
 
 <head>
-    <link href="https://file4.batdongsan.com.vn/images/icon-bds.ico" rel="shortcut icon" type="image/x-icon" />
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kênh thông tin bất động sản</title>
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/Content/home.css" rel="stylesheet" />
-    <link href="~/Content/footer.css" rel="stylesheet" />
+    <title>Bất động sản</title>
+    <meta name="description" content=" Cổng thông tin batdongsan số 1 Việt Nam về dự án BDS thuê văn phòng..." />
+    <link href="~/HinhAnh/Logo_Real_Estate.jpg" rel="icon">
+    <link href="~/Content/main.css" rel="stylesheet" />
     <link href="~/Content/dropdown_custom.css" rel="stylesheet" />
-    <link href="~/Content/Loading.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     <script src="~/Scripts/jquery-3.4.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-            crossorigin="anonymous"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
-    <script src="~/Scripts/style.js"></script>
-
-    <script src="~/Scripts/loadingoverlay.min.js"></script>
-
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/notify.min.js"></script>
+    <script src="~/Scripts/notify.js"></script>
+    <!-- Ads -->
 </head>
 
-<body>
-    <style>
-        /*.loaivanphong {
-            font-size: 14px;
-            line-height: 20px;
-            text-transform: uppercase;
-            padding-bottom: 15px;
-            margin-bottom: 15px;
-            position: relative;
-            
-        }*/
-    </style>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary ">
-        <a href="/" style="color: white; font-size: 30px;"><i class="fas fa-home"></i></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
-                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <br />
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="/Home/ListBuild">VĂN PHÒNG THEO QUẬN </a>
-                    @using (BDSEntities db = new BDSEntities())
-                    {
-                        <div class="header_notify">
-                            <ul class="header_notify_list">
-                                <li class="header_notify_item">
-                                    @foreach (var item in db.DISTRICTs.ToList())
-                                    {
-                                        <div class="item_link">
-                                            <a href="/Home/Theo_Quan/@item.idDistrict" class="header_notify_link" value="@item.idDistrict">@item.nameDistrict</a>
-                                        </div>
-                                    }
+<body ontouchstart="">
+    <div class="wrapper">
+        <!-- Header -->
+        <div class="header fixed">
+            <div class="container">
+                <div class="open-appmobile">
+                    <div class="text" onclick="OpenApp()">
+                        <div>Mở App</div>
+                    </div>
+                    <div class="colse-note" onclick="close_sticky_open_app()"></div>
+                </div>
+                <div class="left">
+                    <!-- Chỉ sử dụng cho Mobile -->
+                    <div class="ic-menu-bar">
+                        <div class="bar1"></div>
+                        <div class="bar2"></div>
+                        <div class="bar3"></div>
+                    </div>
+                    <a class="logo logo-top" href="/Home/Index" title="Cổng thông tin số 1 về Dự án Bất động sản">
+                    </a>
 
+                </div>
+                <div class="center" id="menu-bar" style="height: 42px;">
+                    <!-- Chỉ sử dụng cho Mobile -->
+
+                    <nav role="navigation" itemscope="" itemtype="">
+                        <!-- Sử dụng cho Desktop/Mobile -->
+                        @using (BDSEntities db = new BDSEntities())
+                        {
+                            <ul class="menu-bar  header_notify_list" id="menu">
+
+                                @*<li itemprop="header_notify_item">
+                                    <button class="accordion " title="Mua bán nhà đất - bất động sản" onclick="arrow_animate(this)">Văn phòng theo quận</button>
+                                  
+                                    <a class="" href="/Home/ListBuild" title="">Văn phòng theo quận</a>
+                                    <div>
+                                   
+                                    </div>
+                                </li>*@
+                                <li itemprop="name">
+                                    <!-- Chỉ sử dung cho Mobile -->
+                                    <button class="accordion " title="Cho thuê nhà đất - bất động sản" onclick="arrow_animate(this)">Văn phòng theo hướng</button>
+                                    <a itemprop="url" class="url-lease first-menu" href="/Home/ListHuong" title="">Văn phòng theo hướng</a>
+                                </li>
+                                <li itemprop="name">
+                                    <!-- Chỉ sử dung cho Mobile -->
+                                    <button class="accordion " onclick="arrow_animate(this)" title="vay mua nhà">Văn phòng theo loại</button>
+                                    <a itemprop="url" href="/Home/ListType" class=" first-menu" title="">Văn phòng theo loại</a>
+                                </li>
+                                <li itemprop="name">
+                                    <!-- Chỉ sử dung cho Mobile -->
+                                    <button class="accordion " onclick="arrow_animate(this)" title="Tiện ích">Tin tức</button>
+                                    <a itemprop="url" class="url-tinh-lai first-menu" href="/Home/TinTuc" title="Tiện ích">Tin tức</a>
+                                </li>
+
+                            </ul>
+                        }
+
+                    </nav>
+
+
+                </div>
+
+            </div>
+        </div>
+        <!-- Banner -->
+
+        <div class="ads">
+            <div id="slot-1-hdy-banner-homepage-1__25__10040__865__100"></div>
+        </div>
+        @RenderBody()
+        <style>
+            .box-popup .popup-title {
+                height: 40px;
+            }
+
+            .box-list .title {
+                height: 40px;
+                box-sizing: content-box;
+            }
+
+            #ListMember .content {
+                margin-top: 0px;
+            }
+        </style>
+        <hr style="color: orange; border: 1px solid" />
+        <!-- Footer -->
+        <div class="footer">
+            <div class="links">
+                <div class="container">
+                    <div class="content">
+                        <div class="col-sm-3">
+                            <div class="title">VỀ HOMEDY</div>
+                            <ul>
+                                <li>
+                                    <a href="#" rel="nofollow" title="Giới thiệu">Giới thiệu</a>
+                                </li>
+                                <li>
+                                    <a href="#" rel="nofollow" title="Báo chí nói về Homedy">Báo chí nói về Homedy</a>
+                                </li>
+                                <li>
+                                    <a href="#" rel="nofollow" title="Tuyển dụng">Tuyển dụng</a>
+                                </li>
+                                <li>
+                                    <a href="#" rel="nofollow" title="Quy chế hoạt động">Quy chế hoạt động</a>
+                                </li>
+                                <li>
+                                    <a href="#" rel="nofollow" title="Bảo mật thông tin">Bảo mật thông tin</a>
+                                </li>
+                                <li>
+                                    <a href="#" title="Góp ý" rel="nofollow">Góp ý</a>
+                                </li>
+                                <li>
+                                    <a href="#" title="Trợ giúp" rel="nofollow">Trợ giúp</a>
                                 </li>
                             </ul>
                         </div>
 
-                    }
-
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="">VĂN PHÒNG THEO HẠNG</a>
-                    @using (BDSEntities db = new BDSEntities())
-                    {
-                        <div class="dropdown-menu">
-                            @foreach (var item in db.TYPEs.ToList())
-                            {
-                                <a href="/Home/Theo_Loai/@item.idType" class="dropdown-item" value="@item.idType">@item.nameType</a>
-                            }
+                        <div class="col-sm-3">
+                            <div class="title">Liên kết</div>
+                            <ul class="connective">
+                                <li><a href="https://my.homedy.com" target="_blank" title="MyHomedy - Ý tưởng thiết kế" rel="dofollow">MyHomedy - Ý tưởng thiết kế</a></li>
+                                <li><a href="https://jamja.vn" target="_blank" title="Jamja - Web giảm giá" rel="nofollow">Jamja - Web giảm giá</a></li>
+                                <li><a href="https://www.cooky.vn" target="_blank" title="Cooky - Nấu ngon mỗi ngày" rel="nofollow">Cooky - Nấu ngon mỗi ngày</a></li>
+                                <li><a href="https://www.topcv.vn" target="_blank" title="TopCV - Việc làm chất" rel="nofollow">TopCV - Việc làm chất</a></li>
+                                <li>
+                                    <div class="hepl-contact">
+                                        <div class="title">Đồ án</div>
+                                        <p class="">
+                                            Bản quyền của nhóm đồ án Tuấn, Hiếu, Minh
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
-
-                    }
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/Home/TinTuc">TIN TỨC</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">VĂN PHÒNG THEO HƯỚNG</a>
-                    @using (BDSEntities db = new BDSEntities())
-                    {
-                        <div class="dropdown-menu">
-                            @foreach (var item in db.HUONGs.ToList())
-                            {
-                                <a href="/Home/Theo_Huong/@item.idHuong" class="dropdown-item" value="@item.idHuong">@item.nameHuong</a>
-                            }
+                        <div class="col-sm-3">
+                            <div class="title title-social">KẾT NỐI VỚI CHÚNG TÔI</div>
+                            <div class="title title-about-mb">Về HomeState.com</div>
+                            <ul>
+                                <li>
+                                    <div class="social-network">
+                                        <div class="social facebook">
+                                            <a href="#" rel="nofollow" target="_blank" title=""></a>
+                                        </div>
+                                        <div class="social google-plus">
+                                            <a href="#" rel="nofollow" target="_blank" title=""></a>
+                                        </div>
+                                        <div class="social linkedin">
+                                            <a href="#" rel="nofollow" target="_blank" title=""></a>
+                                        </div>
+                                        <div class="social youtube">
+                                            <a href="#" rel="nofollow" target="_blank" title=""></a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
-
-                    }
-                </li>
-            </ul>
-
-        </div>
-        <div class="form-login">
-            <ul class="navbar-nav lv1">
-                <li class="nav-item item_separate">
-                    Tải ứng dụng
-                    <div class="header_qr">
-                        <img src="~/HinhAnh/qr_code.png" alt="QR code" class="header_qr_img">
-                        <div class="header_qr_apps">
-                            <a href="#" class="header_qr_link"> <img src="~/HinhAnh/google_play.png" alt="Google Play" class="header-qr-dowload-img"></a>
-                            <a href="#" class="header_qr_link"> <img src="~/HinhAnh/app_store.png" alt="Appstore" class="header-qr-dowload-img"></a>
+                        <div class="col-sm-3">
+                            <div class="title title-social">Địa chỉ công ty</div><br />
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.1583255142673!2d106.71737731526044!3d10.79918326172512!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317528a4544f81cb%3A0x9d1d55a3eada5af1!2zVHLGsOG7nW5nIEh1dGVjaA!5e0!3m2!1svi!2s!4v1593194111485!5m2!1svi!2s" width="400" height="200" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
                         </div>
                     </div>
-                </li>
-                <li class="header_navbar_item">
-                    <span class="header_navbar_no_pointer">Kết nối</span>
-                    <a href="#" class="header_navbar_icon_link">
-                        <i class="header_navbar_icon fab fa-facebook"></i>
-                    </a>
-                    <a href="#" class="header_navbar_icon_link">
-                        <i class="header_navbar_icon fab fa-instagram"></i>
-                    </a>
-                </li>
-            </ul>
-
-        </div>
-    </nav>
-    @RenderBody()
- 
-   
-    <footer class="site-footer">
-        <div class="container">
-            <div class="row">
-
-                <div class="col-sm-4 col-md-3">
-                    <h5></h5>
-                    <p>Công ty Cổ phần PropertyGuru Việt Nam</p>
-                    <p><i class="fas fa-map"></i> Tầng 31, Keangnam Hanoi Landmark, Phạm Hùng, Nam Từ Liêm, Hà Nội</p>
-                    <p><i class="fas fa-phone"></i> (024) 3562 5939 - (024) 3562 5940</p>
-                </div>
-
-                <div class="col-sm-4 col-md-3">
-                    <h5>Loại văn phòng</h5>
-                    <ul class="footer-links">
-                        @using (BDSEntities db = new BDSEntities())
-                        {
-                            foreach (var item in db.TYPEs.ToList())
-                            {
-                                <li> <a href="/Home/Theo_Loai/@item.idType" class="dropdown-item" value="@item.idType">@item.nameType</a></li>
-                            }
-
-                        }
-                    </ul>
-                </div>
-
-                <div class="col-sm-4 col-md-3">
-                    <h5>Tải ứng dụng</h5>
-                    <div>
-                        <img src="~/HinhAnh/chplay.png" width="150" />
-
-                    </div>
-                </div>
-                <div class="col-sm-4 col-md-3">
-                    <h5>Vị trị công ty</h5>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.0508336824805!2d106.7146250449666!3d10.802498989957753!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317528a459cb43ab%3A0x6c3d29d370b52a7e!2zVHLGsOG7nW5nIMSQ4bqhaSBo4buNYyBIdXRlY2g!5e0!3m2!1svi!2s!4v1591082086559!5m2!1svi!2s" width="300" height="150" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
                 </div>
             </div>
-            <hr>
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8 col-sm-6 col-xs-12">
-                    <p class="copyright-text">
-                        Copyright &copy; 2020 Code By <a href="https://github.com/NQAM1904/DO_AN_TONG_HOP">Quốc Minh</a>.
-
-                    </p>
-                </div>
-
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <ul class="social-icons">
-                        <li><a class="facebook" href="http://vi-vn.facebook.com"><i class="fab fa-facebook-f"></i></a></li>
-                        <li><a class="twitter" href="https://twitter.com/explore"><i class="fab fa-twitter"></i></a></li>
-                        <li><a class="youtube" href="https://www.youtube.com"><i class="fab fa-youtube"></i></a></li>
-                        <li><a class="github" href="https://github.com/"><i class="fab fa-github"></i></a></li>
-                    </ul>
+            <div class="about">
+                <div class="container">
+                    <div class="content">
+                        <div class="about-address">
+                            © 2020 - Đồ án Tổng hợp
+                        </div>
+                        <div class="about-address-mb">
+                            © 2020 - Bản quyền của nhóm đồ án Tuấn, Hiếu, Minh
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </footer>
+    </div>
+    <div class="back-to-top" title="Lên đầu trang"></div>
 
-
-    <script type="text/javascript">
-        $(".search-cate .select-custom").click(function () {
-            $(".search-cate").find(".advance-select-options").show();
-            $(document).unbind("mousedown");
-            $(document).mousedown(function (j) {
-                var i = $(".search-cate");
-                if (!i.is(j.target) && i.has(j.target).length === 0) {
-                    $(".search-cate").find(".advance-select-options").hide();
-                    $("body").trigger("click");
-                    $(document).unbind("mousedown");
-
-                }
-            })
-        });
-      
-
-
-        $.LoadingOverlay("show", {
-            image: "",
-            fontawesome: "fas fa-sync fa-spin"
-        });
-
-        // Hide it after 3 seconds
-        setTimeout(function () {
-            $.LoadingOverlay("hide");
-        }, 1000);
-    </script>
 </body>
 
 </html>

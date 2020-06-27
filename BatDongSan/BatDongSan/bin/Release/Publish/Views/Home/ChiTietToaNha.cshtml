@@ -5,204 +5,347 @@
     int idBuild = ViewBag.idBuild;
 }
 
+<link href="~/Content/ToaNha.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
 <style>
-    .date {
-        font-style: italic;
+    a:hover {
+        text-decoration: none;
     }
-
-    .noidung {
-        width: 600px;
-    }
-
-    .breadcrumb {
-        margin-top: 20px
-    }
-    .fl-left {
-        float: left;
-    }
-
-    .fl-rigth {
-        float: right;
-    }
-
-    .pd-5 {
-        padding: 5px;
-    }
-
-    .pd-10 {
-        padding: 10px;
-    }
-
-    .clear-fix {
-        clear: both;
-    }
-
-    h1 {
-        text-align: center;
-        text-transform: capitalize;
-        font-size: 30px;
-        margin-top: 30px;
-        letter-spacing: 2px;
-        font-weight: 300;
-    }
-
-
-    .title_img {
-        float: left;
-    }
-
-        .title_img img {
-            padding-top: 20px;
-            width: 100%;
-            height: 400px;
-        }
-
-    .tile_content {
-        width: 500px;
-        height: 350px;
-        float: left;
-        margin: 20px;
-    }
-
-        .tile_content h2 {
-            font-size: 20px;
-            font-weight: 100;
-            text-transform: capitalize;
-        }
-
-        .tile_content h3 {
-            font-size: 30px;
-        }
-
 </style>
-<br/>
-<div class="container-fluid">
 
-    <div class="container">
-        @using (BDSEntities db = new BDSEntities())
-        {
-            var chitiet = db.BUILDINGs.Where(x => x.idBuild == idBuild).FirstOrDefault();
-            <div class="text-center">
-                <h2>Văn phòng cho thuê tại tòa nhà @chitiet.nameBuild</h2>
-            </div>
-        }
-        <br />
-        <div class="row">
-            <div class="col-6">
-                @using (BDSEntities db = new BDSEntities())
-                {
-                    var chitiet = db.BUILDINGs.Where(x => x.idBuild == idBuild).ToList();
+<div class="wrapper">
+    <!-- Header -->
 
-                    foreach (var item in chitiet)
+    <div class="top">
+        <div class="container">
+            <div class="breacrumb">
+                <ul>
+                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                        <a href="/Home/Index" title="Bất động sản" itemprop="item">
+                            <span itemprop="name">Trang chủ</span>
+                        </a>
+                        <meta itemprop="position" content="1" />
+                    </li>
+                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                        <a href="#">
+                            <span itemprop="name">Chi tiết tòa nhà</span>
+                        </a>
+                        <meta itemprop="position" content="2" />
+                    </li>
+                    @using (BDSEntities db = new BDSEntities())
                     {
-                        var hinh = db.IMAGEs.Where(x => x.idBuild == item.idBuild).FirstOrDefault();
-                        <div class="title_img">
-                            <img src="~/Images/@hinh.nameImage" alt="toa-nhà">
-                        </div>
+                        var name = db.BUILDINGs.Where(x => x.idBuild == idBuild).FirstOrDefault();
+                        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                            <a href="#">
+                                <span itemprop="name">@name.nameBuild</span>
+                            </a>
+                            <meta itemprop="position" content="2" />
+                        </li>
                     }
-                }
+                </ul>
             </div>
-            <div class="col-6">
-                @using (BDSEntities db = new BDSEntities())
-                {
+            <div class="info">
+                <div class="left">
+                    <div class="banner">
+                        <div class="top-banner" id="page_image">
 
-                    var thongtin = db.BUILDINGs.Where(x => x.idBuild == idBuild).ToList();
+                            @using (BDSEntities db = new BDSEntities())
+                            {
+                                var hinh = db.IMAGEs.Where(x => x.idBuild == idBuild).FirstOrDefault();
+                                <div id="box_overview" class="image-viewer">
+                                    <div class="image-default" style="background-image: url('http://dienthoaigiavon.com/Images/@hinh.nameImage')">
+                                    </div>
 
-                    foreach (var item in thongtin)
-                    {
+                                </div>
+                            }
 
-                        var phuong = db.WARDs.Where(x => x.idWard == item.idWard).FirstOrDefault();
-                        var quan = db.DISTRICTs.Where(x => x.idDistrict == phuong.idDistrict).FirstOrDefault();
-                        var city = db.CITies.Where(x => x.idCity == quan.idCity).FirstOrDefault();
-                        string GiaTien = String.Format("{0:N0}", item.price);
-                        var xephang = db.TYPEs.Where(x => x.idType == item.idType).FirstOrDefault();
-                        var tinhtrang = db.STATUS.Where(x => x.idStatus == item.idStatus).FirstOrDefault();
-                        var huong = db.HUONGs.Where(x => x.idHuong == item.idHuong).FirstOrDefault();
-                <div class="tile_content">
-                    <h4 style="color: deepskyblue">@item.nameBuild cho thuê văn phòng @quan.nameDistrict</h4>
-                    <h3 style="color: orange">@GiaTien <small>VNĐ/tháng</small></h3>
-                    <div class="icon_item">
-                        <div class="icon_item_left fl-left pd-5 pd-10">
-                            <i class="fa fa-building"></i> Tên Tòa nhà
-                        </div>
-                        <div class="icon_item_right fl-left pd-5 pd-10">
-                            @item.nameBuild
-                        </div>
-                    </div>
-                    <div class="clear-fix"></div>
-                    <div class="icon_item">
-                        <div class="icon_item_left fl-left pd-5 pd-10">
-                            <i class="fas fa-map-marker-alt"></i> Vị trí
-                        </div>
-                        <div class="icon_item_right fl-left pd-5 pd-10">
-                            @item.street 
-                        </div>
-                    </div>
-                    <div class="clear-fix"></div>
-                    <div class="icon_item">
-                        <div class="icon_item_left fl-left pd-5 pd-10">
-                            <i class="fa fa-cube"></i> Diện tích
-                        </div>
-                        <div class="icon_item_right fl-left pd-5 pd-10">
-                            @item.floorarea m<sup>2</sup>
-                        </div>
-                    </div>
-                    <div class="clear-fix"></div>
-                    <div class="icon_item">
-                        <div class="icon_item_left fl-left pd-5 pd-10">
-                            <i class="far fa-compass"></i> Hướng
-                        </div>
-                        <div class="icon_item_right fl-left pd-5 pd-10">
-                            @huong.nameHuong
-                        </div>
-                    </div>
-                    <div class="clear-fix"></div>
-                    <div class="icon_item">
-                        <div class="icon_item_left fl-left pd-5 pd-10">
-                            <i class="fa fa-star"></i> Xếp hạng
-                        </div>
-                        <div class="icon_item_right fl-left pd-5 pd-10">
-                            @xephang.nameType
-                        </div>
-                    </div>
-                    <div class="clear-fix"></div>
-                    <div class="icon_item">
-                        <div class="icon_item_left fl-left pd-5 pd-10">
-                            <i class="fas fa-toggle-on"></i> Tình trạng
-                        </div>
-                        <div class="icon_item_right fl-left pd-5 pd-10">
-                            @tinhtrang.nameStatuts
-                        </div>
-                    </div>
-                    <div class="clear-fix"></div>
-                    <div class="icon_item">
-                        <div class="icon_item_left fl-left pd-5 pd-10">
-                            <i class="far fa-calendar-check"></i> Thời hạn tối hỉu
-                        </div>
-                        <div class="icon_item_right fl-left pd-5 pd-10">
-                            @item.depositDate tháng
                         </div>
                     </div>
                 </div>
-                    }
+                @using (BDSEntities db = new BDSEntities())
+                {
+                    var build = db.BUILDINGs.Where(x => x.idBuild == idBuild).FirstOrDefault();
+                    string GiaTien = String.Format("{0:N0}", build.price);
+                    <div class="right">
+                        <div class="info-detail">
+                            <div class="name">
+                                <h1>@build.nameBuild</h1>
+                            </div>
+                            <div class="address">
+
+                                <span class="ls-address">
+                                    @build.street
+                                </span>
+                            </div>
+                            <div class="price">
+                                <div class="price-total">
+                                    Giá thuê:
+                                    <span style="color: red">@GiaTien/Tháng</span>
+                                </div>
+                                <div class="price-unit">
+                                    Đặt cọc:
+                                    <span>@build.deposits tháng</span>
+                                </div>
+                            </div>
+                            <div class="investor">
+                                <label>Quản lý tòa nhà:</label>
+                                <span>
+                                    @build.nameManager
+                                </span>
+                            </div>
+                            <div class="box-scroll-type">
+                                <div class="info-project">
+                                    <ul>
+                                        <li>
+                                            <label class="txt-text">Di&#x1EC7;n t&#xED;ch khu &#x111;&#x1EA5;t:</label>
+                                            <span class="txt-bule">@build.floorarea m<sup>2</sup></span>
+                                        </li>
+                                        <li>
+                                            <label class="txt-text">Tầng:</label>
+                                            <span class="txt-bule">@build.floor</span>
+                                        </li>
+                                        <li>
+                                            <label class="txt-text">Hướng:</label>
+                                            <span class="txt-bule">@build.HUONG.nameHuong</span>
+                                        </li>
+                                        <li>
+                                            <label class="txt-text">Xếp hạng:</label>
+                                            <span class="txt-bule">@build.TYPE.nameType</span>
+                                        </li>
+                                        <li>
+                                            <label>Trạng thái:</label>
+                                            <span class="specific-time" title="Thời gian mở bán">@build.STATUS.nameStatuts</span>
+
+                                        </li>
+                                        <li>
+                                            <button class="btn btn-success" onclick="Show()">Đặt lịch hẹn</button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
 
 
+                        </div>
+
+
+                    </div>
 
                 }
-                <button class="btn btn-warning btn-block" style="color: white"><i class="fas fa-plus"></i> Đặt phiếu hẹn</button>
             </div>
+
             @using (BDSEntities db = new BDSEntities())
             {
-                var chitiet = db.BUILDINGs.Where(x => x.idBuild == idBuild).ToList();
-                <div class="noidung">
-                    @foreach (var item in chitiet)
-                    {  <h3> Giới thiệu tòa nhà @item.nameBuild</h3>
+                var build = db.BUILDINGs.Where(x => x.idBuild == idBuild).FirstOrDefault();
 
-                        @Html.Raw(item.conent)
-                    }
+                <div class="card">
+                    <div class="card-header">
+                        Tổng quan
+                    </div>
+                    <div class="card-body">
 
+                        <p class="card-text">@Html.Raw(build.conent)</p>
+
+                    </div>
                 </div>
             }
         </div>
+
+    </div>
+
+    <style>
+        .box-popup .popup-title {
+            height: 40px;
+        }
+
+        .box-list .title {
+            height: 40px;
+            box-sizing: content-box;
+        }
+
+        #ListMember .content {
+            margin-top: 0px;
+        }
+    </style>
+</div>
+
+
+<div class="modal" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Thông tin phiếu đặt</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="infoDiv">
+                <h2 class="text-center">Đặt phiếu hẹn</h2>
+                @using (BDSEntities db = new BDSEntities())
+                {
+                    var idRole = 3;
+                    var role = db.ROLEs.Where(x => x.idRole == idRole).FirstOrDefault();
+                    var tk = db.USERs.Where(x => x.idRole == role.idRole).FirstOrDefault();
+                    var nv = db.BUILDINGs.Where(x => x.idBuild == idBuild).FirstOrDefault();
+                    <form method="post">
+                    </form>
+                    <div class="row">
+                        <div class="form-group col-2">
+                            <label><b>SỐ ĐIỆN THOẠI:</b></label>
+                        </div>
+                        <div class="form-group col-10">
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="SDT" id="SDT" onchange="GetSDT()" placeholder="Số điện thoại khách hàng">
+                                <div class="input-group-append" id="button-addon4">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-2">
+                            <label><b>HỌ TÊN:</b></label>
+                        </div>
+                        <div class="form-group col-10">
+                            <input type="text" class="form-control" id="NAMEKH" name="NAMEKH" disabled>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-2">
+                            <label><b>EMAIL:</b></label>
+                        </div>
+                        <div class="form-group col-10">
+                            <input type="text" class="form-control" id="EMAIL" name="EMAIL" disabled>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-2 ">
+                            <label><b>ĐỊA ĐIỂM:</b></label>
+                        </div>
+                        <div class="form-group col-10">
+                            <select class="form-control" name="BUILD">
+                                @foreach (var build in db.BUILDINGs.Where(x => x.idBuild == idBuild).ToList())
+                                {
+                                    <option value="@build.idBuild">@build.nameBuild</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row" style="display: none">
+                        <div class="form-group col-2 ">
+                            <label><b>NHÂN VIÊN:</b></label>
+                        </div>
+                        <div class="form-group col-10">
+                            <select class="form-control" name="NHANVIEN">
+                               
+                                @foreach (var user in db.USERs.Where(x => x.idUser == nv.idUser).ToList())
+                                {
+                                    <option value="@user.idUser">@user.FullName - @user.Phone</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="form-group col-2 ">
+                            <label><b>NGÀY HẸN:</b></label>
+                        </div>
+                        <div class="form-group col-10">
+                            <input class="form-control" name="NGAYHEN" type="datetime-local" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-2 ">
+                            <label><b>NỘI DUNG HẸN:</b></label>
+                        </div>
+                        <div class="form-group col-10">
+                            <textarea type="text" class="form-control" rows="3" name="CONTENT" placeholder="Có thể bỏ trống"></textarea>
+                        </div>
+                    </div>
+
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-warning" onclick="Submit()" style="color: white"><i class="far fa-paper-plane"></i> Gửi</button>
+
+            </div>
+        </div>
     </div>
 </div>
+<script type="text/javascript">
+    function Show() {
+        $("#SDT").val('');
+        $("#NAMEKH").val('');
+        $("#EMAIL").val('');
+        $("#CONTENT").val('');
+        $("#modal").modal('show');
+    }
+    let idPH = 0;
+    function GetSDT() {
+        var phone = $("[name='SDT']").val();
+        if (phone == '') {
+            alert('Vui lòng nhập số điện thoại')
+        }
+        $.ajax({
+            url: '/Ajax/GetCustomer?phone=' + phone,
+            type: 'GET',
+            dataType: 'text'
+        }).done(function (ketqua) {
+            if (ketqua == null)
+                return;
+
+            if (ketqua == "") {
+                $("#NAMEKH").prop("disabled", false);
+                $("#EMAIL").prop("disabled", false);
+            }
+            else {
+                var json = JSON.parse(ketqua);
+                $("#NAMEKH").val(json.NAME);
+                $("#EMAIL").val(json.EMAIL);
+                $("#NAMEKH").prop("disabled", true);
+            }
+        });
+
+    }
+    function Submit() {
+        let phone = $("[name='SDT']").val();
+        let noidung = $("[name='CONTENT']").val();
+        let toanha = $("[name='BUILD']").val();
+        let nv = $("[name='NHANVIEN']").val();
+        let nh = $("[name='NGAYHEN']").val();
+        let email = $("[name='EMAIL']")
+        let ngaytao = $("[name='NGAYTAO']").val();
+        if (nh == '' || phone == '' || email == '') {
+            $.notify("Vui lòng điền thông tin!", "warning");
+        }
+
+        $.ajax({
+            url: '/Ajax/PostPhieuHen2',
+            type: 'POST',
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            dataType: "json",
+            data: {
+                idPhieu: 0,
+                idBuild: toanha,
+                idUserNV: nv,
+                contentPhieu: noidung,
+                createPhieu: ngaytao,
+                ngayhen: nh,
+                phone: phone,
+                cusname: $("#NAMEKH").val(),
+                email: $("#EMAIL").val()
+            }
+        }).done(function (result) {
+            if (result.Success) {
+                alert("Đặt phiếu hẹn thành công!");
+                location.reload();
+                return;
+                $.notify('Tạo thành công', 'successs');
+            }
+            $.notify('Có lỗi xảy ra', 'error');
+        });
+    }
+
+
+</script>

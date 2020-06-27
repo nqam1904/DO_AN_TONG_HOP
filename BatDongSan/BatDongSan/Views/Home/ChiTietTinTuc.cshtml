@@ -4,61 +4,111 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     int idNews = ViewBag.IdNews;
 }
-<style>
-    .date {
-        font-style: italic;
-    }
-    .noidung{
-        margin-top: 20px;
-    }
-    .breadcrumb{
-        margin-top: 20px
-    }
-</style>
-<div class="container-fluid">
-    
-    <div class="container">
-        @using (BDSEntities db = new BDSEntities())
-                {
-                    var chitiet = db.NEWS.Where(x => x.idNews == idNews).FirstOrDefault();
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/Home/TinTuc">Tin Tức</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@chitiet.titleNews</li>
-                </ol>
-            </nav>
-        }
-        <br />
-        <div class="row">
-            <div class="col-6">
+
+<link href="~/Content/ToaNha.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
+<div class="wrapper">
+    <!-- Header -->
+    <div class="top">
+        <div class="container">
+            <div class="breacrumb">
+                <ul>
+                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                        <a href="/Home/TinTuc" title="Tin tức" itemprop="item">
+                            <span itemprop="name">Tin Tức</span>
+                        </a>
+                        <meta itemprop="position" content="1" />
+                    </li>
+                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                        <a href="#">
+                            <span itemprop="name">Chi tiết tin tức</span>
+                        </a>
+                        <meta itemprop="position" content="2" />
+                    </li>
+                    @using (BDSEntities db = new BDSEntities())
+                    {
+                        var name = db.NEWS.Where(x => x.idNews == idNews).FirstOrDefault();
+                        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                            <a href="#">
+                                <span itemprop="name">@name.titleNews</span>
+                            </a>
+                            <meta itemprop="position" content="2" />
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="info">
+                <div class="left">
+                    @using (BDSEntities db = new BDSEntities())
+                    {
+                        var news = db.NEWS.Where(x => x.idNews == idNews).FirstOrDefault();
+                        <h2 style="color:#055699">@news.titleNews</h2>
+                        <p style="color:#8f8f8f">@news.createDate</p>
+                      
+                    }
+                    <div class="banner">
+                        <div class="top-banner" id="page_image">
+
+                            @using (BDSEntities db = new BDSEntities())
+                            {
+                                var hinh = db.NEWS.Where(x => x.idNews == idNews).FirstOrDefault();
+                                <div id="box_overview" class="image-viewer">
+                                    <div class="image-default" style="background-image: url('http://dienthoaigiavon.com/Images/@hinh.Img')">
+                                    </div>
+
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
                 @using (BDSEntities db = new BDSEntities())
                 {
-                    var chitiet = db.NEWS.Where(x => x.idNews == idNews).ToList();
-                    foreach (var item in chitiet)
+                    foreach (var news in db.NEWS.ToList())
                     {
-                        <h3><b>@item.titleNews</b></h3>
+                        @*<div class="right">
+                        <h2>@news.titleNews</h2
 
-                        <img src="~/Images/@item.Img" width="550" />
-                        <br />
-
-                        <div class="noidung">
-                            @Html.Raw(item.Description)
-                        </div>
-
-                        <br />
-                        <div class="date text-right">
-                            <p>@item.createDate</p>
-                        </div>
+                    </div>*@
                     }
                 }
-            </div>
-            <div class="col-6">
-                @using(BDSEntities db = new BDSEntities())
-                {
 
-                }
             </div>
+
+            @using (BDSEntities db = new BDSEntities())
+            {
+                var mota = db.NEWS.Where(x => x.idNews == idNews).FirstOrDefault();
+                <br />
+                <br />
+                <br />
+                <br /> <br /> <br />
+                <div class="card">
+                    <div class="card-header">
+                       Nội dung
+                    </div>
+                    <div class="card-body">
+
+                     <p class="card-text">@Html.Raw(mota.Description)</p>
+
+                    </div>
+                </div>
+            }
         </div>
-    </div>
-</div>
 
+    </div>
+
+    <style>
+        .box-popup .popup-title {
+            height: 40px;
+        }
+
+        .box-list .title {
+            height: 40px;
+            box-sizing: content-box;
+        }
+
+        #ListMember .content {
+            margin-top: 0px;
+        }
+    </style>
+</div>
